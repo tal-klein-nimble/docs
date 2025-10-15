@@ -1,64 +1,207 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Nimble Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#7C8DFF",
+    "light": "#C1C9FF",
+    "dark": "#2B3058"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Welcome",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Introduction",
+            "icon": "book-open",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "introduction/overview",
+              "introduction/release-notes"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Getting Started",
+            "icon": "play",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "getting-started/proxy",
+              "getting-started/web-api",
+              "getting-started/agents",
+              "getting-started/mcp-server",
+              "getting-started/account-management"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Web API",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Overview",
+            "icon": "info",
+            "pages": [
+              "nimble-sdk/web-api/overview",
+              "nimble-sdk/web-api/product-specs"
+            ]
+          },
+          {
+            "group": "Quick Start Guide",
+            "icon": "rocket",
+            "pages": [
+              "nimble-sdk/web-api/quickstart",
+              "nimble-sdk/web-api/authentication",
+              "nimble-sdk/web-api/realtime-requests",
+              "nimble-sdk/web-api/delivery-methods",
+              "nimble-sdk/web-api/batch-processing",
+              "nimble-sdk/web-api/response-codes",
+              "nimble-sdk/web-api/faqs"
+            ]
+          },
+          {
+            "group": "Functions",
+            "icon": "function-square",
+            "pages": [
+              "nimble-sdk/web-api/functions",
+              {
+                "group": "Page Interaction",
+                "icon": "cursor-click",
+                "pages": [
+                  "nimble-sdk/web-api/page-interaction/wait",
+                  "nimble-sdk/web-api/page-interaction/wait-for-selector",
+                  "nimble-sdk/web-api/page-interaction/wait-and-click",
+                  "nimble-sdk/web-api/page-interaction/wait-and-type",
+                  "nimble-sdk/web-api/page-interaction/scroll",
+                  "nimble-sdk/web-api/page-interaction/scroll-to",
+                  "nimble-sdk/web-api/page-interaction/infinite-scrolling",
+                  "nimble-sdk/web-api/page-interaction/screenshots",
+                  "nimble-sdk/web-api/page-interaction/cookies",
+                  "nimble-sdk/web-api/page-interaction/http-requests"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Vertical Endpoints",
+            "icon": "search",
+            "pages": [
+              "nimble-sdk/web-api/serp-api",
+              "nimble-sdk/web-api/maps-api"
+            ]
+          },
+          {
+            "group": "Reference",
+            "icon": "book-open",
+            "pages": [
+              "nimble-sdk/web-api/reference"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Nimble SDK",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "package",
+            "pages": ["nimble-sdk/sdk-overview"]
+          },
+          {
+            "group": "Web Retrieval API",
+            "icon": "download",
+            "pages": [
+              {
+                "group": "Getting Started",
+                "icon": "play",
+                "pages": [
+                  "nimble-sdk/web-retrieval/installation",
+                  "nimble-sdk/web-retrieval/quickstart"
+                ]
+              },
+              {
+                "group": "Configuration",
+                "icon": "gear",
+                "pages": [
+                  "nimble-sdk/web-retrieval/overview",
+                  "nimble-sdk/web-retrieval/auth"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "icon": "server",
+                "pages": [
+                  "nimble-sdk/web-retrieval/endpoints-overview",
+                  "nimble-sdk/web-retrieval/endpoints-user",
+                  "nimble-sdk/web-retrieval/endpoints-data"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Proxy API",
+            "icon": "shield",
+            "pages": [
+              {
+                "group": "Getting Started",
+                "icon": "play",
+                "pages": [
+                  "nimble-sdk/proxy-api/installation",
+                  "nimble-sdk/proxy-api/quickstart"
+                ]
+              },
+              {
+                "group": "Configuration",
+                "icon": "gear",
+                "pages": [
+                  "nimble-sdk/proxy-api/overview",
+                  "nimble-sdk/proxy-api/auth",
+                  "nimble-sdk/proxy-api/data-processing"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Client Libraries",
+            "icon": "code",
+            "pages": [
+              {
+                "group": "Getting Started",
+                "icon": "play",
+                "pages": [
+                  "nimble-sdk/client-libraries/installation",
+                  "nimble-sdk/client-libraries/quickstart"
+                ]
+              },
+              {
+                "group": "Configuration",
+                "icon": "gear",
+                "pages": [
+                  "nimble-sdk/client-libraries/overview",
+                  "nimble-sdk/client-libraries/auth",
+                  "nimble-sdk/client-libraries/data-processing"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Introduction",
+            "icon": "info",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Endpoints",
+            "icon": "server",
             "pages": [
+              "endpoints/overview",
+              "endpoints/user",
+              "endpoints/data",
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
               "api-reference/endpoint/delete",
@@ -66,27 +209,41 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "General",
+        "groups": [
+          {
+            "group": "Development",
+            "icon": "code",
+            "pages": [
+              "development"
+            ]
+          },
+          {
+            "group": "AI Tools",
+            "icon": "robot",
+            "pages": [
+              "ai-tools/claude-code",
+              "ai-tools/cursor",
+              "ai-tools/windsurf"
+            ]
+          },
+          {
+            "group": "Essentials",
+            "icon": "book",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/navigation",
+              "essentials/settings",
+              "essentials/reusable-snippets"
+            ]
+          }
+        ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
