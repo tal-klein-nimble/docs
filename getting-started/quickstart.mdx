@@ -1,0 +1,43 @@
+---
+title: Quickstart Guide
+description: Get up and running with Nimble in minutes
+---
+
+# Quickstart Guide
+
+This guide will help you make your first request with Nimble in just a few minutes.
+
+## 1. Get Your API Key
+
+First, obtain your API key from the Nimble dashboard.
+
+## 2. Make Your First Request
+
+### Node.js
+
+```javascript
+import { NimbleClient } from '@nimbleway/sdk';
+
+const client = new NimbleClient({
+  apiKey: 'your-api-key'
+});
+
+const response = await client.webApi.get('https://example.com');
+console.log(response.data);
+```
+
+### Python
+
+```python
+from nimble_sdk import NimbleClient
+
+client = NimbleClient(api_key='your-api-key')
+response = client.web_api.get('https://example.com')
+print(response.data)
+```
+
+## Next Steps
+
+- Explore the [Web API](/web-api) documentation
+- Learn about [Configuration](/nimble-sdk/web-api/functions) options
+- Check out the [API Reference](/api-reference/introduction)
