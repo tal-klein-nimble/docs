@@ -1,4 +1,77 @@
 ---
-title: 'Geo Targeting'
+title: "Geo Targeting"
+description: "Built-in residential proxy allowing Geo-targeting options"
 ---
 
+Geo Targeting routes each request through a proxy exit in a specific region. Use it when content changes by location or language.
+
+Common uses:
+
+- **Localized content**: pricing, availability, shipping, store pages.
+- **SEO & market research**: region-specific SERPs and ads.
+- **Fewer blocks**: look like a real local user with residential exits.
+
+# Supported parameters
+
+You can pass these parameters to any Web Tool request (Extract, Search, Crawl, etc).
+
+- `country` - Routes the request through a matching country exit. Use a 2-letter country code (example: `US`default, `FR`).
+- `state` (US Only) - Pins the request to a US state. Only available when `country="US"`. Use a 2-letter state code (example: `CA`, `NY`).
+- `city` - Pins the request to a city. For best matching, set `country` too.
+- `locale` - Sets the browser language for localization. Use BCP 47 locale strings (example: `en-US`, `fr-FR`).
+
+<Note>
+  `country`/`state`/`city` geo targeting changes **where** the request comes from. `locale` changes **which language** the browser prefers.
+</Note>
+
+
+# Usage
+
+This request exits from **New York** and sets the browser language to **English**.
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://ipinfo.io/json",
+    country="US",
+    state="NY",
+    locale="en-US",
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract("https://ipinfo.io/json", {
+  country: "US",
+  state: "NY",
+  locale: "en-US",
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://ipinfo.io/json",
+    "country": "US",
+    "state": "NY",
+    "locale": "en-US"
+}'
+```
+
+</CodeGroup>
