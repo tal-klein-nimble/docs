@@ -1,0 +1,196 @@
+---
+title: "Quickstart"
+description: "Send your first request through Nimble's residential proxy network"
+---
+
+## Prerequisites
+
+Before you begin, make sure you have:
+- A Nimble account with residential proxy access
+- Your account name and pipeline credentials
+
+<Note>
+Don't have an account yet? [Contact our sales team](https://www.nimbleway.com/contact) to get started.
+</Note>
+
+## Basic Request Format
+
+The Nimble BackConnect Gateway uses a standard proxy format:
+
+```
+http://account-{accountName}-pipeline-{pipelineName}:{pipelinePassword}@ip.nimbleway.com:7000
+```
+
+### Required Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `accountName` | Your company gateway name |
+| `pipelineName` | Pipeline to use (default: "residential") |
+| `pipelinePassword` | Your pipeline authentication credential |
+
+## Send Your First Request
+
+<CodeGroup>
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName:pipelinePassword@ip.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+```python Python
+import requests
+
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName:pipelinePassword@ip.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName:pipelinePassword@ip.nimbleway.com:7000'
+}
+
+url = 'https://ipinfo.io'
+response = requests.get(url, proxies=proxies)
+
+print(response.status_code)
+print(response.text)
+```
+
+```javascript Node.js
+const axios = require('axios');
+
+const targetAddress = "https://ipinfo.io/json";
+
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName:pipelinePassword@ip.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const run = async () => {
+  const res = await axios(targetAddress, await getProxy());
+  return res.data;
+}
+
+(async () => {
+  const response = await run()
+  console.log(response);
+})();
+```
+
+```go Go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+)
+
+func main() {
+	proxyURL, err := url.Parse("http://account-accountName-pipeline-pipelineName:pipelinePassword@ip.nimbleway.com:7000")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		},
+	}
+
+	req, err := http.NewRequest("GET", "https://ipinfo.io", nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(string(body))
+}
+```
+
+</CodeGroup>
+
+<Tip>
+Replace `accountName`, `pipelineName`, and `pipelinePassword` with your actual credentials.
+</Tip>
+
+## Example Response
+
+A successful request to `ipinfo.io` returns your current proxy IP details:
+
+```json
+{
+  "ip": "203.0.113.45",
+  "city": "Los Angeles",
+  "region": "California",
+  "country": "US",
+  "loc": "34.0522,-118.2437",
+  "org": "AS12345 Example ISP",
+  "timezone": "America/Los_Angeles"
+}
+```
+
+## Quick Examples
+
+### Target a Specific Country
+
+Add country targeting to your proxy connection:
+
+```bash
+curl -x http://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@ip.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+### Use a Sticky Session
+
+Maintain the same IP across multiple requests:
+
+```bash
+curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@ip.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+## Common Response Codes
+
+| Code | Meaning |
+|------|---------|
+| 200 | Success |
+| 407 | Authentication failed - check credentials |
+| 525 | No suitable IP found for request parameters |
+
+<Card title="View All Response Codes" icon="list" href="/residential-proxy/response-codes">
+  See the complete list of response codes and their meanings
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication Methods" icon="key" href="/residential-proxy/authentication">
+    Learn about username/password and IP allowlist authentication
+  </Card>
+  <Card title="Geotargeting" icon="location-dot" href="/residential-proxy/geotargeting">
+    Target specific countries, states, or cities
+  </Card>
+  <Card title="Session Control" icon="rotate" href="/residential-proxy/session-control">
+    Control IP rotation and sticky sessions
+  </Card>
+  <Card title="Response Codes" icon="circle-info" href="/residential-proxy/response-codes">
+    Understand all response codes
+  </Card>
+</CardGroup>

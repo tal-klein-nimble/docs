@@ -1,0 +1,395 @@
+---
+title: Maps API  
+description: Extract Google Maps data and local business information
+---
+
+# Maps API
+
+Extract comprehensive local business data, reviews, and geographic information from Google Maps.
+
+## Basic Maps Request
+
+### Endpoint
+```
+POST https://api.nimbleway.com/v1/maps
+```
+
+### Search Local Businesses
+
+```bash
+curl -X POST "https://api.nimbleway.com/v1/maps" \
+  -H "Authorization: Bearer your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "restaurants near me",
+    "location": "New York, NY"
+  }'
+```
+
+### Response
+
+```json
+{
+  "status": "success",
+  "query": "restaurants near me",
+  "location": "New York, NY",
+  "results": [
+    {
+      "name": "Joe's Pizza",
+      "address": "123 Main St, New York, NY 10001",
+      "phone": "+1 (555) 123-4567",
+      "website": "https://joespizza.com",
+      "rating": 4.5,
+      "reviews_count": 1247,
+      "price_level": "$$",
+      "category": "Pizza Restaurant",
+      "hours": {
+        "monday": "11:00 AM - 10:00 PM",
+        "tuesday": "11:00 AM - 10:00 PM",
+        "wednesday": "11:00 AM - 10:00 PM"
+      },
+      "coordinates": {
+        "lat": 40.7589,
+        "lng": -73.9851
+      },
+      "place_id": "ChIJd8BlQ2BZwokRAFQXSW2xTsQ"
+    }
+  ]
+}
+```
+
+## Request Types
+
+### Local Search
+Find businesses by category and location:
+
+```json
+{
+  "query": "coffee shops",
+  "location": "San Francisco, CA",
+  "radius": "5km",
+  "limit": 20
+}
+```
+
+### Place Details
+Get detailed information about a specific place:
+
+```json
+{
+  "place_id": "ChIJd8BlQ2BZwokRAFQXSW2xTsQ",
+  "include_reviews": true,
+  "include_photos": true
+}
+```
+
+### Coordinates Search
+Search by geographic coordinates:
+
+```json
+{
+  "query": "gas stations",
+  "coordinates": {
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  "radius": "2km"
+}
+```
+
+## Parameters
+
+### Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `query` | string | Search query (e.g., "restaurants", "hotels") |
+| `location` | string | Location name or address |
+
+### Optional Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | integer | `20` | Maximum number of results |
+| `radius` | string | `5km` | Search radius (e.g., "1km", "5mi") |
+| `min_rating` | float | `0` | Minimum rating filter (0-5) |
+| `price_level` | string | `any` | Price filter: `$`, `$$`, `$$$`, `$$$$` |
+| `open_now` | boolean | `false` | Only show currently open businesses |
+| `include_reviews` | boolean | `false` | Include customer reviews |
+| `include_photos` | boolean | `false` | Include business photos |
+| `language` | string | `en` | Response language |
+
+## Response Data
+
+### Business Information
+```json
+{
+  "name": "Business Name",
+  "address": "Full address",
+  "phone": "+1 (555) 123-4567",
+  "website": "https://business.com",
+  "email": "info@business.com",
+  "category": "Restaurant",
+  "subcategory": "Italian Restaurant",
+  "rating": 4.3,
+  "reviews_count": 856,
+  "price_level": "$$"
+}
+```
+
+### Operating Hours
+```json
+{
+  "hours": {
+    "monday": "9:00 AM - 9:00 PM",
+    "tuesday": "9:00 AM - 9:00 PM", 
+    "wednesday": "9:00 AM - 9:00 PM",
+    "thursday": "9:00 AM - 9:00 PM",
+    "friday": "9:00 AM - 10:00 PM",
+    "saturday": "10:00 AM - 10:00 PM",
+    "sunday": "10:00 AM - 8:00 PM"
+  },
+  "current_status": "open",
+  "next_status_change": "closes at 9:00 PM"
+}
+```
+
+### Reviews and Ratings
+```json
+{
+  "reviews": [
+    {
+      "author": "John D.",
+      "rating": 5,
+      "date": "2024-01-15",
+      "text": "Great food and excellent service!",
+      "helpful_votes": 12
+    }
+  ],
+  "rating_breakdown": {
+    "5_star": 45,
+    "4_star": 30,
+    "3_star": 15,
+    "2_star": 7,
+    "1_star": 3
+  }
+}
+```
+
+### Photos and Media
+```json
+{
+  "photos": [
+    {
+      "url": "https://maps.gstatic.com/photo123.jpg",
+      "width": 1200,
+      "height": 800,
+      "type": "exterior"
+    },
+    {
+      "url": "https://maps.gstatic.com/photo456.jpg", 
+      "width": 800,
+      "height": 600,
+      "type": "interior"
+    }
+  ]
+}
+```
+
+## Use Cases
+
+### Local Business Directory
+Build comprehensive business directories:
+
+```json
+{
+  "query": "restaurants",
+  "location": "Downtown Seattle",
+  "limit": 100,
+  "include_reviews": true,
+  "min_rating": 4.0
+}
+```
+
+### Competitor Analysis
+Research competitors in your area:
+
+```json
+{
+  "query": "your business category",
+  "location": "your city",
+  "radius": "10km",
+  "include_reviews": true
+}
+```
+
+### Market Research
+Analyze market density and opportunities:
+
+```json
+{
+  "query": "coffee shops",
+  "location": "potential expansion city",
+  "limit": 50,
+  "price_level": "$$"
+}
+```
+
+### Review Monitoring
+Track reviews for your business:
+
+```json
+{
+  "place_id": "your_business_place_id",
+  "include_reviews": true,
+  "review_limit": 100
+}
+```
+
+## Advanced Features
+
+### Multi-Location Search
+Search multiple locations in one request:
+
+```json
+{
+  "query": "hotels",
+  "locations": [
+    "New York, NY",
+    "Los Angeles, CA", 
+    "Chicago, IL"
+  ],
+  "limit": 10
+}
+```
+
+### Category Filtering
+Filter by specific business categories:
+
+```json
+{
+  "query": "food",
+  "location": "Miami, FL",
+  "categories": ["restaurant", "cafe", "bakery"],
+  "exclude_categories": ["fast_food"]
+}
+```
+
+### Trending Places
+Find trending or popular places:
+
+```json
+{
+  "query": "trending restaurants",
+  "location": "Austin, TX",
+  "sort_by": "popularity",
+  "time_filter": "week"
+}
+```
+
+## SDK Examples
+
+### Node.js
+```javascript
+const results = await client.maps({
+  query: 'coffee shops',
+  location: 'Portland, OR',
+  limit: 25,
+  include_reviews: true,
+  min_rating: 4.0
+});
+
+results.forEach(place => {
+  console.log(`${place.name} - ${place.rating}⭐`);
+});
+```
+
+### Python
+```python
+results = client.maps({
+    'query': 'coffee shops',
+    'location': 'Portland, OR',
+    'limit': 25,
+    'include_reviews': True,
+    'min_rating': 4.0
+})
+
+for place in results:
+    print(f"{place['name']} - {place['rating']}⭐")
+```
+
+## Rate Limits
+
+| Plan | Requests/Hour | Data Points/Request |
+|------|--------------|-------------------|
+| Free | 50 | 10 |
+| Starter | 500 | 25 |
+| Professional | 5,000 | 100 |
+| Enterprise | Custom | Custom |
+
+## Pricing
+
+- **Basic search**: $0.002 per result
+- **With reviews**: $0.005 per result
+- **With photos**: $0.008 per result
+- **Place details**: $0.001 per request
+
+## Error Handling
+
+### Location Not Found
+```json
+{
+  "status": "error",
+  "error": "LOCATION_NOT_FOUND",
+  "message": "Could not find location: 'Invalid City Name'"
+}
+```
+
+### No Results
+```json
+{
+  "status": "success",
+  "results": [],
+  "message": "No businesses found matching criteria"
+}
+```
+
+### Rate Limit Exceeded
+```json
+{
+  "status": "error",
+  "error": "RATE_LIMIT_EXCEEDED",
+  "message": "Maps API rate limit exceeded",
+  "retry_after": 3600
+}
+```
+
+## Best Practices
+
+### Query Optimization
+- Use specific business categories for better results
+- Include location context for accurate targeting
+- Combine filters to narrow down results
+
+### Data Management
+- Cache frequently accessed business data
+- Update business information regularly
+- Handle closed/moved businesses gracefully
+
+### Cost Optimization
+- Request only needed data fields
+- Use appropriate result limits
+- Implement smart caching strategies
+
+## Compliance
+
+- **Google Maps Terms**: Respect Google's terms of service
+- **Rate Limiting**: Stay within API limits
+- **Data Usage**: Follow data usage guidelines
+- **Attribution**: Provide proper attribution when required
+
+## Next Steps
+
+- Learn about [SERP API](/nimble-sdk/web-api/serp-api) for search data
+- Explore [Batch Processing](/nimble-sdk/web-api/batch-processing) for multiple locations
+- Check [Page Interaction](/nimble-sdk/web-api/functions) for dynamic content

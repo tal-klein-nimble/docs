@@ -1,0 +1,245 @@
+---
+title: "Web API Functions"
+description: "Complete guide to Web API capabilities including request types, geo-targeting, drivers, and page interactions"
+---
+
+# Web API Functions
+
+Explore the full range of Web API capabilities for advanced data collection.
+
+## Request Types
+
+The Web API supports three types of requests:
+
+### Real-Time Requests
+- Executes scraping task immediately
+- Returns response as soon as data is available
+- Best for interactive applications
+
+### Async Requests
+- Initiates scraping task independently
+- Notifies via callback URL when complete
+- Ideal for background processing
+
+### Batch Requests
+- Process up to 1,000 URLs in a single request
+- Supports custom settings per URL
+- Enables efficient bulk operations
+
+**Batch Example:**
+```python
+data = {
+    "requests": [
+        { "url": "https://www.finance.com" },
+        { "url": "https://www.travel.com" },
+        { "url": "https://www.socialmedia.com" }
+    ],
+    "storage_type": "s3",
+    "storage_url": "s3://Your.Repository.Path/",
+    "callback_url": "https://your.callback.url/path"
+}
+```
+
+## Geo Location Targeting
+
+Route requests through proxies in specific geographical locations.
+
+**Parameters:**
+- `country`: ISO Alpha-2 Country Codes (default = "all")
+- `state`: US states (default = null)
+- `city`: Specific city targeting (default = null)
+- `locale`: Language/locale setting (default = "auto")
+
+```json
+{
+    "url": "https://ipinfo.io/json",
+    "country": "US",
+    "state": "NY",
+    "locale": "en-US"
+}
+```
+
+## Browserless Drivers
+
+Choose the right driver for your performance and stealth needs:
+
+| Driver | Rendering | Stealth Level | Speed | Best For |
+|--------|-----------|---------------|-------|----------|
+| **vx6** | None | Basic | Fastest | Simple content |
+| **vx8** | Light JS | Standard | Fast | Most websites |
+| **vx8-pro** | Full | Standard | Medium | Interactive sites |
+| **vx10** | Advanced | High | Slower | Protected sites |
+| **vx10-pro** | Advanced | Highest | Slowest | Maximum stealth |
+| **vx12** | Specialized | Maximum | Variable | Social media |
+
+## Rate Limits by Plan
+
+| Plan | VX6 (RPS) | VX8 (RPS) | VX10 (RPS) | VX12 (RPS) |
+|------|-----------|-----------|------------|------------|
+| PAYG | 20 | 10 | 5 | 5 |
+| Beginner | 40 | 20 | 10 | 5 |
+| Essential | 60 | 30 | 20 | 5 |
+| Advanced | 80 | 45 | 30 | 5 |
+| Professional | 100 | 60 | 40 | 10 |
+| Enterprise | ∞ | ∞ | ∞ | 20 |
+
+## JavaScript Rendering
+
+Enable advanced page rendering with customizable options:
+
+```json
+{
+    "url": "https://www.example.com",
+    "render": true,
+    "render_options": {
+        "include_iframes": true,
+        "render_type": "idle0",
+        "timeout": 35000,
+        "blocked_domains": ["ads.example.com"]
+    }
+}
+```
+
+**Render Types:**
+- `load`: Standard page load event
+- `domready`: DOMContentLoaded event
+- `idle2`: 2 or fewer network connections in 500ms
+- `idle0`: No network connections in 500ms
+
+## Page Interactions
+
+<Warning>
+Page interactions require rendering (`render: true`) and have a maximum timeout of 120 seconds. Operations run sequentially.
+</Warning>
+
+### Available Functions
+
+1. **Wait** - Simple delay
+2. **Wait for Selectors** - Wait for elements
+3. **Click** - Click on elements  
+4. **Type** - Input text into fields
+5. **Scroll** - Scroll to coordinates or elements
+6. **Infinite Scroll** - Handle dynamic loading
+7. **Screenshots** - Capture page images
+8. **Cookies** - Extract cookies
+9. **HTTP Requests** - Make API calls
+
+### Examples
+
+<CodeGroup>
+```json Wait and Click
+{
+    "render_flow": [{
+        "wait_and_click": {
+            "selector": "input[name='submit']",
+            "timeout": 20000,
+            "delay": 500,
+            "scroll": true
+        }
+    }]
+}
+```
+
+```json Type in Field
+{
+    "render_flow": [{
+        "wait_and_type": {
+            "selector": "input[type='search']",
+            "value": "search query",
+            "timeout": 20000,
+            "click_on_element": true
+        }
+    }]
+}
+```
+
+```json Infinite Scroll
+{
+    "render_flow": [{
+        "infinite_scroll": {
+            "loading_selector": ".spinner",
+            "delay_after_scroll": 2000,
+            "duration": 15000,
+            "click_on_selector": ".load-more"
+        }
+    }]
+}
+```
+</CodeGroup>
+
+## Network Capture
+
+Intercept and capture internal API calls on websites.
+
+### URL Filtering
+```json
+{
+    "network_capture": [
+        {
+            "method": "GET",
+            "url": {
+                "type": "contains", 
+                "value": "/api/"
+            }
+        }
+    ]
+}
+```
+
+### Resource Type Filtering
+```json
+{
+    "network_capture": [
+        {
+            "resource_type": ["xhr", "fetch", "script"]
+        }
+    ]
+}
+```
+
+## Data Parsing
+
+Three primary parsing tools for extracting structured data:
+
+### 1. Parsing Templates
+Surgical parsing with high control:
+
+```json
+{
+    "articles": {
+        "type": "object-list",
+        "selectors": ["article"],
+        "fields": {
+            "title": {
+                "selectors": [".title"],
+                "extractor": "text"
+            },
+            "link": {
+                "selectors": ["a"],
+                "extractor": "[href]"
+            }
+        }
+    }
+}
+```
+
+### 2. AI Parsing Skills
+Automatic mode using HTML-trained LLMs
+
+### 3. Merge Dynamic Parser
+Combines AI parsing with custom logic
+
+## Custom Headers & Cookies
+
+Add custom headers and cookies to your requests:
+
+```json
+{
+    "url": "https://example.com",
+    "headers": {
+        "User-Agent": "Custom-Agent/1.0",
+        "Accept": "application/json"
+    },
+    "cookies": "session=abc123;token=xyz789"
+}
+```

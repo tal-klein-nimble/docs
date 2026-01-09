@@ -1,0 +1,308 @@
+---
+title: Frequently Asked Questions
+description: Common questions and answers about Nimble Web API
+---
+
+# Frequently Asked Questions
+
+Get answers to the most common questions about using Nimble Web API.
+
+## Getting Started
+
+### How do I get an API key?
+1. Sign up for a free account at [dashboard.nimbleway.com](https://dashboard.nimbleway.com)
+2. Navigate to the "API Keys" section
+3. Click "Generate New Key" 
+4. Copy and securely store your API key
+
+### What's included in the free plan?
+- **1,000 requests per month**
+- **Basic Web API access**
+- **Standard proxy locations**
+- **Community support**
+
+### How quickly can I get started?
+Most developers are making their first successful API call within 5 minutes using our [Quick Start Guide](/nimble-sdk/web-api/quickstart).
+
+## Technical Questions
+
+### What's the difference between real-time and batch processing?
+
+| Feature | Real-time | Batch |
+|---------|-----------|-------|
+| **Response time** | Immediate (2-30s) | Variable (minutes-hours) |
+| **Best for** | Single URLs, live data | Multiple URLs, large jobs |
+| **Cost** | Standard rate | Volume discounts |
+| **Rate limits** | Per-second limits | Higher concurrency |
+
+### Do you support JavaScript rendering?
+Yes! Enable JavaScript rendering by setting `render: true` in your request:
+
+```json
+{
+  "url": "https://spa-site.com",
+  "render": true,
+  "wait_for": "networkidle0"
+}
+```
+
+### Can I scrape behind login walls?
+Yes, using our page interaction features:
+
+```json
+{
+  "url": "https://protected-site.com/login",
+  "actions": [
+    {
+      "type": "wait_and_type",
+      "selector": "input[name='username']", 
+      "text": "your-username"
+    },
+    {
+      "type": "wait_and_type",
+      "selector": "input[name='password']",
+      "text": "your-password"
+    },
+    {
+      "type": "wait_and_click",
+      "selector": "button[type='submit']"
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".dashboard"
+    }
+  ]
+}
+```
+
+### How do I handle CAPTCHAs?
+Nimble automatically solves most CAPTCHAs using advanced stealth technology. No additional configuration needed - it's included in all plans.
+
+## Pricing & Limits
+
+### How does pricing work?
+- **Pay-per-request** model
+- **Volume discounts** for higher usage
+- **No setup fees** or monthly minimums
+- **Only pay for successful requests**
+
+Current rates:
+- **Standard requests**: $0.001 per request
+- **JavaScript rendering**: $0.003 per request  
+- **SERP API**: $0.001 per search
+- **Maps API**: $0.002 per search
+
+### What are the rate limits?
+
+| Plan | Requests/Second | Concurrent | Monthly Included |
+|------|----------------|------------|------------------|
+| **Free** | 1 | 1 | 1,000 |
+| **Starter** | 5 | 10 | 10,000 |
+| **Professional** | 20 | 50 | 100,000 |
+| **Enterprise** | Custom | Custom | Custom |
+
+### Do failed requests count against my quota?
+No - you're only charged for successful requests (HTTP 200 responses).
+
+## Proxy & Location
+
+### How many proxy locations do you support?
+We support **200+ locations** across 6 continents, including:
+- **Residential IPs**: 10M+ IPs across 180+ countries
+- **Datacenter IPs**: 100K+ IPs in major cities
+- **ISP diversity**: 1000+ internet service providers
+
+### Can I specify proxy locations?
+Yes, specify location using the `country` parameter:
+
+```json
+{
+  "url": "https://geo-restricted-site.com",
+  "country": "GB"
+}
+```
+
+Supported formats:
+- **Country codes**: `US`, `GB`, `DE`, `JP`
+- **Country names**: `United States`, `United Kingdom`
+- **Cities**: `New York`, `London`, `Tokyo`
+
+### Do you support sticky sessions?
+Yes, use the `session_id` parameter to maintain the same IP across requests:
+
+```json
+{
+  "url": "https://example.com",
+  "session_id": "my-session-123"
+}
+```
+
+## Data & Formats
+
+### What response formats do you support?
+- **HTML** (default): Full page HTML
+- **JSON**: Parsed JSON responses
+- **Text**: Plain text content
+- **Screenshots**: PNG images
+- **PDF**: PDF document capture
+
+### How do I extract specific data?
+Use CSS selectors or XPath expressions:
+
+```json
+{
+  "url": "https://ecommerce-site.com",
+  "extract": {
+    "title": "h1.product-title",
+    "price": ".price-current",
+    "availability": ".stock-status"
+  }
+}
+```
+
+### Can I get screenshots?
+Yes, enable screenshots in your request:
+
+```json
+{
+  "url": "https://example.com",
+  "screenshot": true,
+  "screenshot_options": {
+    "full_page": true,
+    "format": "png"
+  }
+}
+```
+
+## Reliability & Performance
+
+### What's your uptime SLA?
+- **99.9% uptime** guaranteed for paid plans
+- **Real-time status** at [status.nimbleway.com](https://status.nimbleway.com)
+- **Automatic failover** across multiple data centers
+
+### How do you handle target site blocking?
+Our stealth technology includes:
+- **Real browser fingerprints** - Undetectable automation
+- **Smart proxy rotation** - Automatic IP switching  
+- **CAPTCHA solving** - Automatic challenge resolution
+- **Rate limiting** - Respectful request patterns
+
+### What's the average response time?
+- **Simple requests**: 2-5 seconds
+- **JavaScript rendering**: 5-15 seconds
+- **Complex interactions**: 10-30 seconds
+- **99th percentile**: Under 45 seconds
+
+## Integration & Development
+
+### Do you have SDKs?
+Yes! Official SDKs available for:
+- **Node.js**: `npm install @nimbleway/sdk`
+- **Python**: `pip install nimble-sdk`
+- **PHP**: `composer require nimbleway/sdk`
+- **REST API**: Direct HTTP integration
+
+### Can I use webhooks?
+Yes, webhooks are supported for all plans:
+
+```json
+{
+  "url": "https://example.com", 
+  "delivery_method": "webhook",
+  "webhook_url": "https://your-app.com/webhook"
+}
+```
+
+### Do you support batch operations?
+Yes! Submit up to 10,000 URLs in a single batch request:
+
+```json
+{
+  "urls": [
+    "https://site1.com",
+    "https://site2.com", 
+    "https://site3.com"
+  ],
+  "delivery_method": "webhook"
+}
+```
+
+## Compliance & Security
+
+### Is my data secure?
+- **SSL/TLS encryption** for all communications
+- **No data retention** - responses aren't stored
+- **SOC 2 Type II** certified infrastructure
+- **GDPR compliant** data processing
+
+### Do you store scraped content?
+No - scraped content is delivered directly to you and not stored on our servers.
+
+### Can I use this for GDPR compliance?
+Yes, our service is GDPR compliant. We act as a data processor, and you maintain control as the data controller.
+
+## Troubleshooting
+
+### Why am I getting 401 Unauthorized errors?
+Check these common issues:
+- **API key format**: Ensure proper `Bearer your-api-key` format
+- **Key status**: Verify your API key is active in the dashboard
+- **Account status**: Check if your account is in good standing
+
+### My requests are timing out - what should I do?
+Try these solutions:
+- **Increase timeout**: Set `timeout: 60` (in seconds)
+- **Disable rendering**: Set `render: false` if JavaScript isn't needed
+- **Simplify actions**: Reduce complex page interactions
+- **Try different locations**: Some proxies may be faster
+
+### Why are some requests failing?
+Common causes and solutions:
+- **Target site blocking**: Try different proxy locations
+- **Rate limiting**: Reduce request frequency
+- **Invalid URLs**: Verify URLs are accessible
+- **Complex selectors**: Simplify CSS selectors
+
+### How do I report bugs or issues?
+Contact our support team:
+- **Email**: support@nimbleway.com
+- **Dashboard**: Submit tickets through your dashboard
+- **Include**: Request IDs, error messages, and example URLs
+
+## Billing & Account
+
+### How do I upgrade my plan?
+Visit your [dashboard](https://dashboard.nimbleway.com) and click "Upgrade Plan" to see available options.
+
+### Can I get a refund?
+We offer **30-day money-back guarantee** for new customers who are not satisfied with the service.
+
+### Do you offer enterprise pricing?
+Yes! Contact our sales team for:
+- **Custom pricing** for high-volume usage
+- **Dedicated infrastructure** 
+- **Priority support**
+- **Custom integrations**
+
+### How do I track my usage?
+Monitor usage in real-time through your dashboard:
+- **Request counts** by day/month
+- **Success rates** and error breakdown  
+- **Response time metrics**
+- **Cost tracking** and projections
+
+## Still Have Questions?
+
+Can't find what you're looking for? We're here to help:
+
+- **Documentation**: Browse our comprehensive [Web API docs](/nimble-sdk/web-api)
+- **Support Email**: support@nimbleway.com
+- **Live Chat**: Available in your dashboard
+- **Community Forum**: Join other developers in our community
+
+**Response times**:
+- **Free plan**: 24-48 hours
+- **Paid plans**: 4-8 hours  
+- **Enterprise**: 1-2 hours
+- **Critical issues**: 30 minutes

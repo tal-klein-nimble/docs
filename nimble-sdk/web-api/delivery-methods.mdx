@@ -1,0 +1,221 @@
+---
+title: Delivery Methods
+description: Different ways to receive your scraped data from Nimble Web API
+---
+
+# Delivery Methods
+
+Nimble Web API supports multiple delivery methods to suit different integration patterns and use cases.
+
+## Synchronous Response (Default)
+
+Get immediate results in the API response - best for real-time applications.
+
+### Request
+```bash
+curl -X POST "https://api.nimbleway.com/v1/scrape" \
+  -H "Authorization: Bearer your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "delivery_method": "response"
+  }'
+```
+
+### Response
+```json
+{
+  "status": "success",
+  "url": "https://example.com",
+  "html": "<!DOCTYPE html>...",
+  "response_time": 2.34
+}
+```
+
+## Webhook Delivery
+
+Receive results via HTTP webhook - ideal for asynchronous processing.
+
+### Setup Webhook
+```json
+{
+  "url": "https://example.com",
+  "delivery_method": "webhook",
+  "webhook_url": "https://your-app.com/webhook/nimble"
+}
+```
+
+### Webhook Payload
+```json
+{
+  "job_id": "job_123456",
+  "status": "completed",
+  "url": "https://example.com",
+  "html": "<!DOCTYPE html>...",
+  "completed_at": "2024-01-15T10:30:00Z"
+}
+```
+
+## Amazon S3 Storage
+
+Store results directly in your S3 bucket for large-scale operations.
+
+### Configuration
+```json
+{
+  "url": "https://example.com",
+  "delivery_method": "s3",
+  "s3_config": {
+    "bucket": "your-bucket",
+    "key": "scraping-results/{{job_id}}.json",
+    "region": "us-east-1"
+  }
+}
+```
+
+## Polling Method
+
+For systems that prefer to poll for results rather than receive webhooks.
+
+### Submit Job
+```bash
+curl -X POST "https://api.nimbleway.com/v1/scrape" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "url": "https://example.com",
+    "delivery_method": "polling"
+  }'
+```
+
+### Response
+```json
+{
+  "job_id": "job_123456",
+  "status": "queued",
+  "estimated_completion": "2024-01-15T10:32:00Z"
+}
+```
+
+### Check Status
+```bash
+curl -X GET "https://api.nimbleway.com/v1/jobs/job_123456" \
+  -H "Authorization: Bearer your-api-key"
+```
+
+## Email Delivery
+
+Receive results via email - useful for reports and monitoring.
+
+### Configuration
+```json
+{
+  "url": "https://example.com",
+  "delivery_method": "email",
+  "email_config": {
+    "to": "results@yourcompany.com",
+    "subject": "Scraping Results - {{timestamp}}",
+    "format": "json"
+  }
+}
+```
+
+## Choosing the Right Method
+
+### Real-time Applications
+- **Synchronous Response** - Immediate results needed
+- **Response Time**: < 30 seconds
+- **Use Cases**: Live price checking, instant data validation
+
+### High-Volume Processing  
+- **Webhook Delivery** - Handle results asynchronously
+- **Response Time**: Variable (seconds to minutes)
+- **Use Cases**: Batch processing, data pipelines
+
+### Data Archival
+- **S3 Storage** - Long-term storage and analysis
+- **Response Time**: Variable
+- **Use Cases**: Historical data collection, analytics
+
+### Monitoring & Reports
+- **Email Delivery** - Human-readable results
+- **Response Time**: Variable
+- **Use Cases**: Daily reports, error notifications
+
+## Error Handling
+
+### Webhook Retry Logic
+```json
+{
+  "webhook_config": {
+    "url": "https://your-app.com/webhook",
+    "retry_attempts": 3,
+    "retry_delay": 5000,
+    "timeout": 30000
+  }
+}
+```
+
+### S3 Error Handling
+```json
+{
+  "status": "error",
+  "error": "S3_UPLOAD_FAILED",
+  "message": "Failed to upload to S3 bucket",
+  "fallback_method": "webhook"
+}
+```
+
+## Best Practices
+
+### Webhook Security
+- **Use HTTPS** for webhook endpoints
+- **Verify signatures** to ensure authenticity
+- **Implement idempotency** to handle duplicates
+- **Return 200 status** to confirm receipt
+
+### Performance Optimization
+- **Choose appropriate method** for your use case
+- **Implement proper error handling** for all methods
+- **Monitor delivery success rates** in your dashboard
+- **Set up fallback methods** for critical workflows
+
+## SDK Examples
+
+### Node.js
+```javascript
+// Webhook delivery
+const result = await client.scrape({
+  url: 'https://example.com',
+  delivery_method: 'webhook',
+  webhook_url: 'https://your-app.com/webhook'
+});
+
+// S3 delivery
+const s3Result = await client.scrape({
+  url: 'https://example.com',
+  delivery_method: 's3',
+  s3_config: {
+    bucket: 'your-bucket',
+    key: 'results/{{timestamp}}.json'
+  }
+});
+```
+
+### Python
+```python
+# Webhook delivery
+result = client.scrape({
+    'url': 'https://example.com',
+    'delivery_method': 'webhook',
+    'webhook_url': 'https://your-app.com/webhook'
+})
+
+# Polling method
+job = client.scrape({
+    'url': 'https://example.com', 
+    'delivery_method': 'polling'
+})
+
+# Check job status
+status = client.get_job_status(job['job_id'])
+```

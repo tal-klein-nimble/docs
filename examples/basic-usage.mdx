@@ -1,0 +1,46 @@
+---
+title: "Basic Usage Examples"
+description: "Common patterns for using Nimble SDK"
+icon: "code"
+---
+
+## Authentication
+
+```javascript
+import { NimbleSDK } from "@nimble/sdk";
+
+// Initialize with API Key
+const nimble = new NimbleSDK({
+  apiKey: process.env.NIMBLE_API_KEY,
+});
+
+// Or use OAuth
+const nimble = new NimbleSDK({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+});
+```
+
+## Basic CRUD Operations
+
+<CodeGroup>
+```javascript Create
+const resource = await nimble.resources.create({
+  name: 'New Resource',
+  type: 'example'
+});
+```
+```javascript Read
+const resource = await nimble.resources.get('resource-id');
+```
+```javascript Update
+const updated = await nimble.resources.update('resource-id', {
+  name: 'Updated Name'
+});
+```
+```javascript Delete
+await nimble.resources.delete('resource-id');
+```
+</CodeGroup>
+
+<Note>All SDK methods return Promises and support async/await syntax</Note>

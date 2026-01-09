@@ -1,4 +1,59 @@
 ---
-title: 'Get Plants'
-openapi: 'GET /plants'
+title: "Get Resource"
+api: "GET /api/v2/resources/{id}"
+description: "Retrieve a specific resource by ID"
 ---
+
+## Request
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+<ParamField query="include" type="string">
+  Comma-separated list of related resources to include
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  <Expandable title="properties">
+    <ResponseField name="id" type="string">
+      Unique identifier for the resource
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of the resource
+    </ResponseField>
+    <ResponseField name="attributes" type="object">
+      Resource attributes
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl --request GET \
+  --url https://api.nimble.com/api/v2/resources/123 \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+```javascript Node.js
+const response = await nimble.resources.get('123', {
+  include: 'related'
+});
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "123",
+    "type": "resource",
+    "attributes": {
+      "name": "Example Resource",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  }
+}
+```
+</ResponseExample>

@@ -1,0 +1,33 @@
+---
+title: "Installation"
+description: "Get started with Nimble SDK 2.0"
+icon: "download"
+---
+
+## Prerequisites
+
+Before installing the Nimble SDK, ensure you have:
+
+- Node.js 16.0 or higher
+- npm or yarn package manager
+- Valid API credentials
+
+## Installation
+
+<CodeGroup>
+  ```bash npm npm install @nimble/sdk@2.0.0 ``` ```bash yarn yarn add
+  @nimble/sdk@2.0.0 ``` ```bash pnpm pnpm add @nimble/sdk@2.0.0 ```
+</CodeGroup>
+
+## Quick Setup
+
+```javascript
+import { NimbleSDK } from "@nimble/sdk";
+
+const nimble = new NimbleSDK({
+  apiKey: "your-api-key",
+  environment: "production",
+});
+```
+
+<Check>**Success!** You've successfully installed Nimble SDK 2.0</Check>

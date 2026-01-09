@@ -1,0 +1,36 @@
+---
+title: Endpoints Overview
+description: Overview of all available Nimble API endpoints
+---
+
+# Endpoints Overview
+
+Nimble provides several endpoint categories to handle different aspects of web data extraction and proxy services.
+
+## Available Endpoint Categories
+
+### Web Scraping Endpoints
+- **GET /web-api/scrape** - Extract data from web pages
+- **POST /web-api/batch** - Process multiple URLs in batch
+
+### User Management
+- **GET /user/profile** - Get user account information  
+- **POST /user/settings** - Update user preferences
+
+### Data Processing
+- **GET /data/extract** - Extract structured data
+- **POST /data/transform** - Apply data transformations
+
+## Authentication
+
+All endpoints require authentication via API key in the request headers:
+
+```bash
+Authorization: Bearer your-api-key
+```
+
+## Rate Limits
+
+- Standard: 1000 requests/hour
+- Premium: 10000 requests/hour
+- Enterprise: Custom limits available

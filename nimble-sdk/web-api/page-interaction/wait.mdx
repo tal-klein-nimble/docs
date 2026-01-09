@@ -1,0 +1,154 @@
+---
+title: Wait (Delay)
+description: Add delays to your scraping workflows
+---
+
+# Wait (Delay)
+
+Add time-based delays to your scraping workflow to allow pages to load or simulate human behavior.
+
+## Basic Wait
+
+Add a simple delay before extracting content:
+
+```json
+{
+  "url": "https://example.com",
+  "actions": [
+    {
+      "type": "wait",
+      "duration": 3000
+    }
+  ]
+}
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `type` | string | Yes | Must be `"wait"` |
+| `duration` | integer | Yes | Wait time in milliseconds |
+
+## Use Cases
+
+### Page Load Delays
+Wait for slow-loading pages:
+
+```json
+{
+  "url": "https://slow-loading-site.com",
+  "actions": [
+    {
+      "type": "wait", 
+      "duration": 5000
+    }
+  ]
+}
+```
+
+### Human-like Behavior
+Simulate natural browsing patterns:
+
+```json
+{
+  "url": "https://social-media-site.com",
+  "actions": [
+    {
+      "type": "click",
+      "selector": "button.load-more"
+    },
+    {
+      "type": "wait",
+      "duration": 2000
+    },
+    {
+      "type": "scroll",
+      "direction": "down"
+    }
+  ]
+}
+```
+
+### Rate Limiting
+Add delays between actions to avoid rate limits:
+
+```json
+{
+  "url": "https://api-heavy-site.com", 
+  "actions": [
+    {
+      "type": "click",
+      "selector": ".next-page"
+    },
+    {
+      "type": "wait",
+      "duration": 1000
+    },
+    {
+      "type": "click", 
+      "selector": ".load-data"
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### Optimal Wait Times
+- **Short delays (500-1000ms)** - For fast-loading elements
+- **Medium delays (2000-5000ms)** - For complex page loads
+- **Long delays (5000ms+)** - For very slow or heavy pages
+
+### Performance Considerations
+- **Use sparingly** - Unnecessary waits slow down scraping
+- **Combine with other wait types** - Use `wait_for_selector` when possible
+- **Monitor timeouts** - Ensure total request time stays reasonable
+
+### Error Handling
+```json
+{
+  "url": "https://example.com",
+  "timeout": 30000,
+  "actions": [
+    {
+      "type": "wait",
+      "duration": 3000
+    }
+  ]
+}
+```
+
+## SDK Examples
+
+### Node.js
+```javascript
+const result = await client.scrape({
+  url: 'https://example.com',
+  actions: [
+    {
+      type: 'wait',
+      duration: 3000
+    }
+  ]
+});
+```
+
+### Python
+```python
+result = client.scrape({
+    'url': 'https://example.com',
+    'actions': [
+        {
+            'type': 'wait',
+            'duration': 3000
+        }
+    ]
+})
+```
+
+## Related Actions
+
+- [Wait for Selector](/nimble-sdk/web-api/page-interaction/wait-for-selector) - Wait for specific elements
+- [Wait and Click](/nimble-sdk/web-api/page-interaction/wait-and-click) - Wait then click elements
+- [Scroll](/nimble-sdk/web-api/page-interaction/scroll) - Scroll page content
