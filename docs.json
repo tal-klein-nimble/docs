@@ -33,6 +33,26 @@
             ]
           },
           {
+            "group": "Web Tools",
+            "pages": [
+              {
+                "group": "Extract",
+                "pages": [
+                  "documentation/web-tools/extract/stealth-mode",
+                  "documentation/web-tools/extract/geo-targeting",
+                  "documentation/web-tools/extract/parsing-schema",
+                  "documentation/web-tools/extract/browser-actions",
+                  "documentation/web-tools/extract/network-capture",
+                  "documentation/web-tools/extract/advanced-settings"
+                ]
+              },
+              "documentation/web-tools/extract-templates",
+              "documentation/web-tools/search",
+              "documentation/web-tools/map",
+              "documentation/web-tools/crawl"
+            ]
+          },
+          {
             "group": "AI Tools",
             "icon": "robot",
             "pages": [
