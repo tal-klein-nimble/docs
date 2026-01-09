@@ -2,3 +2,103 @@
 title: "Extract"
 description: "Get clean & structured data from any URL"
 ---
+
+Nimble Extract lets you send any URL and instantly retrieve full page content and structured data, all through a simple SDK call. You can:
+
+- Collect **HTML, text, and metadata** from any webpage
+- Enable **Stealth Mode** for improved reliability on complex sites
+- Enable **JavaScript rendering** for dynamic sites
+- Use **Browser actions** and **Network Capture** when needed
+- Apply **Geo-Targeting** (country, state, city, locale)
+- Define **Parsing Scheme **easily for structured output
+
+Nimble handles browser fingerprinting, proxy routing, JS rendering, and parsing automatically, so you get reliable page data without manual configuration.
+
+<Note>
+  For more details, see the **Extract API Reference.**
+</Note>
+
+
+# Simple Extract Request
+
+## Installation
+
+<CodeGroup>
+
+```python Python
+# pip install nimble-py
+
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+```
+
+
+```node Node.js
+// npm install @nimbleway/sdk
+
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
+```
+
+</CodeGroup>
+
+## Usage
+
+Use `nimble.extraxt()` to perform a real-time URL request and retrieve page content
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+# Initialize client
+nimble = Nimble(api_key="YOUR-API-KEY")
+result = nimble.extract(url = "https://www.example.com")
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+// Initialize client
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
+
+const results = await nimble.extract("https://www.example.com");
+
+console.log(results);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com"
+}'
+```
+
+</CodeGroup>
+
+## Response
+
+```json
+{
+    "url": "https://www.example.com",
+    "task_id": "05420ecd-457c-1432-95d8-a99b4e83c307",
+    "status": "success",
+    "query_time": "2025-11-23T17:09:14.341Z",
+    "html_content":"<HTML>",
+    "status_code": 200,
+    "parsing": {...},
+    "driver": "vx6"
+}
+```
