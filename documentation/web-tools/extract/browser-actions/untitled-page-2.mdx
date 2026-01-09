@@ -1,9 +1,9 @@
 ---
-title: "Browser Actions"
-description: "Interact with webpages through clicks, typing, scrolling, and more"
+title: "Deterministic Mode"
+description: "Full control over browser actions with predefined steps"
 ---
 
-Browser Actions let you perform operations on webpages before data collection, including clicking, typing, scrolling, and capturing screenshots. These interactions are essential for accessing dynamically loaded content on modern websites.
+Deterministic mode gives you full control over the sequence of actions performed in the browser, ensuring predictable and repeatable results. You manually specify each step like click, scroll, wait, or type.
 
 Common uses:
 
@@ -12,8 +12,17 @@ Common uses:
 - **Submit searches**: Enter search terms and submit forms to access results pages.
 - **Trigger lazy-loaded data**: Scroll to load images, products, or infinite feeds.
 
+## When to use
+
+Use deterministic mode when you need:
+
+- **Low cost**: Pay per driver usage and API calls, not token consumption
+- **Predictable execution**: Same steps run every time
+- **Full control**: Specify exact actions and sequences
+- **Fast performance**: No LLM inference overhead
+
 <Note>
-  Browser Actions require page rendering to be enabled (`render: true`). All operations execute sequentially within a global **240-second timeout**.
+  Deterministic flows may break when page structure or selectors change. Monitor and update your flows as needed.
 </Note>
 
 # Available actions
@@ -34,16 +43,21 @@ Browser Actions are passed in the `browser_actions` array. Each action executes 
 | `get_cookies`     | Collect cookies from the page                  |
 | `http_request`    | Execute additional HTTP requests               |
 
+<Note>
+  Browser Actions require page rendering to be enabled (`render: true`). All operations execute sequentially within a global **240-second timeout**. 
+</Note>
+
+
 # Usage
 
 ## Wait (delay)
 
 Add a delay between actions to simulate human behavior or allow elements to load.
 
-### **Parameters:**
+**Parameters:**
 
 - `delay` (required) - Time to pause in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -110,11 +124,11 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Wait until a specific element appears on the page before continuing.
 
-### **Parameters:**
+**Parameters:**
 
 - `selectors` (required) - Array of CSS selectors to wait for
 - `timeout` (optional) - Maximum time to wait in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -184,14 +198,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Wait for an element to appear and click it.
 
-### **Parameters:**
+**Parameters:**
 
 - `selector` (required) - CSS selector of the element to click
 - `timeout` (optional) - Maximum time to wait for the click action in milliseconds
 - `delay` (optional) - Time to pause before executing the click in milliseconds
 - `scroll` (optional) - Scroll element into view if hidden (boolean)
 - `visible` (optional) - Wait for element to be visible, not just present in DOM (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -270,7 +284,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Wait for an input field and type text into it.
 
-### **Parameters:**
+**Parameters:**
 
 - `selector` (required) - CSS selector of the input element
 - `value` (required) - Text to type into the element
@@ -278,7 +292,7 @@ Wait for an input field and type text into it.
 - `delay` (optional) - Time to pause before typing in milliseconds
 - `click_on_element` (optional) - Click the element before typing (boolean)
 - `visible` (optional) - Wait for element to be visible (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -360,7 +374,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Quickly paste text into an input field.
 
-### **Parameters:**
+**Parameters:**
 
 - `selector` (required) - CSS selector of the input element
 - `value` (required) - Text to paste into the element
@@ -368,7 +382,7 @@ Quickly paste text into an input field.
 - `delay` (optional) - Time to pause before pasting in milliseconds
 - `click_on_element` (optional) - Click the element before pasting (boolean)
 - `visible` (optional) - Wait for element to be visible (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -450,13 +464,13 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Scroll to specific X/Y coordinates on the page.
 
-### **Parameters:**
+**Parameters:**
 
 - `x` (required) - Horizontal scroll position
 - `y` (required) - Vertical scroll position
 - `timeout` (optional) - Maximum time for scroll action in milliseconds
 - `scroll_in_element` (optional) - CSS selector of container to scroll within (for scrolling inside sidebars, modals, etc.)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -529,11 +543,11 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Scroll to bring a specific element into view.
 
-### **Parameters:**
+**Parameters:**
 
 - `selector` (required) - CSS selector of the element to scroll to
 - `visible` (optional) - Wait for element to be visible before scrolling (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -603,7 +617,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Handle lazy-loading pages that reveal content as you scroll, like social media feeds.
 
-### **Parameters:**
+**Parameters:**
 
 - `duration` (required) - Time interval for continuous scrolling in milliseconds
 - `loading_selector` (optional) - CSS selector for loading/spinner indicators
@@ -611,7 +625,7 @@ Handle lazy-loading pages that reveal content as you scroll, like social media f
 - `click_on_selector` (optional) - CSS selector to click after each scroll (e.g., "Load more" button)
 - `idle_timeout` (optional) - Wait time after scroll; terminates if no page height change in milliseconds
 - `scroll_in_element` (optional) - CSS selector of container to scroll within
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -691,12 +705,12 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Take a screenshot of the page in PNG, JPEG, or WebP format.
 
-### **Parameters:**
+**Parameters:**
 
 - `full_page` (optional) - Capture entire page or just visible viewport (boolean, default: `false`)
 - `format` (optional) - Image format: `png`, `jpeg`, or `webp` (default: `png`)
 - `timeout` (optional) - Maximum time for screenshot processing in milliseconds (default: `30000`)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -769,10 +783,10 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Capture and store cookies from the page.
 
-### **Parameters:**
+**Parameters:**
 
 - `timeout` (optional) - Time to wait for new cookies before storage in milliseconds (default: `1000`)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -839,13 +853,13 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 Perform additional HTTP GET/POST requests to internal APIs.
 
-### **Parameters:**
+**Parameters:**
 
 - `url` (required) - Target URL for the HTTP request
 - `method` (optional) - HTTP method: `GET` or `POST` (default: `GET`)
 - `headers` (optional) - Additional headers as JSON object
 - `timeout` (optional) - Request timeout in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -1047,3 +1061,48 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 ```
 
 </CodeGroup>
+
+# Example response
+
+When browser actions complete successfully, you'll receive the final page state along with any data captured.
+
+The response includes:
+
+- **html**: Final DOM state after all actions
+- **screenshot**: Page screenshot if requested
+- **cookies**: Collected cookies if `get_cookies` was used
+- **network_capture**: Captured network requests if configured
+- **metadata**: Execution details including driver used and timing
+
+```json
+{
+  "status": "success",
+  "data": {
+    "html": "<!DOCTYPE html><html>...</html>",
+    "screenshot": "base64_encoded_image_data",
+    "cookies": [
+      {
+        "name": "session_id",
+        "value": "abc123xyz",
+        "domain": ".example.com",
+        "path": "/",
+        "expires": 1735689600,
+        "httpOnly": true,
+        "secure": true
+      }
+    ],
+    "network_capture": [
+      {
+        "url": "https://api.example.com/products",
+        "status": 200,
+        "response_body": "{\"products\": [...]}"
+      }
+    ]
+  },
+  "metadata": {
+    "driver": "vx10",
+    "execution_time_ms": 3450,
+    "actions_executed": 4
+  }
+}
+```

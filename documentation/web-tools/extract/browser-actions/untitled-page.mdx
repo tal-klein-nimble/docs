@@ -1,0 +1,242 @@
+---
+title: "Browser Actions"
+description: "Automate webpage interactions with deterministic steps or AI agents"
+---
+
+Browser Actions enable you to interact with webpages before data extraction. Choose between two modes based on your needs: deterministic control or AI-powered flexibility.
+
+Common uses:
+
+- **Load dynamic content**: Trigger lazy-loaded data, infinite scrolls, and pagination
+- **Submit forms**: Enter search terms, apply filters, or configure settings
+- **Navigate pages**: Click buttons, open dropdowns, and interact with UI elements
+- **Capture state**: Take screenshots, collect cookies, or record network traffic
+
+# Two modes
+
+Browser Actions offers two approaches to automate webpage interactions:
+
+## Deterministic Mode
+
+Manually define each action step with full control over execution sequence.
+
+**Best for:**
+
+- Predictable, repeatable automation
+- Cost-sensitive applications (lower pricing)
+- Static pages with consistent selectors
+- Fast execution without LLM overhead
+
+**How it works:**
+
+1. Define actions in the `browser_actions` array
+2. Specify selectors, delays, and sequences
+3. Nimble executes steps exactly as configured
+
+**Pricing:** Based on driver usage (vx6, vx8, vx10, etc.) - no token costs
+
+<Card title="Deterministic Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
+  Full control with predefined action steps
+</Card>
+
+## LLM Mode
+
+Describe desired interactions in natural language and let AI determine the best execution strategy.
+
+**Best for:**
+
+- Zero-setup automation
+- Pages that change frequently
+- Complex interaction sequences
+- Intelligent decision-making
+
+**How it works:**
+
+1. Send a natural language prompt (e.g., "scroll until all items load, open filters, click 'On Sale'")
+2. Nimble's AI agent takes control of the browser in real-time
+3. AI adapts to page variations and figures out the optimal sequence
+
+**Pricing:** Uses vx14 driver + token consumption (higher cost than deterministic)
+
+<Card title="LLM Mode" icon="sparkles" href="/documentation/web-tools/extract/browser-actions-llm">
+  AI-powered automation with natural language prompts
+</Card>
+
+# Quick comparison
+
+| Feature         | Deterministic Mode         | LLM Mode                   |
+| --------------- | -------------------------- | -------------------------- |
+| **Setup**       | Manual step configuration  | Natural language prompt    |
+| **Cost**        | Lower (driver only)        | Higher (driver + tokens)   |
+| **Flexibility** | Fixed sequence             | Adapts dynamically         |
+| **Maintenance** | Update when page changes   | Self-healing               |
+| **Speed**       | Faster (no inference)      | Slower (LLM processing)    |
+| **Control**     | Full control               | AI-determined              |
+| **Best for**    | Stable pages, cost control | Changing pages, zero setup |
+
+<Note>
+  Both modes require page rendering to be enabled (`render: true`) and operate within a global **120-second timeout**.
+</Note>
+
+# Choosing the right mode
+
+**Use Deterministic Mode when:**
+
+- You need low-cost, predictable automation
+- Page structure is stable and selectors don't change often
+- You want full control over every action
+- Performance is critical
+
+**Use LLM Mode when:**
+
+- You want zero-setup, hands-free automation
+- Pages change frequently and maintaining selectors is challenging
+- You need intelligent handling of dynamic elements
+- Higher cost is acceptable for reduced maintenance
+
+# Usage examples
+
+## Deterministic Mode
+
+Define exact steps to execute:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_and_type": {
+                "selector": "input[type='search']",
+                "value": "laptop"
+            }
+        },
+        {
+            "wait_and_click": {
+                "selector": "button[type='submit']"
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_and_type: {
+        selector: "input[type='search']",
+        value: "laptop"
+      }
+    },
+    {
+      wait_and_click: {
+        selector: "button[type='submit']"
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [
+        {
+            "wait_and_type": {
+                "selector": "input[type='\''search'\'']",
+                "value": "laptop"
+            }
+        },
+        {
+            "wait_and_click": {
+                "selector": "button[type='\''submit'\'']"
+            }
+        }
+    ]
+}'
+```
+
+</CodeGroup>
+
+## LLM Mode
+
+Let AI figure out the steps:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "llm_prompt": "Search for 'laptop' and apply filters for 'On Sale' items"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  llm_prompt: "Search for 'laptop' and apply filters for 'On Sale' items"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "llm_prompt": "Search for '\''laptop'\'' and apply filters for '\''On Sale'\'' items"
+}'
+```
+
+</CodeGroup>
+
+# Next steps
+
+<CardGroup cols={2}>
+  <Card title="Deterministic Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
+    Learn about all available actions and parameters
+  </Card>
+  <Card title="LLM Mode" icon="sparkles" href="/documentation/web-tools/extract/browser-actions-llm">
+    Use AI agents for hands-free automation
+  </Card>
+</CardGroup>

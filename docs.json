@@ -42,7 +42,14 @@
                   "documentation/web-tools/extract/geo-targeting",
                   "documentation/web-tools/extract/stealth-mode",
                   "documentation/web-tools/extract/parsing-schema",
-                  "documentation/web-tools/extract/browser-actions",
+                  {
+                    "group": "Browser Actions",
+                    "pages": [
+                      "documentation/web-tools/extract/browser-actions/untitled-page",
+                      "documentation/web-tools/extract/browser-actions/untitled-page-2",
+                      "documentation/web-tools/extract/browser-actions/untitled-page-1"
+                    ]
+                  },
                   "documentation/web-tools/extract/network-capture",
                   "documentation/web-tools/extract/advanced-settings"
                 ]

@@ -1,0 +1,279 @@
+---
+title: "LLM Mode"
+description: "AI-powered browser automation with natural language prompts"
+---
+
+LLM mode enables fully hands-free browser automation. Describe your desired interactions in natural language, and Nimble's AI agent takes control of the browser in real-time to execute them.
+
+The AI agent adapts to page variations, handles dynamic elements intelligently, and figures out complex interaction sequences automatically.
+
+## When to use
+
+Use LLM mode when you need:
+
+- **Zero setup**: No selector configuration or step definition required
+- **Self-healing**: Automatically adapts when pages change
+- **Complex interactions**: AI handles multi-step sequences intelligently
+- **Dynamic pages**: Works with pages that change frequently
+
+<Note>
+  LLM mode uses the vx14 driver and incurs additional token consumption costs based on prompt and response length. This is more expensive than deterministic flows but requires zero maintenance.
+</Note>
+
+# How it works
+
+1. **Send a prompt**: Describe what you want to accomplish in natural language
+2. **AI takes control**: The LLM agent analyzes the page and determines the best action sequence
+3. **Real-time execution**: Actions are performed live in the browser, not pre-generated
+4. **Adaptive behavior**: AI adjusts to page variations and handles unexpected elements
+
+<Note>
+  The LLM agent executes actions in real-time based on the current page state. It's not translating your prompt into predefined steps—it's actually controlling the browser dynamically.
+</Note>
+
+# Usage
+
+## Basic example
+
+Let the AI handle all interactions:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "llm_prompt": "Search for 'laptop' and filter by 'On Sale' items"
+})
+
+print(result)
+```
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  llm_prompt: "Search for 'laptop' and filter by 'On Sale' items"
+});
+
+console.log(result);
+```
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "llm_prompt": "Search for '\''laptop'\'' and filter by '\''On Sale'\'' items"
+}'
+```
+
+</CodeGroup>
+
+## Infinite scroll
+
+Handle dynamic content loading:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/products",
+    "render": True,
+    "llm_prompt": "Scroll down until all products are loaded"
+})
+
+print(result)
+```
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/products",
+  render: true,
+  llm_prompt: "Scroll down until all products are loaded"
+});
+
+console.log(result);
+```
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/products",
+    "render": true,
+    "llm_prompt": "Scroll down until all products are loaded"
+}'
+```
+
+</CodeGroup>
+
+## Complex interaction
+
+Multi-step workflows:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "llm_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+})
+
+print(result)
+```
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  llm_prompt: "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+});
+
+console.log(result);
+```
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "llm_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+}'
+```
+
+</CodeGroup>
+
+# Example response
+
+When the LLM agent completes your prompt, you receive the final page state and execution details.
+
+```json
+{
+  "status": "success",
+  "data": {
+    "html": "<!DOCTYPE html><html>...</html>",
+    "llm_execution": {
+      "prompt": "Search for 'laptop' and filter by 'On Sale' items",
+      "actions_performed": [
+        "Located search input field",
+        "Typed 'laptop' into search",
+        "Clicked search button",
+        "Waited for results to load",
+        "Opened filters panel",
+        "Selected 'On Sale' checkbox",
+        "Applied filters"
+      ],
+      "success": true,
+      "execution_time_ms": 5200
+    }
+  },
+  "metadata": {
+    "driver": "vx14",
+    "token_usage": {
+      "prompt_tokens": 450,
+      "completion_tokens": 320,
+      "total_tokens": 770
+    },
+    "execution_time_ms": 5200
+  }
+}
+```
+
+The response includes:
+- **html**: Final DOM state after AI execution
+- **llm_execution**: Details about actions the AI performed
+- **actions_performed**: Step-by-step log of what the agent did
+- **token_usage**: Token consumption for cost tracking
+- **metadata**: Execution details including driver (vx14) and timing
+
+# Best practices
+
+## Writing effective prompts
+
+**Be specific but flexible:**
+```
+✅ "Search for 'wireless headphones' and filter by price under $100"
+❌ "Find some headphones"
+```
+
+**Describe outcomes, not selectors:**
+```
+✅ "Click the 'Add to Cart' button"
+❌ "Click button.btn-primary.add-cart"
+```
+
+**Chain actions logically:**
+```
+✅ "Sort by price ascending, then scroll to load all items"
+❌ "Do sorting and scrolling stuff"
+```
+
+## Cost optimization
+
+- Use deterministic mode for repetitive, stable workflows
+- Reserve LLM mode for complex or frequently changing pages
+- Test prompts in development to optimize token usage
+- Monitor token consumption in production
+
+## Error handling
+
+The AI agent handles common issues automatically:
+- **Missing elements**: Waits for elements to appear
+- **Dynamic content**: Adapts to lazy-loaded elements
+- **Page variations**: Adjusts to layout changes
+- **Timeouts**: Reports when actions cannot be completed
+
+<Note>
+  The global 120-second timeout still applies. If the AI cannot complete your prompt within this time, the request will timeout.
+</Note>
+
+# Pricing
+
+LLM mode costs include:
+- **vx14 driver usage**: Higher tier driver for AI capabilities
+- **Token consumption**: Based on prompt length and AI response
+- **API call**: Standard request fee
+
+This is typically 3-5x more expensive than deterministic flows, but eliminates maintenance costs when pages change.
+
+# Comparison with Deterministic Mode
+
+| Aspect | Deterministic | LLM |
+|--------|--------------|-----|
+| **Setup time** | Minutes to hours | Seconds |
+| **Maintenance** | Update when pages change | Zero maintenance |
+| **Cost per request** | Lower | Higher |
+| **Execution speed** | Faster | Slower (LLM inference) |
+| **Reliability** | High (if maintained) | High (self-healing) |
+| **Use case** | Stable, predictable pages | Dynamic, changing pages |
