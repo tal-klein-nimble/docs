@@ -1,0 +1,71 @@
+---
+title: Data Endpoints
+description: Process and transform extracted data
+---
+
+# Data Endpoints
+
+Extract, process, and transform web data using Nimble's data processing endpoints.
+
+## Extract Data
+
+Extract structured data from web content.
+
+```http
+GET /data/extract
+```
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `url` | string | Target URL to extract data from |
+| `selector` | string | CSS selector for data extraction |
+| `format` | string | Output format (json, csv, xml) |
+
+### Example Request
+
+```bash
+curl -X GET "https://api.nimbleway.com/data/extract?url=https://example.com&selector=.product&format=json" \
+  -H "Authorization: Bearer your-api-key"
+```
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "title": "Product Name",
+      "price": "$29.99",
+      "availability": "In Stock"
+    }
+  ],
+  "total_results": 1,
+  "processing_time": "1.2s"
+}
+```
+
+## Transform Data
+
+Apply transformations to extracted data.
+
+```http
+POST /data/transform
+```
+
+### Request Body
+
+```json
+{
+  "data": [...],
+  "transformations": [
+    {
+      "type": "filter",
+      "field": "price",
+      "condition": "greater_than",
+      "value": 20
+    }
+  ]
+}
+```

@@ -1,0 +1,263 @@
+---
+title: Wait and Click
+description: Wait for elements to appear, then click them
+---
+
+# Wait and Click
+
+Wait for elements to become available and clickable, then perform a click action.
+
+## Basic Wait and Click
+
+```json
+{
+  "url": "https://example.com",
+  "actions": [
+    {
+      "type": "wait_and_click",
+      "selector": "button.load-more",
+      "timeout": 10000
+    }
+  ]
+}
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `type` | string | Yes | Must be `"wait_and_click"` |
+| `selector` | string | Yes | CSS selector for the element to click |
+| `timeout` | integer | No | Max wait time in milliseconds (default: 10000) |
+| `visible` | boolean | No | Wait for element to be visible (default: true) |
+| `enabled` | boolean | No | Wait for element to be enabled (default: true) |
+
+## Use Cases
+
+### Load More Buttons
+Click pagination or "Load More" buttons:
+
+```json
+{
+  "url": "https://social-feed.com",
+  "actions": [
+    {
+      "type": "wait_and_click",
+      "selector": "button[data-testid='load-more']",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+### Modal Dialogs
+Handle popup dialogs and modals:
+
+```json
+{
+  "url": "https://ecommerce-site.com/product/123",
+  "actions": [
+    {
+      "type": "wait_and_click",
+      "selector": ".cookie-banner .accept-btn",
+      "timeout": 3000
+    },
+    {
+      "type": "wait_and_click", 
+      "selector": ".size-selector .size-medium",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+### Dynamic Content
+Click elements that appear after page interactions:
+
+```json
+{
+  "url": "https://interactive-app.com",
+  "actions": [
+    {
+      "type": "click",
+      "selector": ".category-filter"
+    },
+    {
+      "type": "wait_and_click",
+      "selector": ".subcategory-item:first-child",
+      "timeout": 8000
+    }
+  ]
+}
+```
+
+## Advanced Options
+
+### Multiple Conditions
+Wait for multiple conditions before clicking:
+
+```json
+{
+  "type": "wait_and_click",
+  "selector": "button.submit",
+  "timeout": 15000,
+  "visible": true,
+  "enabled": true
+}
+```
+
+### Click Coordinates
+Click at specific coordinates relative to element:
+
+```json
+{
+  "type": "wait_and_click",
+  "selector": ".interactive-canvas",
+  "offset": {
+    "x": 100,
+    "y": 50
+  }
+}
+```
+
+### Force Click
+Force click even if element is not interactable:
+
+```json
+{
+  "type": "wait_and_click",
+  "selector": ".hidden-trigger",
+  "force": true
+}
+```
+
+## Error Handling
+
+### Element Not Found
+```json
+{
+  "status": "error",
+  "error": "ELEMENT_NOT_FOUND",
+  "message": "Element with selector 'button.missing' not found within timeout",
+  "selector": "button.missing"
+}
+```
+
+### Element Not Clickable
+```json
+{
+  "status": "error", 
+  "error": "ELEMENT_NOT_CLICKABLE",
+  "message": "Element is not clickable (disabled or hidden)",
+  "selector": "button.disabled"
+}
+```
+
+### Timeout Exceeded
+```json
+{
+  "status": "error",
+  "error": "TIMEOUT_EXCEEDED", 
+  "message": "Element did not become clickable within 10000ms",
+  "selector": "button.slow-loader"
+}
+```
+
+## Best Practices
+
+### Selector Specificity
+Use specific selectors to avoid clicking wrong elements:
+
+```json
+// Good - specific selector
+{
+  "type": "wait_and_click",
+  "selector": "button[data-testid='add-to-cart']"
+}
+
+// Avoid - too generic
+{
+  "type": "wait_and_click", 
+  "selector": "button"
+}
+```
+
+### Appropriate Timeouts
+Set reasonable timeouts based on expected load times:
+
+```json
+// Fast interactions
+{
+  "type": "wait_and_click",
+  "selector": ".quick-action",
+  "timeout": 3000
+}
+
+// Slow-loading content  
+{
+  "type": "wait_and_click",
+  "selector": ".heavy-content-trigger",
+  "timeout": 15000
+}
+```
+
+### Chaining Actions
+Combine with other actions for complex workflows:
+
+```json
+{
+  "url": "https://multi-step-form.com",
+  "actions": [
+    {
+      "type": "wait_and_type",
+      "selector": "input[name='email']",
+      "text": "user@example.com"
+    },
+    {
+      "type": "wait_and_click",
+      "selector": "button.continue"
+    },
+    {
+      "type": "wait_and_click",
+      "selector": "button.submit",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+## SDK Examples
+
+### Node.js
+```javascript
+const result = await client.scrape({
+  url: 'https://example.com',
+  actions: [
+    {
+      type: 'wait_and_click',
+      selector: 'button.load-more',
+      timeout: 10000
+    }
+  ]
+});
+```
+
+### Python
+```python
+result = client.scrape({
+    'url': 'https://example.com',
+    'actions': [
+        {
+            'type': 'wait_and_click',
+            'selector': 'button.load-more',
+            'timeout': 10000
+        }
+    ]
+})
+```
+
+## Related Actions
+
+- [Wait for Selector](/nimble-sdk/web-api/page-interaction/wait-for-selector) - Wait without clicking
+- [Wait and Type](/nimble-sdk/web-api/page-interaction/wait-and-type) - Wait and input text
+- [Click](/nimble-sdk/web-api/page-interaction/wait-and-click) - Basic click action

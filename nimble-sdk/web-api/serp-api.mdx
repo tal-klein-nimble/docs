@@ -1,0 +1,347 @@
+---
+title: SERP API
+description: Extract search engine results with Nimble SERP API
+---
+
+# SERP API
+
+Extract search engine results pages (SERPs) with high accuracy and comprehensive data parsing.
+
+## Supported Search Engines
+
+- **Google** - Web, Images, News, Shopping, Videos
+- **Bing** - Web search results
+- **DuckDuckGo** - Privacy-focused search
+- **Yandex** - Russian search engine
+- **Baidu** - Chinese search engine
+
+## Basic SERP Request
+
+### Endpoint
+```
+POST https://api.nimbleway.com/v1/serp
+```
+
+### Google Search Example
+
+```bash
+curl -X POST "https://api.nimbleway.com/v1/serp" \
+  -H "Authorization: Bearer your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "engine": "google",
+    "query": "web scraping tools",
+    "location": "United States"
+  }'
+```
+
+### Response
+
+```json
+{
+  "status": "success",
+  "engine": "google",
+  "query": "web scraping tools",
+  "location": "United States",
+  "results": {
+    "organic": [
+      {
+        "position": 1,
+        "title": "Best Web Scraping Tools - 2024 Guide",
+        "url": "https://example.com/scraping-tools",
+        "description": "Comprehensive guide to web scraping tools...",
+        "displayed_url": "example.com/scraping-tools"
+      }
+    ],
+    "ads": [
+      {
+        "position": 1,
+        "title": "Professional Web Scraping Service",
+        "url": "https://ads.example.com",
+        "description": "Get reliable data extraction..."
+      }
+    ],
+    "people_also_ask": [
+      {
+        "question": "What are the best web scraping tools?",
+        "answer": "The best web scraping tools include..."
+      }
+    ]
+  },
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 10,
+    "results_per_page": 10
+  }
+}
+```
+
+## Parameters
+
+### Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `engine` | string | Search engine: `google`, `bing`, `duckduckgo`, `yandex`, `baidu` |
+| `query` | string | Search query |
+
+### Optional Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `location` | string | `United States` | Geographic location for results |
+| `language` | string | `en` | Language code (e.g., `en`, `es`, `fr`) |
+| `page` | integer | `1` | Results page number |
+| `num_results` | integer | `10` | Number of results per page |
+| `safe_search` | string | `moderate` | Safe search: `off`, `moderate`, `strict` |
+| `time_range` | string | `any` | Time filter: `hour`, `day`, `week`, `month`, `year` |
+
+## Search Engine Specific Features
+
+### Google Features
+
+#### Image Search
+```json
+{
+  "engine": "google",
+  "search_type": "images", 
+  "query": "mountain landscapes",
+  "image_size": "large",
+  "image_type": "photo"
+}
+```
+
+#### News Search
+```json
+{
+  "engine": "google",
+  "search_type": "news",
+  "query": "artificial intelligence",
+  "time_range": "week",
+  "sort_by": "relevance"
+}
+```
+
+#### Shopping Search
+```json
+{
+  "engine": "google", 
+  "search_type": "shopping",
+  "query": "wireless headphones",
+  "min_price": 50,
+  "max_price": 200
+}
+```
+
+### Bing Features
+
+```json
+{
+  "engine": "bing",
+  "query": "machine learning",
+  "location": "United Kingdom",
+  "freshness": "week"
+}
+```
+
+### Location Targeting
+
+#### By Country
+```json
+{
+  "engine": "google",
+  "query": "restaurants nearby", 
+  "location": "France"
+}
+```
+
+#### By City
+```json
+{
+  "engine": "google",
+  "query": "weather forecast",
+  "location": "New York, NY, United States"
+}
+```
+
+#### By Coordinates
+```json
+{
+  "engine": "google",
+  "query": "coffee shops",
+  "location": {
+    "lat": 40.7128,
+    "lng": -74.0060,
+    "radius": "10km"
+  }
+}
+```
+
+## Response Data Structure
+
+### Organic Results
+```json
+{
+  "organic": [
+    {
+      "position": 1,
+      "title": "Page Title",
+      "url": "https://example.com",
+      "description": "Meta description or snippet",
+      "displayed_url": "example.com",
+      "rich_snippets": {
+        "rating": {
+          "stars": 4.5,
+          "reviews": 128
+        },
+        "price": "$29.99"
+      }
+    }
+  ]
+}
+```
+
+### Knowledge Graph
+```json
+{
+  "knowledge_graph": {
+    "title": "Company Name",
+    "description": "Company description...",
+    "website": "https://company.com",
+    "stock_ticker": "COMP",
+    "founded": "2010",
+    "headquarters": "San Francisco, CA"
+  }
+}
+```
+
+### Featured Snippets
+```json
+{
+  "featured_snippet": {
+    "type": "paragraph",
+    "question": "What is web scraping?",
+    "answer": "Web scraping is the process of...",
+    "source": {
+      "title": "Web Scraping Guide",
+      "url": "https://example.com/guide"
+    }
+  }
+}
+```
+
+## Use Cases
+
+### SEO Monitoring
+Track keyword rankings for your website:
+
+```json
+{
+  "engine": "google",
+  "query": "your target keyword",
+  "location": "United States",
+  "page": 1,
+  "num_results": 100
+}
+```
+
+### Competitor Analysis
+Monitor competitor search visibility:
+
+```json
+{
+  "engine": "google", 
+  "query": "industry competitor keywords",
+  "location": "target market location"
+}
+```
+
+### Market Research
+Analyze search trends and user intent:
+
+```json
+{
+  "engine": "google",
+  "query": "product category research",
+  "search_type": "images",
+  "time_range": "month"
+}
+```
+
+## SDK Examples
+
+### Node.js
+```javascript
+const results = await client.serp({
+  engine: 'google',
+  query: 'web scraping tools',
+  location: 'United States',
+  num_results: 20
+});
+
+console.log(results.organic);
+```
+
+### Python
+```python
+results = client.serp({
+    'engine': 'google',
+    'query': 'web scraping tools', 
+    'location': 'United States',
+    'num_results': 20
+})
+
+print(results['organic'])
+```
+
+## Rate Limits
+
+| Plan | Requests/Hour | Concurrent |
+|------|--------------|------------|
+| Free | 100 | 1 |
+| Starter | 1,000 | 5 |
+| Professional | 10,000 | 20 |
+| Enterprise | Custom | Custom |
+
+## Pricing
+
+- **Google/Bing**: $0.001 per request
+- **DuckDuckGo**: $0.0005 per request  
+- **Yandex/Baidu**: $0.002 per request
+
+## Error Handling
+
+### Invalid Search Engine
+```json
+{
+  "status": "error",
+  "error": "INVALID_ENGINE",
+  "message": "Supported engines: google, bing, duckduckgo, yandex, baidu"
+}
+```
+
+### No Results Found
+```json
+{
+  "status": "success",
+  "results": {
+    "organic": [],
+    "total_results": 0
+  },
+  "message": "No results found for query"
+}
+```
+
+## Best Practices
+
+- **Use specific queries** for better result quality
+- **Set appropriate locations** for geo-targeted results  
+- **Handle pagination** for comprehensive data collection
+- **Respect rate limits** to avoid account suspension
+- **Cache results** to reduce API costs
+
+## Next Steps
+
+- Explore [Maps API](/nimble-sdk/web-api/maps-api) for location data
+- Learn about [Batch Processing](/nimble-sdk/web-api/batch-processing) for multiple queries
+- Check [Web API Functions](/nimble-sdk/web-api/functions) for advanced features

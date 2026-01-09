@@ -1,0 +1,404 @@
+---
+title: Wait for Selector
+description: Wait for specific elements to appear on the page
+---
+
+# Wait for Selector
+
+Wait for specific elements to become available before proceeding with data extraction.
+
+## Basic Wait for Selector
+
+```json
+{
+  "url": "https://example.com",
+  "actions": [
+    {
+      "type": "wait_for_selector",
+      "selector": ".dynamic-content",
+      "timeout": 10000
+    }
+  ]
+}
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `type` | string | Yes | Must be `"wait_for_selector"` |
+| `selector` | string | Yes | CSS selector for the element to wait for |
+| `timeout` | integer | No | Max wait time in milliseconds (default: 10000) |
+| `visible` | boolean | No | Wait for element to be visible (default: true) |
+| `hidden` | boolean | No | Wait for element to be hidden (default: false) |
+
+## Wait Conditions
+
+### Wait for Visibility
+Wait for an element to become visible:
+
+```json
+{
+  "type": "wait_for_selector",
+  "selector": ".loading-spinner",
+  "visible": true,
+  "timeout": 5000
+}
+```
+
+### Wait for Element to Hide
+Wait for an element to disappear:
+
+```json
+{
+  "type": "wait_for_selector",
+  "selector": ".loading-overlay",
+  "hidden": true,
+  "timeout": 15000
+}
+```
+
+### Wait for DOM Presence
+Wait for element to exist in DOM (regardless of visibility):
+
+```json
+{
+  "type": "wait_for_selector",
+  "selector": "#dynamic-data",
+  "visible": false,
+  "timeout": 8000
+}
+```
+
+## Use Cases
+
+### Dynamic Content Loading
+Wait for AJAX-loaded content:
+
+```json
+{
+  "url": "https://news-site.com",
+  "actions": [
+    {
+      "type": "wait_for_selector",
+      "selector": ".article-list .article-item",
+      "timeout": 15000
+    }
+  ]
+}
+```
+
+### Form Validation
+Wait for form validation messages:
+
+```json
+{
+  "url": "https://form-site.com/contact",
+  "actions": [
+    {
+      "type": "wait_and_type",
+      "selector": "input[name='email']",
+      "text": "invalid-email"
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".error-message",
+      "timeout": 3000
+    }
+  ]
+}
+```
+
+### Modal Dialogs
+Wait for popup modals to appear:
+
+```json
+{
+  "url": "https://app.com/dashboard",
+  "actions": [
+    {
+      "type": "click",
+      "selector": ".open-modal-btn"
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".modal.show",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+### Single Page Applications
+Wait for SPA route changes:
+
+```json
+{
+  "url": "https://spa-app.com",
+  "actions": [
+    {
+      "type": "click",
+      "selector": "a[href='/products']"
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".products-container",
+      "timeout": 10000
+    }
+  ]
+}
+```
+
+## Advanced Selectors
+
+### Attribute Selectors
+```json
+{
+  "type": "wait_for_selector",
+  "selector": "img[data-loaded='true']",
+  "timeout": 20000
+}
+```
+
+### Complex Selectors
+```json
+{
+  "type": "wait_for_selector", 
+  "selector": ".product-list .product-item:nth-child(10)",
+  "timeout": 15000
+}
+```
+
+### Multiple Class Selector
+```json
+{
+  "type": "wait_for_selector",
+  "selector": ".content.loaded.visible",
+  "timeout": 8000
+}
+```
+
+## Error Handling
+
+### Element Not Found
+```json
+{
+  "status": "error",
+  "error": "ELEMENT_NOT_FOUND",
+  "message": "Element with selector '.missing-element' not found within timeout",
+  "selector": ".missing-element",
+  "timeout": 10000
+}
+```
+
+### Timeout Exceeded
+```json
+{
+  "status": "error",
+  "error": "TIMEOUT_EXCEEDED",
+  "message": "Element did not appear within 10000ms",
+  "selector": ".slow-loading-content"
+}
+```
+
+## Performance Optimization
+
+### Appropriate Timeouts
+```json
+// Fast elements - short timeout
+{
+  "type": "wait_for_selector",
+  "selector": ".quick-popup",
+  "timeout": 3000
+}
+
+// Slow AJAX - longer timeout
+{
+  "type": "wait_for_selector", 
+  "selector": ".heavy-data-table",
+  "timeout": 30000
+}
+```
+
+### Specific Selectors
+```json
+// Good - specific selector
+{
+  "type": "wait_for_selector",
+  "selector": "#search-results .result-item"
+}
+
+// Avoid - too generic
+{
+  "type": "wait_for_selector",
+  "selector": "div"
+}
+```
+
+## Chaining with Other Actions
+
+### Wait, Then Extract
+```json
+{
+  "url": "https://dynamic-site.com",
+  "actions": [
+    {
+      "type": "wait_for_selector",
+      "selector": ".price-loaded",
+      "timeout": 10000
+    }
+  ],
+  "extract": {
+    "price": ".current-price",
+    "availability": ".stock-status"
+  }
+}
+```
+
+### Wait, Then Interact
+```json
+{
+  "url": "https://interactive-app.com",
+  "actions": [
+    {
+      "type": "wait_for_selector",
+      "selector": ".category-dropdown",
+      "timeout": 5000
+    },
+    {
+      "type": "click",
+      "selector": ".category-dropdown"
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".dropdown-options",
+      "timeout": 3000
+    },
+    {
+      "type": "click",
+      "selector": ".dropdown-option:first-child"
+    }
+  ]
+}
+```
+
+## Common Patterns
+
+### Loading States
+```json
+{
+  "url": "https://app.com/data",
+  "actions": [
+    // Wait for loading to start
+    {
+      "type": "wait_for_selector",
+      "selector": ".loading-spinner",
+      "timeout": 2000
+    },
+    // Wait for loading to finish
+    {
+      "type": "wait_for_selector",
+      "selector": ".loading-spinner", 
+      "hidden": true,
+      "timeout": 30000
+    },
+    // Wait for content to appear
+    {
+      "type": "wait_for_selector",
+      "selector": ".data-table tbody tr",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+### Progressive Enhancement
+```json
+{
+  "url": "https://progressive-site.com",
+  "actions": [
+    // Wait for basic content
+    {
+      "type": "wait_for_selector",
+      "selector": ".main-content",
+      "timeout": 5000
+    },
+    // Wait for enhanced features
+    {
+      "type": "wait_for_selector",
+      "selector": ".enhanced-widget",
+      "timeout": 10000
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### Selector Specificity
+- **Use unique selectors** when possible
+- **Prefer IDs and data attributes** over generic classes
+- **Test selectors** in browser dev tools first
+- **Consider element hierarchy** for stability
+
+### Timeout Management
+- **Set realistic timeouts** based on expected load times
+- **Use shorter timeouts** for fast interactions
+- **Allow longer timeouts** for heavy content
+- **Consider user experience** - don't wait too long
+
+### Error Recovery
+```json
+{
+  "url": "https://unreliable-site.com",
+  "actions": [
+    {
+      "type": "wait_for_selector",
+      "selector": ".primary-content",
+      "timeout": 15000
+    },
+    // Fallback if primary content doesn't load
+    {
+      "type": "wait_for_selector", 
+      "selector": ".fallback-content",
+      "timeout": 5000
+    }
+  ]
+}
+```
+
+## SDK Examples
+
+### Node.js
+```javascript
+const result = await client.scrape({
+  url: 'https://example.com',
+  actions: [
+    {
+      type: 'wait_for_selector',
+      selector: '.dynamic-content',
+      timeout: 10000
+    }
+  ]
+});
+```
+
+### Python
+```python
+result = client.scrape({
+    'url': 'https://example.com',
+    'actions': [
+        {
+            'type': 'wait_for_selector',
+            'selector': '.dynamic-content',
+            'timeout': 10000
+        }
+    ]
+})
+```
+
+## Related Actions
+
+- [Wait](/nimble-sdk/web-api/page-interaction/wait) - Simple time-based delays
+- [Wait and Click](/nimble-sdk/web-api/page-interaction/wait-and-click) - Wait for element then click
+- [Wait and Type](/nimble-sdk/web-api/page-interaction/wait-and-type) - Wait for element then type text

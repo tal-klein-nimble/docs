@@ -1,0 +1,118 @@
+---
+title: "Web API Quick Start"
+description: "Get started with Nimble Web API - authentication, first request, and basic usage"
+---
+
+# Quick Start Guide
+
+Get up and running with the Nimble Web API in minutes.
+
+## What You'll Learn
+
+- How to authenticate with the Web API
+- Make your first request
+- Understand response structure
+- Choose delivery methods
+
+## Authentication
+
+The Web API uses **Basic Authentication** with base64 encoded credentials.
+
+**Format:** `base64(username:password)`
+
+<CodeGroup>
+```bash cURL
+curl --location --request POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Basic dXNlckBuaW1ibGV3YXkuY29tOnBhc3MxMjM=' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com"
+}'
+```
+
+```python Python
+import requests
+
+url = 'https://api.webit.live/api/v1/realtime/web'
+headers = {
+    'Authorization': 'Basic dXNlckBuaW1ibGV3YXkuY29tOnBhc3MxMjM=',
+    'Content-Type': 'application/json'
+}
+data = {
+    "url": "https://www.example.com"
+}
+
+response = requests.post(url, headers=headers, json=data)
+```
+</CodeGroup>
+
+## Your First Request
+
+**Endpoint:** `https://api.webit.live/api/v1/realtime/web`
+
+```python
+import requests
+
+url = 'https://api.webit.live/api/v1/realtime/web'
+headers = {
+    'Authorization': 'Basic <your-credential-string>',
+    'Content-Type': 'application/json'
+}
+data = {
+    "url": "https://www.example.com"
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+## Response Structure
+
+```json
+{	
+    "status": "success",
+    "html_content": "string",
+    "parsing": {
+         "status": "success",
+         "entities": { },
+         "total_entities_count": 0,
+         "entities_count": { }
+    }
+}
+```
+
+## Key Features
+
+### Real-time Data Collection
+- SERP collection for SEO/SEM analysis
+- Product data from major marketplaces
+- Training data for AI models
+- Lead enrichment for sales
+
+### Advanced Capabilities
+- **High data accuracy** through Nimble Browser
+- **Robust fingerprinting** for unrestricted access
+- **Zero maintenance** fully-managed service
+- **Unlimited scalability** on serverless platforms
+- **Integrated proxy network** (Nimble IP)
+
+## Delivery Methods
+
+Choose how you want to receive your data:
+
+1. **Real-time** - Data returned immediately in API response
+2. **Cloud Storage** - Direct delivery to S3/Google Cloud
+3. **Callback** - Notification when data is ready
+
+## Next Steps
+
+- Learn about [Web API Functions](/nimble-sdk/web-api/functions)
+- Explore [API Reference](/nimble-sdk/web-api/reference)
+- Check out [advanced features](/nimble-sdk/web-api/advanced)
+
+## Need Help?
+
+- Review our [troubleshooting guide](#)
+- Contact support for assistance
+- Join our developer community

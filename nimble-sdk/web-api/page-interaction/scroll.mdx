@@ -1,0 +1,456 @@
+---
+title: Scroll
+description: Scroll page content to load dynamic elements and reveal hidden content
+---
+
+# Scroll
+
+Scroll page content vertically or horizontally to trigger lazy loading, reveal hidden elements, or navigate through content.
+
+## Basic Scroll
+
+```json
+{
+  "url": "https://example.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 1000
+    }
+  ]
+}
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `type` | string | Yes | Must be `"scroll"` |
+| `direction` | string | Yes | Scroll direction: `down`, `up`, `left`, `right` |
+| `pixels` | integer | No | Pixels to scroll (default: 500) |
+| `element` | string | No | CSS selector of element to scroll |
+| `smooth` | boolean | No | Smooth scrolling animation (default: false) |
+
+## Scroll Directions
+
+### Vertical Scrolling
+
+#### Scroll Down
+```json
+{
+  "type": "scroll",
+  "direction": "down",
+  "pixels": 800
+}
+```
+
+#### Scroll Up
+```json
+{
+  "type": "scroll", 
+  "direction": "up",
+  "pixels": 500
+}
+```
+
+### Horizontal Scrolling
+
+#### Scroll Right
+```json
+{
+  "type": "scroll",
+  "direction": "right", 
+  "pixels": 300
+}
+```
+
+#### Scroll Left
+```json
+{
+  "type": "scroll",
+  "direction": "left",
+  "pixels": 200
+}
+```
+
+## Element-Specific Scrolling
+
+### Scroll Within Container
+```json
+{
+  "type": "scroll",
+  "element": ".scrollable-container",
+  "direction": "down",
+  "pixels": 400
+}
+```
+
+### Scroll Modal Content
+```json
+{
+  "type": "scroll",
+  "element": ".modal-body",
+  "direction": "down", 
+  "pixels": 600
+}
+```
+
+## Use Cases
+
+### Lazy Loading Content
+Trigger lazy-loaded images and content:
+
+```json
+{
+  "url": "https://image-gallery.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 1000
+    },
+    {
+      "type": "wait",
+      "duration": 2000
+    },
+    {
+      "type": "scroll", 
+      "direction": "down",
+      "pixels": 1000
+    }
+  ]
+}
+```
+
+### Social Media Feeds
+Load more posts in social media feeds:
+
+```json
+{
+  "url": "https://social-site.com/feed",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 2000
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".loading-spinner",
+      "hidden": true
+    }
+  ]
+}
+```
+
+### Product Catalogs
+Navigate through product listings:
+
+```json
+{
+  "url": "https://ecommerce.com/products",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down", 
+      "pixels": 1500
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".product-item:nth-child(20)"
+    }
+  ]
+}
+```
+
+### News Articles
+Scroll through long-form content:
+
+```json
+{
+  "url": "https://news-site.com/article",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 3000,
+      "smooth": true
+    }
+  ]
+}
+```
+
+## Advanced Scrolling Patterns
+
+### Progressive Scrolling
+Scroll in increments to mimic human behavior:
+
+```json
+{
+  "url": "https://content-heavy-site.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 500
+    },
+    {
+      "type": "wait",
+      "duration": 1000
+    },
+    {
+      "type": "scroll",
+      "direction": "down", 
+      "pixels": 500
+    },
+    {
+      "type": "wait",
+      "duration": 1500
+    },
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 500
+    }
+  ]
+}
+```
+
+### Scroll and Extract
+Scroll to reveal content, then extract data:
+
+```json
+{
+  "url": "https://data-site.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 2000
+    },
+    {
+      "type": "wait_for_selector",
+      "selector": ".additional-data"
+    }
+  ],
+  "extract": {
+    "all_items": ".data-item",
+    "total_count": ".result-count"
+  }
+}
+```
+
+### Horizontal Carousel Navigation
+Navigate through image carousels or sliders:
+
+```json
+{
+  "url": "https://gallery-site.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "element": ".image-carousel",
+      "direction": "right",
+      "pixels": 800
+    },
+    {
+      "type": "wait",
+      "duration": 1000
+    }
+  ]
+}
+```
+
+## Smooth Scrolling
+
+### Natural Scrolling Animation
+```json
+{
+  "type": "scroll",
+  "direction": "down",
+  "pixels": 1200,
+  "smooth": true
+}
+```
+
+### Benefits of Smooth Scrolling
+- **More human-like** behavior
+- **Triggers animations** that depend on scroll events
+- **Better for sites** with scroll-based interactions
+- **Mimics real user** scrolling patterns
+
+## Performance Considerations
+
+### Optimal Scroll Distances
+```json
+// Small increments for precise control
+{
+  "type": "scroll",
+  "direction": "down",
+  "pixels": 300
+}
+
+// Larger jumps for faster navigation
+{
+  "type": "scroll",
+  "direction": "down", 
+  "pixels": 1500
+}
+```
+
+### Wait After Scrolling
+Always add delays after scrolling to allow content to load:
+
+```json
+{
+  "url": "https://dynamic-site.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 1000
+    },
+    {
+      "type": "wait",
+      "duration": 2000
+    }
+  ]
+}
+```
+
+## Error Handling
+
+### Element Not Scrollable
+```json
+{
+  "status": "error",
+  "error": "ELEMENT_NOT_SCROLLABLE", 
+  "message": "Element '.fixed-container' cannot be scrolled",
+  "element": ".fixed-container"
+}
+```
+
+### Invalid Direction
+```json
+{
+  "status": "error",
+  "error": "INVALID_PARAMETER",
+  "message": "Invalid scroll direction 'diagonal'. Use: up, down, left, right"
+}
+```
+
+## Combining with Other Actions
+
+### Scroll + Click Pattern
+```json
+{
+  "url": "https://long-page.com",
+  "actions": [
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 2000
+    },
+    {
+      "type": "wait_and_click",
+      "selector": ".load-more-btn"
+    }
+  ]
+}
+```
+
+### Multiple Scroll Points
+```json
+{
+  "url": "https://multi-section-site.com",
+  "actions": [
+    // Scroll to section 1
+    {
+      "type": "scroll",
+      "direction": "down", 
+      "pixels": 800
+    },
+    {
+      "type": "wait",
+      "duration": 1000
+    },
+    // Scroll to section 2
+    {
+      "type": "scroll",
+      "direction": "down",
+      "pixels": 1200
+    },
+    {
+      "type": "wait",
+      "duration": 1000
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### Realistic Scrolling
+- **Use human-like distances** (300-1500 pixels)
+- **Add delays between scrolls** (1-3 seconds)
+- **Vary scroll distances** for natural patterns
+- **Use smooth scrolling** when appropriate
+
+### Content Loading
+- **Wait for content** to load after scrolling
+- **Check for loading indicators** before proceeding
+- **Allow time for lazy loading** to trigger
+- **Verify new content** appeared before continuing
+
+### Performance
+- **Minimize excessive scrolling** to reduce request time
+- **Use efficient scroll distances** to reach target content
+- **Combine with other actions** for complex workflows
+- **Monitor total request timeout** with multiple scrolls
+
+## SDK Examples
+
+### Node.js
+```javascript
+const result = await client.scrape({
+  url: 'https://example.com',
+  actions: [
+    {
+      type: 'scroll',
+      direction: 'down',
+      pixels: 1000,
+      smooth: true
+    },
+    {
+      type: 'wait',
+      duration: 2000
+    }
+  ]
+});
+```
+
+### Python
+```python
+result = client.scrape({
+    'url': 'https://example.com',
+    'actions': [
+        {
+            'type': 'scroll',
+            'direction': 'down', 
+            'pixels': 1000,
+            'smooth': True
+        },
+        {
+            'type': 'wait',
+            'duration': 2000
+        }
+    ]
+})
+```
+
+## Related Actions
+
+- [Scroll To](/nimble-sdk/web-api/page-interaction/scroll-to) - Scroll to specific elements
+- [Infinite Scrolling](/nimble-sdk/web-api/page-interaction/infinite-scrolling) - Automated infinite scroll
+- [Wait](/nimble-sdk/web-api/page-interaction/wait) - Add delays between actions
