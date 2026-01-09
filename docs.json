@@ -41,7 +41,14 @@
                   "documentation/web-tools/extract/extract-overview",
                   "documentation/web-tools/extract/geo-targeting",
                   "documentation/web-tools/extract/stealth-mode",
-                  "documentation/web-tools/extract/parsing-schema",
+                  {
+                    "group": "Parsing Schema",
+                    "pages": [
+                      "documentation/web-tools/extract/parsing-schema",
+                      "documentation/web-tools/extract/parsing-schema/untitled-page-1",
+                      "documentation/web-tools/extract/parsing-schema/untitled-page"
+                    ]
+                  },
                   {
                     "group": "Browser Actions",
                     "pages": [

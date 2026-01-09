@@ -1,0 +1,606 @@
+---
+title: "Schema Mode"
+description: "Precise data extraction with CSS selectors and parsers"
+---
+
+Schema mode gives you full control over data extraction using CSS selectors and parsers. Define exact data structures for predictable, low-cost extraction that executes consistently across thousands of pages.
+
+## When to use
+
+Use schema mode when you need:
+
+- **Low cost**: Pay per driver usage, not token consumption
+- **Predictable extraction**: Same selectors extract same data every time
+- **Full control**: Specify exact CSS paths and data types
+- **High volume**: Process large datasets efficiently
+
+<Note>
+  Parsers may break when page structure or selectors change. Monitor source pages and update parsers as needed.
+</Note>
+
+# Parser structure
+
+Parsers define how to extract data using three core components:
+
+**Required properties:**
+
+- `type` - Return format: `item`, `list`, `json`, `table`, `object`, `object-list`
+- `selectors` - CSS selectors identifying target elements (multiple for fallbacks)
+- `extractor` - What to extract: `text`, `html`, or attributes like `[href]`
+
+# Extraction types
+
+| Type          | Purpose                    | Returns                             |
+| ------------- | -------------------------- | ----------------------------------- |
+| `item`        | Single element             | First matched element               |
+| `list`        | Multiple elements          | Array of all matches                |
+| `json`        | JSON formatted             | First element as JSON               |
+| `table`       | HTML tables                | JSON using headers as keys          |
+| `object`      | Custom structure           | Single element with multiple fields |
+| `object-list` | Multiple custom structures | Array of objects                    |
+
+# Extractors
+
+Specify what to extract from matched elements:
+
+- `text` - Element text without HTML tags
+- `html` - Full inner HTML content
+- `[attribute]` - Specific attributes (e.g., `[href]`, `[src]`, `[data-id]`)
+
+# Usage
+
+## Basic extraction
+
+Extract a single field:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    name: str
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema=Product,
+    parser={
+        "name": {
+            "selector": ".product-name",
+            "extractor": "text"
+        }
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  parser: {
+    name: {
+      selector: ".product-name",
+      extractor: "text"
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "parser": {
+        "name": {
+            "selector": ".product-name",
+            "extractor": "text"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+## Object extraction
+
+Extract multiple fields from a single element:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    name: str
+    price: float
+    rating: float
+    url: str
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema=Product,
+    parser={
+        "type": "object",
+        "selector": ".product-card",
+        "fields": {
+            "name": {
+                "selector": ".product-name",
+                "extractor": "text"
+            },
+            "price": {
+                "selector": ".price",
+                "extractor": "text"
+            },
+            "rating": {
+                "selector": ".rating",
+                "extractor": "text"
+            },
+            "url": {
+                "selector": "a.product-link",
+                "extractor": "[href]"
+            }
+        }
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  parser: {
+    type: "object",
+    selector: ".product-card",
+    fields: {
+      name: {
+        selector: ".product-name",
+        extractor: "text"
+      },
+      price: {
+        selector: ".price",
+        extractor: "text"
+      },
+      rating: {
+        selector: ".rating",
+        extractor: "text"
+      },
+      url: {
+        selector: "a.product-link",
+        extractor: "[href]"
+      }
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "parser": {
+        "type": "object",
+        "selector": ".product-card",
+        "fields": {
+            "name": {
+                "selector": ".product-name",
+                "extractor": "text"
+            },
+            "price": {
+                "selector": ".price",
+                "extractor": "text"
+            },
+            "rating": {
+                "selector": ".rating",
+                "extractor": "text"
+            },
+            "url": {
+                "selector": "a.product-link",
+                "extractor": "[href]"
+            }
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+## List extraction
+
+Extract multiple items with the same structure:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+from typing import List
+
+class Product(BaseModel):
+    name: str
+    price: float
+
+class ProductList(BaseModel):
+    products: List[Product]
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/products",
+    schema=ProductList,
+    parser={
+        "products": {
+            "type": "object-list",
+            "selector": ".product-item",
+            "fields": {
+                "name": {
+                    "selector": ".product-name",
+                    "extractor": "text"
+                },
+                "price": {
+                    "selector": ".price",
+                    "extractor": "text"
+                }
+            }
+        }
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/products",
+  parser: {
+    products: {
+      type: "object-list",
+      selector: ".product-item",
+      fields: {
+        name: {
+          selector: ".product-name",
+          extractor: "text"
+        },
+        price: {
+          selector: ".price",
+          extractor: "text"
+        }
+      }
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/products",
+    "parser": {
+        "products": {
+            "type": "object-list",
+            "selector": ".product-item",
+            "fields": {
+                "name": {
+                    "selector": ".product-name",
+                    "extractor": "text"
+                },
+                "price": {
+                    "selector": ".price",
+                    "extractor": "text"
+                }
+            }
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+## Table extraction
+
+Convert HTML tables to JSON:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/table",
+    parser={
+        "data": {
+            "type": "table",
+            "selector": "table.data-table"
+        }
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/table",
+  parser: {
+    data: {
+      type: "table",
+      selector: "table.data-table"
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/table",
+    "parser": {
+        "data": {
+            "type": "table",
+            "selector": "table.data-table"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+## Fallback selectors
+
+Provide multiple selectors for robustness:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    price: float
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema=Product,
+    parser={
+        "price": {
+            "selectors": [".price-new", ".price", "[data-price]"],
+            "extractor": "text"
+        }
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  parser: {
+    price: {
+      selectors: [".price-new", ".price", "[data-price]"],
+      extractor: "text"
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "parser": {
+        "price": {
+            "selectors": [".price-new", ".price", "[data-price]"],
+            "extractor": "text"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+<Note>
+  Nimble tries each selector in order and uses the first match. This creates fallback logic for varying page structures.
+</Note>
+
+# Example response
+
+When parsing completes successfully, you receive structured data matching your schema:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "products": [
+      {
+        "name": "Wireless Headphones",
+        "price": 79.99,
+        "rating": 4.5,
+        "url": "/product/wireless-headphones",
+        "in_stock": true
+      },
+      {
+        "name": "Bluetooth Speaker",
+        "price": 49.99,
+        "rating": 4.2,
+        "url": "/product/bluetooth-speaker",
+        "in_stock": true
+      }
+    ]
+  },
+  "metadata": {
+    "driver": "vx8",
+    "execution_time_ms": 1250,
+    "items_extracted": 2
+  }
+}
+```
+
+The response includes:
+
+- **data**: Structured JSON matching your schema
+- **metadata**: Execution details including driver and timing
+- **items_extracted**: Count of items successfully parsed
+
+# Best practices
+
+## Selector specificity
+
+**Use specific selectors:**
+
+```
+✅ ".product-card .price-value"
+❌ ".price"
+```
+
+**Combine classes and attributes:**
+
+```
+✅ "button[data-action='add-to-cart']"
+❌ "button"
+```
+
+## Error handling
+
+**Provide fallbacks:**
+
+```json
+{
+  "selectors": [".price-new", ".price-old", ".price"]
+}
+```
+
+**Use optional fields:**
+
+```python
+class Product(BaseModel):
+    name: str
+    price: float
+    rating: Optional[float] = None  # Optional field
+```
+
+## Performance optimization
+
+- Use specific selectors to reduce DOM traversal
+- Extract only needed fields
+- Leverage `object-list` for multiple similar items
+- Test parsers on sample pages before production
+
+## Managing parsers
+
+**Upload parsers for reuse:**
+
+```bash
+# Create parser
+curl -X POST 'https://api.webit.live/api/v1/parsers' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "product-parser",
+    "parser": {
+        "type": "object",
+        "selector": ".product",
+        "fields": {...}
+    }
+}'
+
+# Use by name
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "parser_name": "product-parser"
+}'
+```
+
+**List all parsers:**
+
+```bash
+curl -X GET 'https://api.webit.live/api/v1/parsers' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+**Update parser:**
+
+```bash
+curl -X PUT 'https://api.webit.live/api/v1/parsers' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "product-parser",
+    "parser": {...}
+}'
+```
+
+**Delete parser:**
+
+```bash
+curl -X DELETE 'https://api.webit.live/api/v1/parsers/product-parser' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+<Note>
+  Uploaded parsers are stored separately and can be reused across requests, making them ideal for production use.
+</Note>

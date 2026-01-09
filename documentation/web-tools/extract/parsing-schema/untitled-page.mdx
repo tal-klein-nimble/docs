@@ -1,0 +1,525 @@
+---
+title: "LLM Mode"
+description: "AI-powered data extraction with natural language prompts"
+---
+
+LLM mode enables intelligent data extraction using AI. Describe what data you need in natural language or provide a loose schema, and the AI dynamically analyzes each page to extract and structure information—adapting to variations without schema maintenance.
+
+## When to use
+
+Use LLM mode when you need:
+
+- **Zero setup**: No CSS selector configuration required
+- **Self-healing**: Automatically adapts when pages change
+- **Flexible extraction**: Works across varying page structures
+- **Complex data**: AI understands context and relationships
+
+<Note>
+  LLM mode uses the vx14 driver and incurs additional token consumption costs. This is more expensive than schema mode but requires zero maintenance when pages change.
+</Note>
+
+# How it works
+
+1. **Define what you need**: Provide a schema model and/or natural language prompt
+2. **AI analyzes the page**: The LLM understands page structure and identifies relevant data
+3. **Dynamic extraction**: Data is extracted and structured automatically
+4. **Adaptive behavior**: Works across different page layouts and structures
+
+<Note>
+  The AI analyzes each page individually, adapting to its specific structure. You can provide a schema model for structure, a prompt for guidance, or both.
+</Note>
+
+# Usage
+
+## With schema model
+
+Define your data structure and let AI find the data:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class ProductInfo(BaseModel):
+    name: str
+    price: float
+    rating: float
+    in_stock: bool
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema=ProductInfo
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const ProductInfo = {
+  name: "string",
+  price: "number",
+  rating: "number",
+  in_stock: "boolean"
+};
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  schema: ProductInfo
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "schema": {
+        "name": "string",
+        "price": "number",
+        "rating": "number",
+        "in_stock": "boolean"
+    }
+}'
+```
+
+</CodeGroup>
+
+## With natural language prompt
+
+Describe what to extract without defining structure:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema_prompt="Extract product details including name, price, customer ratings, and stock availability"
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  schema_prompt: "Extract product details including name, price, customer ratings, and stock availability"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "schema_prompt": "Extract product details including name, price, customer ratings, and stock availability"
+}'
+```
+
+</CodeGroup>
+
+## Combining schema and prompt
+
+Provide both structure and guidance for best results:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class ProductInfo(BaseModel):
+    name: str
+    price: float
+    rating: float
+    reviews_count: int
+    in_stock: bool
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/product",
+    schema=ProductInfo,
+    schema_prompt="Extract product information. For rating, use the average customer rating. Count total number of reviews."
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const ProductInfo = {
+  name: "string",
+  price: "number",
+  rating: "number",
+  reviews_count: "number",
+  in_stock: "boolean"
+};
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  schema: ProductInfo,
+  schema_prompt: "Extract product information. For rating, use the average customer rating. Count total number of reviews."
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "schema": {
+        "name": "string",
+        "price": "number",
+        "rating": "number",
+        "reviews_count": "number",
+        "in_stock": "boolean"
+    },
+    "schema_prompt": "Extract product information. For rating, use the average customer rating. Count total number of reviews."
+}'
+```
+
+</CodeGroup>
+
+## Extracting lists
+
+Extract multiple items with AI intelligence:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+from typing import List
+
+class Product(BaseModel):
+    name: str
+    price: float
+    rating: float
+
+class ProductList(BaseModel):
+    products: List[Product]
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/products",
+    schema=ProductList,
+    schema_prompt="Extract all products visible on the page with their names, prices, and ratings"
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/products",
+  schema_prompt: "Extract all products visible on the page with their names, prices, and ratings. Return as an array of objects."
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/products",
+    "schema_prompt": "Extract all products visible on the page with their names, prices, and ratings. Return as an array of objects."
+}'
+```
+
+</CodeGroup>
+
+## Complex extraction
+
+Let AI handle intricate data relationships:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract(
+    url="https://www.example.com/article",
+    schema_prompt="Extract the article title, author name, publication date, main content, and all image URLs. Also extract any related articles mentioned with their titles and links."
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  schema_prompt: "Extract the article title, author name, publication date, main content, and all image URLs. Also extract any related articles mentioned with their titles and links."
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/article",
+    "schema_prompt": "Extract the article title, author name, publication date, main content, and all image URLs. Also extract any related articles mentioned with their titles and links."
+}'
+```
+
+</CodeGroup>
+
+# Example response
+
+When LLM parsing completes, you receive structured data with AI execution details:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "Wireless Bluetooth Headphones",
+    "price": 79.99,
+    "rating": 4.5,
+    "reviews_count": 1234,
+    "in_stock": true,
+    "features": [
+      "Active Noise Cancellation",
+      "30-hour battery life",
+      "Quick charge technology"
+    ]
+  },
+  "llm_extraction": {
+    "schema_prompt": "Extract product information including all key features",
+    "confidence": 0.95,
+    "fields_extracted": 6,
+    "extraction_method": "llm"
+  },
+  "metadata": {
+    "driver": "vx14",
+    "token_usage": {
+      "prompt_tokens": 850,
+      "completion_tokens": 280,
+      "total_tokens": 1130
+    },
+    "execution_time_ms": 2100
+  }
+}
+```
+
+The response includes:
+
+- **data**: Extracted data matching your schema or prompt
+- **llm_extraction**: AI execution details and confidence score
+- **token_usage**: Token consumption for cost tracking
+- **metadata**: Execution details including driver (vx14) and timing
+
+# Best practices
+
+## Writing effective prompts
+
+**Be specific about requirements:**
+
+```
+✅ "Extract product name, current price (not original price), average rating, and stock status"
+❌ "Get product info"
+```
+
+**Describe data relationships:**
+
+```
+✅ "Extract all review comments with their associated ratings and dates"
+❌ "Get reviews"
+```
+
+**Clarify ambiguities:**
+
+```
+✅ "For price, use the discounted price if available, otherwise use the regular price"
+❌ "Extract price"
+```
+
+## Schema design
+
+**Use descriptive field names:**
+
+```python
+class Product(BaseModel):
+    current_price: float  # ✅ Clear intent
+    price: float          # ❌ Ambiguous
+```
+
+**Provide context with prompts:**
+
+```python
+result = nimble.extract(
+    schema=Product,
+    schema_prompt="Extract current selling price (not MSRP)"  # ✅ Clarifies which price
+)
+```
+
+## Cost optimization
+
+- Use schema mode for stable, high-volume extraction
+- Reserve LLM mode for complex or frequently changing pages
+- Be concise in prompts to reduce token usage
+- Monitor token consumption in production
+- Test prompts to optimize extraction accuracy
+
+## Error handling
+
+The AI handles various scenarios automatically:
+
+- **Missing data**: Returns null for optional fields
+- **Multiple formats**: Normalizes data (e.g., "\$79.99" → 79.99)
+- **Variations**: Adapts to different page layouts
+- **Context**: Understands semantic meaning
+
+<Note>
+  The AI analyzes the entire page context to extract accurate data, even when elements aren't explicitly labeled.
+</Note>
+
+# Pricing
+
+LLM mode costs include:
+
+- **vx14 driver usage**: Higher tier driver for AI capabilities
+- **Token consumption**: Based on page size and prompt length
+- **API call**: Standard request fee
+
+Typical cost is 3-5x higher than schema mode, but eliminates maintenance when pages change.
+
+# Combining with browser actions
+
+Use AI extraction after dynamic interactions:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+from typing import List
+
+class Product(BaseModel):
+    name: str
+    price: float
+
+class ProductList(BaseModel):
+    products: List[Product]
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "infinite_scroll": {
+                "duration": 10000
+            }
+        }
+    ],
+    "schema": ProductList,
+    "schema_prompt": "Extract all loaded products with names and prices"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      infinite_scroll: {
+        duration: 10000
+      }
+    }
+  ],
+  schema_prompt: "Extract all loaded products with names and prices. Return as array."
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "infinite_scroll": {
+            "duration": 10000
+        }
+    }],
+    "schema_prompt": "Extract all loaded products with names and prices. Return as array."
+}'
+```
+
+</CodeGroup>
+
+# Comparison with Schema Mode
+
+| Aspect               | Schema Mode                      | LLM Mode               |
+| -------------------- | -------------------------------- | ---------------------- |
+| **Setup time**       | Minutes to configure             | Seconds                |
+| **Maintenance**      | Update when pages change         | Zero maintenance       |
+| **Cost per request** | Lower                            | Higher                 |
+| **Accuracy**         | Precise (with correct selectors) | High (context-aware)   |
+| **Flexibility**      | Fixed selectors                  | Adapts to variations   |
+| **Use case**         | Stable, high-volume              | Dynamic, varying pages |
