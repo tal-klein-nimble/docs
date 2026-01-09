@@ -1,4 +1,1049 @@
 ---
-title: 'Browser Actions'
+title: "Browser Actions"
+description: "Interact with webpages through clicks, typing, scrolling, and more"
 ---
 
+Browser Actions let you perform operations on webpages before data collection, including clicking, typing, scrolling, and capturing screenshots. These interactions are essential for accessing dynamically loaded content on modern websites.
+
+Common uses:
+
+- **Load more content**: Click "Show more" buttons or scroll to reveal additional items.
+- **Set filters**: Select dropdowns, checkboxes, or date ranges to refine displayed data.
+- **Submit searches**: Enter search terms and submit forms to access results pages.
+- **Trigger lazy-loaded data**: Scroll to load images, products, or infinite feeds.
+
+<Note>
+  Browser Actions require page rendering to be enabled (`render: true`). All operations execute sequentially within a global **240-second timeout**.
+</Note>
+
+# Available actions
+
+Browser Actions are passed in the `browser_actions` array. Each action executes in sequence.
+
+| Action            | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `wait`            | Add a delay between actions (milliseconds)     |
+| `wait_for`        | Wait until a selector appears on the page      |
+| `wait_and_click`  | Wait for an element and click it               |
+| `wait_and_type`   | Wait for an input field and type text          |
+| `paste`           | Paste text into an input field quickly         |
+| `scroll`          | Scroll to specific X/Y coordinates             |
+| `scroll_to`       | Scroll to bring a selector into view           |
+| `infinite_scroll` | Handle lazy-loading pages with infinite scroll |
+| `screenshot`      | Capture a screenshot of the page               |
+| `get_cookies`     | Collect cookies from the page                  |
+| `http_request`    | Execute additional HTTP requests               |
+
+# Usage
+
+## Wait (delay)
+
+Add a delay between actions to simulate human behavior or allow elements to load.
+
+### **Parameters:**
+
+- `delay` (required) - Time to pause in milliseconds
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait": {
+                "delay": 500
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait: {
+        delay: 500
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait": {
+            "delay": 500
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Wait for selector
+
+Wait until a specific element appears on the page before continuing.
+
+### **Parameters:**
+
+- `selectors` (required) - Array of CSS selectors to wait for
+- `timeout` (optional) - Maximum time to wait in milliseconds
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_for": {
+                "selectors": ["body", "#content"],
+                "timeout": 2000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_for: {
+        selectors: ["body", "#content"],
+        timeout: 2000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_for": {
+            "selectors": ["body", "#content"],
+            "timeout": 2000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Wait and click
+
+Wait for an element to appear and click it.
+
+### **Parameters:**
+
+- `selector` (required) - CSS selector of the element to click
+- `timeout` (optional) - Maximum time to wait for the click action in milliseconds
+- `delay` (optional) - Time to pause before executing the click in milliseconds
+- `scroll` (optional) - Scroll element into view if hidden (boolean)
+- `visible` (optional) - Wait for element to be visible, not just present in DOM (boolean)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_and_click": {
+                "selector": "button.load-more",
+                "timeout": 20000,
+                "delay": 500,
+                "scroll": True,
+                "visible": False
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_and_click: {
+        selector: "button.load-more",
+        timeout: 20000,
+        delay: 500,
+        scroll: true,
+        visible: false
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_and_click": {
+            "selector": "button.load-more",
+            "timeout": 20000,
+            "delay": 500,
+            "scroll": true,
+            "visible": false
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Wait and type
+
+Wait for an input field and type text into it.
+
+### **Parameters:**
+
+- `selector` (required) - CSS selector of the input element
+- `value` (required) - Text to type into the element
+- `timeout` (optional) - Maximum time to wait for the action in milliseconds
+- `delay` (optional) - Time to pause before typing in milliseconds
+- `click_on_element` (optional) - Click the element before typing (boolean)
+- `visible` (optional) - Wait for element to be visible (boolean)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_and_type": {
+                "selector": "input[type='search']",
+                "value": "eggplant",
+                "timeout": 20000,
+                "delay": 500,
+                "click_on_element": True,
+                "visible": False
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_and_type: {
+        selector: "input[type='search']",
+        value: "eggplant",
+        timeout: 20000,
+        delay: 500,
+        click_on_element: true,
+        visible: false
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_and_type": {
+            "selector": "input[type='\''search'\'']",
+            "value": "eggplant",
+            "timeout": 20000,
+            "delay": 500,
+            "click_on_element": true,
+            "visible": false
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Paste
+
+Quickly paste text into an input field.
+
+### **Parameters:**
+
+- `selector` (required) - CSS selector of the input element
+- `value` (required) - Text to paste into the element
+- `timeout` (optional) - Maximum time to wait for the action in milliseconds
+- `delay` (optional) - Time to pause before pasting in milliseconds
+- `click_on_element` (optional) - Click the element before pasting (boolean)
+- `visible` (optional) - Wait for element to be visible (boolean)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "paste": {
+                "selector": "input[type='search']",
+                "value": "eggplant",
+                "timeout": 20000,
+                "delay": 500,
+                "click_on_element": True,
+                "visible": False
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      paste: {
+        selector: "input[type='search']",
+        value: "eggplant",
+        timeout: 20000,
+        delay: 500,
+        click_on_element: true,
+        visible: false
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "paste": {
+            "selector": "input[type='\''search'\'']",
+            "value": "eggplant",
+            "timeout": 20000,
+            "delay": 500,
+            "click_on_element": true,
+            "visible": false
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Scroll to coordinates
+
+Scroll to specific X/Y coordinates on the page.
+
+### **Parameters:**
+
+- `x` (required) - Horizontal scroll position
+- `y` (required) - Vertical scroll position
+- `timeout` (optional) - Maximum time for scroll action in milliseconds
+- `scroll_in_element` (optional) - CSS selector of container to scroll within (for scrolling inside sidebars, modals, etc.)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "scroll": {
+                "x": 0,
+                "y": 1000,
+                "timeout": 20000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      scroll: {
+        x: 0,
+        y: 1000,
+        timeout: 20000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "scroll": {
+            "x": 0,
+            "y": 1000,
+            "timeout": 20000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Scroll to selector
+
+Scroll to bring a specific element into view.
+
+### **Parameters:**
+
+- `selector` (required) - CSS selector of the element to scroll to
+- `visible` (optional) - Wait for element to be visible before scrolling (boolean)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "scroll_to": {
+                "selector": "#footer",
+                "visible": False
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      scroll_to: {
+        selector: "#footer",
+        visible: false
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "scroll_to": {
+            "selector": "#footer",
+            "visible": false
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Infinite scroll
+
+Handle lazy-loading pages that reveal content as you scroll, like social media feeds.
+
+### **Parameters:**
+
+- `duration` (required) - Time interval for continuous scrolling in milliseconds
+- `loading_selector` (optional) - CSS selector for loading/spinner indicators
+- `delay_after_scroll` (optional) - Time to wait between scrolls in milliseconds
+- `click_on_selector` (optional) - CSS selector to click after each scroll (e.g., "Load more" button)
+- `idle_timeout` (optional) - Wait time after scroll; terminates if no page height change in milliseconds
+- `scroll_in_element` (optional) - CSS selector of container to scroll within
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "infinite_scroll": {
+                "loading_selector": ".spinner",
+                "delay_after_scroll": 2000,
+                "duration": 15000,
+                "idle_timeout": 5000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      infinite_scroll: {
+        loading_selector: ".spinner",
+        delay_after_scroll: 2000,
+        duration: 15000,
+        idle_timeout: 5000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "infinite_scroll": {
+            "loading_selector": ".spinner",
+            "delay_after_scroll": 2000,
+            "duration": 15000,
+            "idle_timeout": 5000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+<Note>
+  Use `loading_selector` to track loading indicators for reliable scrolling. Alternatively, use `delay_after_scroll` and `duration` for time-based scrolling.
+</Note>
+
+## Capture screenshot
+
+Take a screenshot of the page in PNG, JPEG, or WebP format.
+
+### **Parameters:**
+
+- `full_page` (optional) - Capture entire page or just visible viewport (boolean, default: `false`)
+- `format` (optional) - Image format: `png`, `jpeg`, or `webp` (default: `png`)
+- `timeout` (optional) - Maximum time for screenshot processing in milliseconds (default: `30000`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "screenshot": {
+                "full_page": True,
+                "format": "jpeg",
+                "timeout": 30000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      screenshot: {
+        full_page: true,
+        format: "jpeg",
+        timeout: 30000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "screenshot": {
+            "full_page": true,
+            "format": "jpeg",
+            "timeout": 30000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Collect cookies
+
+Capture and store cookies from the page.
+
+### **Parameters:**
+
+- `timeout` (optional) - Time to wait for new cookies before storage in milliseconds (default: `1000`)
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "get_cookies": {
+                "timeout": 1000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      get_cookies: {
+        timeout: 1000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "get_cookies": {
+            "timeout": 1000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+## Execute HTTP requests
+
+Perform additional HTTP GET/POST requests to internal APIs.
+
+### **Parameters:**
+
+- `url` (required) - Target URL for the HTTP request
+- `method` (optional) - HTTP method: `GET` or `POST` (default: `GET`)
+- `headers` (optional) - Additional headers as JSON object
+- `timeout` (optional) - Request timeout in milliseconds
+- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "http_request": {
+                "url": "https://api.example.com/data",
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "timeout": 5000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      http_request: {
+        url: "https://api.example.com/data",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        timeout: 5000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "http_request": {
+            "url": "https://api.example.com/data",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "timeout": 5000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+<Note>
+  The first `http_request` in a `browser_actions` is free. Starting from the second request, each additional `http_request` is billed as a VX6 request.
+</Note>
+
+# Chaining actions
+
+You can chain multiple actions together in the `browser_actions` array. They execute sequentially.
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_and_type": {
+                "selector": "input[type='search']",
+                "value": "laptop",
+                "click_on_element": True
+            }
+        },
+        {
+            "wait": {
+                "delay": 1000
+            }
+        },
+        {
+            "wait_and_click": {
+                "selector": "button[type='submit']"
+            }
+        },
+        {
+            "wait_for": {
+                "selectors": [".results"],
+                "timeout": 5000
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_and_type: {
+        selector: "input[type='search']",
+        value: "laptop",
+        click_on_element: true
+      }
+    },
+    {
+      wait: {
+        delay: 1000
+      }
+    },
+    {
+      wait_and_click: {
+        selector: "button[type='submit']"
+      }
+    },
+    {
+      wait_for: {
+        selectors: [".results"],
+        timeout: 5000
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [
+        {
+            "wait_and_type": {
+                "selector": "input[type='\''search'\'']",
+                "value": "laptop",
+                "click_on_element": true
+            }
+        },
+        {
+            "wait": {
+                "delay": 1000
+            }
+        },
+        {
+            "wait_and_click": {
+                "selector": "button[type='\''submit'\'']"
+            }
+        },
+        {
+            "wait_for": {
+                "selectors": [".results"],
+                "timeout": 5000
+            }
+        }
+    ]
+}'
+```
+
+</CodeGroup>
