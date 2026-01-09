@@ -25,11 +25,11 @@
             "group": "Getting Started",
             "icon": "play",
             "pages": [
+              "documentation/getting-started/untitled-page",
               "getting-started/web-api",
               "getting-started/agents",
               "getting-started/mcp-server",
-              "getting-started/account-management",
-              "getting-started/proxy"
+              "getting-started/account-management"
             ]
           },
           {
@@ -46,6 +46,7 @@
             "icon": "shield",
             "hidden": true,
             "pages": [
+              "getting-started/proxy",
               "residential-proxy/overview",
               "residential-proxy/quickstart",
               "residential-proxy/authentication",

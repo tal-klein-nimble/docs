@@ -35,6 +35,7 @@ curl -x http://account-accountName-pipeline-pipelineName:pipelinePassword@ip.nim
   https://ipinfo.io
 ```
 
+
 ```python Python
 import requests
 
@@ -49,6 +50,7 @@ response = requests.get(url, proxies=proxies)
 print(response.status_code)
 print(response.text)
 ```
+
 
 ```javascript Node.js
 const axios = require('axios');
@@ -74,6 +76,7 @@ const run = async () => {
   console.log(response);
 })();
 ```
+
 
 ```go Go
 package main
@@ -124,7 +127,7 @@ func main() {
 </CodeGroup>
 
 <Note>
-Replace `accountName`, `pipelineName`, and `pipelinePassword` with your actual credentials from the Nimble dashboard.
+  Replace `accountName`, `pipelineName`, and `pipelinePassword` with your actual credentials from the Nimble dashboard.
 </Note>
 
 ## IP Allowlist Authentication
@@ -146,6 +149,7 @@ Authenticate requests based on trusted IP addresses without including credential
 ### Configuration
 
 Configure IP allowlists through:
+
 - Nimble dashboard under pipeline settings
 - Admin API `/account/pipelines` endpoint
 
@@ -156,7 +160,7 @@ curl -x http://ip.nimbleway.com:9000 https://ipinfo.io
 ```
 
 <Warning>
-**Security Consideration**: Avoid using shared IP addresses (like AWS shared IPs) in your allowlist. Other parties on the same shared IP could potentially use your account.
+  **Security Consideration**: Avoid using shared IP addresses (like AWS shared IPs) in your allowlist. Other parties on the same shared IP could potentially use your account.
 </Warning>
 
 ## Choosing an Authentication Method
@@ -168,7 +172,6 @@ curl -x http://ip.nimbleway.com:9000 https://ipinfo.io
     - Multiple team members with different credentials
     - Cloud environments with rotating IPs
   </Accordion>
-
   <Accordion title="When to use IP Allowlist">
     - Fixed server infrastructure
     - Enhanced security requirements
@@ -179,11 +182,11 @@ curl -x http://ip.nimbleway.com:9000 https://ipinfo.io
 
 ## Authentication Errors
 
-| Response Code | Issue | Solution |
-|---------------|-------|----------|
-| 407 | Proxy Authentication Required | Verify account name, pipeline name, and password are correct |
-| 401 | Unauthorized | Check that your IP is in the allowlist (if using IP authentication) |
-| 403 | Forbidden | Pipeline may be disabled or you may have reached quota limits |
+| Response Code | Issue                         | Solution                                                            |
+| ------------- | ----------------------------- | ------------------------------------------------------------------- |
+| 407           | Proxy Authentication Required | Verify account name, pipeline name, and password are correct        |
+| 401           | Unauthorized                  | Check that your IP is in the allowlist (if using IP authentication) |
+| 403           | Forbidden                     | Pipeline may be disabled or you may have reached quota limits       |
 
 <Card title="Response Codes Reference" icon="circle-info" href="/residential-proxy/response-codes">
   View complete list of response codes and troubleshooting steps
