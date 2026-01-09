@@ -13,7 +13,7 @@ Common uses:
 
 # Supported drivers
 
-Nimble offers a range of drivers from basic to advanced stealth in order to control the browser JS rendering.
+- `driver (optional)`- Nimble offers a range of drivers from basic to advanced stealth in order to control the browser JS rendering
 
 | Driver     | Rendering | Mode     | Purpose                                                                                   |
 | ---------- | --------- | -------- | ----------------------------------------------------------------------------------------- |
@@ -22,16 +22,6 @@ Nimble offers a range of drivers from basic to advanced stealth in order to cont
 | `vx8-pro`  | Yes       | Headfull | Headfull rendering with more human-like behavior. Ideal for moderate anti-bot protections |
 | `vx10`     | Yes       | Headless | Advanced stealth for highly protected websites                                            |
 | `vx10-pro` | Yes       | Headfull | Highest-grade stealth and realism. Best for heavily fortified targets                     |
-
-<Note>
-  If you omit the `driver` parameter, Nimble automatically selects the optimal driver, including appropriate stealth measures if needed. The selected driver appears in the response for reference.
-</Note>
-
-<Note>
-  **Billing** is based on driver tiers: `vx6`, `vx8`, and `vx10`. \
-  The `-pro` variants `vx8-pro` and `vx10-pro`) are billed at the same rate as their base versions.
-</Note>
-
 
 # Usage
 
@@ -79,12 +69,6 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 ```
 
-
-```node Node.js
-
-driver vx6 is automatically used when setting reder=false
-```
-
 </CodeGroup>
 
 <Note>
@@ -116,7 +100,8 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-const result = await nimble.extract("https://heavily-protected-site.com", {
+const result = await nimble.extract({
+  url:"https://heavily-protected-site.com", 
   driver: "vx10-pro",
 });
 
@@ -137,5 +122,5 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 </CodeGroup>
 
 <Note>
-  When setting `render:true`, Nimble will select the desired driver (**vx8** / **vx8-pro** / **vx10** / **vx10-pro**) based on the target domain's anti-bot technology 
+  When setting `render:true`,Nimble automatically selects the optimal driver (**vx8** / **vx8-pro** / **vx10** / **vx10-pro**) based on the target domain's anti-bot technology
 </Note>
