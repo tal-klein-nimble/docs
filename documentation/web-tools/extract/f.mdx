@@ -1,0 +1,671 @@
+---
+title: "Formats"
+description: "Control response format and included data types"
+---
+
+Format options control what data types are included in your response. Specify one or more formats to receive HTML, markdown, screenshots, or extracted links alongside your extracted data.
+
+Common uses:
+
+- **Full page content**: Get raw HTML for custom processing
+- **Readable text**: Convert pages to clean markdown format
+- **Visual records**: Capture screenshots for monitoring or archival
+- **Link extraction**: Get all URLs from the page for further crawling
+
+<Note>
+  You can combine multiple formats in a single request. All specified formats will be included in the response.
+</Note>
+
+# Available formats
+
+| Format       | Description               | Use Case                                        |
+| ------------ | ------------------------- | ----------------------------------------------- |
+| `html`       | Raw HTML content          | Custom parsing, archival, full DOM access       |
+| `markdown`   | Clean markdown conversion | Readable text, content analysis, LLM processing |
+| `screenshot` | Page screenshot (base64)  | Visual verification, monitoring, documentation  |
+| `links`      | All extracted URLs        | Link discovery, crawling, sitemap building      |
+
+# Usage
+
+## Single format
+
+Request one format type:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["html"]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  formats: ["html"]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "formats": ["html"]
+}'
+```
+
+</CodeGroup>
+
+## Multiple formats
+
+Combine multiple formats to get different data representations:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["html", "markdown", "screenshot", "links"]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  formats: ["html", "markdown", "screenshot", "links"]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "formats": ["html", "markdown", "screenshot", "links"]
+}'
+```
+
+</CodeGroup>
+
+## HTML format
+
+Get the raw HTML content of the page:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["html"]
+})
+
+# Access HTML content
+html_content = result["data"]["html"]
+print(html_content)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  formats: ["html"]
+});
+
+// Access HTML content
+const htmlContent = result.data.html;
+console.log(htmlContent);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/article",
+    "formats": ["html"]
+}'
+```
+
+</CodeGroup>
+
+**Best for:**
+
+- Custom HTML parsing
+- Preserving exact page structure
+- Accessing all DOM elements and attributes
+- Archival purposes
+
+## Markdown format
+
+Convert the page to clean, readable markdown:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["markdown"]
+})
+
+# Access markdown content
+markdown_content = result["data"]["markdown"]
+print(markdown_content)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  formats: ["markdown"]
+});
+
+// Access markdown content
+const markdownContent = result.data.markdown;
+console.log(markdownContent);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/article",
+    "formats": ["markdown"]
+}'
+```
+
+</CodeGroup>
+
+**Best for:**
+
+- Clean text extraction
+- Content analysis
+- LLM processing
+- Human-readable output
+
+## Screenshot format
+
+Capture a visual snapshot of the page:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+import base64
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["screenshot"],
+    "render": True
+})
+
+# Access screenshot (base64 encoded)
+screenshot_data = result["data"]["screenshot"]
+
+# Decode and save
+with open("screenshot.png", "wb") as f:
+    f.write(base64.b64decode(screenshot_data))
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+import fs from "fs";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  formats: ["screenshot"],
+  render: true
+});
+
+// Access screenshot (base64 encoded)
+const screenshotData = result.data.screenshot;
+
+// Decode and save
+const buffer = Buffer.from(screenshotData, "base64");
+fs.writeFileSync("screenshot.png", buffer);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "formats": ["screenshot"],
+    "render": true
+}'
+```
+
+</CodeGroup>
+
+<Note>
+  Screenshots require page rendering to be enabled (`render: true`). The image is returned as base64-encoded PNG data.
+</Note>
+
+**Best for:**
+
+- Visual verification
+- Monitoring page changes
+- Documentation and reporting
+- Debugging layout issues
+
+## Links format
+
+Extract all URLs found on the page:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["links"]
+})
+
+# Access extracted links
+links = result["data"]["links"]
+for link in links:
+    print(link)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  formats: ["links"]
+});
+
+// Access extracted links
+const links = result.data.links;
+links.forEach(link => console.log(link));
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "formats": ["links"]
+}'
+```
+
+</CodeGroup>
+
+**Best for:**
+
+- Link discovery
+- Building sitemaps
+- Crawling workflows
+- Finding internal/external links
+
+# Combining with other features
+
+Formats work seamlessly with parsing, browser actions, and other features:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    name: str
+    price: float
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/product",
+    "render": True,
+    "formats": ["html", "markdown", "screenshot"],
+    "schema": Product,
+    "browser_actions": [
+        {
+            "wait": {
+                "delay": 1000
+            }
+        }
+    ]
+})
+
+# Access different formats
+product_data = result["data"]["parsed"]
+html = result["data"]["html"]
+markdown = result["data"]["markdown"]
+screenshot = result["data"]["screenshot"]
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  render: true,
+  formats: ["html", "markdown", "screenshot"],
+  schema_prompt: "Extract product name and price",
+  browser_actions: [
+    {
+      wait: {
+        delay: 1000
+      }
+    }
+  ]
+});
+
+// Access different formats
+const productData = result.data.parsed;
+const html = result.data.html;
+const markdown = result.data.markdown;
+const screenshot = result.data.screenshot;
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "render": true,
+    "formats": ["html", "markdown", "screenshot"],
+    "schema_prompt": "Extract product name and price",
+    "browser_actions": [{
+        "wait": {
+            "delay": 1000
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+# Example response
+
+When formats are specified, all requested data is included in the response:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "html": "<!DOCTYPE html><html><head>...</head><body>...</body></html>",
+    "markdown": "# Article Title\n\nThis is the article content...",
+    "screenshot": "iVBORw0KGgoAAAANSUhEUgAAA...",
+    "links": [
+      "https://www.example.com/about",
+      "https://www.example.com/contact",
+      "https://www.example.com/products",
+      "https://external-site.com"
+    ],
+    "parsed": {
+      "title": "Example Article",
+      "author": "John Doe"
+    }
+  },
+  "metadata": {
+    "driver": "vx8",
+    "execution_time_ms": 1850,
+    "formats_included": ["html", "markdown", "screenshot", "links"]
+  }
+}
+```
+
+The response includes:
+
+- **html**: Raw HTML if requested
+- **markdown**: Converted markdown if requested
+- **screenshot**: Base64-encoded PNG if requested
+- **links**: Array of extracted URLs if requested
+- **parsed**: Structured data if parsing was used
+- **metadata**: Execution details and formats included
+
+# Best practices
+
+## Format selection
+
+**Choose formats based on your needs:**
+
+- Use `html` when you need full DOM access
+- Use `markdown` for clean text and content analysis
+- Use `screenshot` for visual verification
+- Use `links` for discovering URLs to crawl
+
+**Avoid unnecessary formats:**
+
+```python
+# ❌ Don't request all formats if you only need one
+formats=["html", "markdown", "screenshot", "links"]
+
+# ✅ Request only what you need
+formats=["markdown"]
+```
+
+## Performance considerations
+
+- Each format adds processing time
+- Screenshots require rendering and are slower
+- HTML and markdown are faster to generate
+- Request only needed formats for optimal performance
+
+## Screenshot optimization
+
+**Control screenshot size with browser actions:**
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "formats": ["screenshot"],
+    "browser_actions": [
+        {
+            "screenshot": {
+                "full_page": False,  # Viewport only
+                "format": "jpeg"     # Smaller file size
+            }
+        }
+    ]
+})
+```
+
+## Link filtering
+
+**Process links after extraction:**
+
+```python
+# Filter internal links only
+internal_links = [
+    link for link in result["data"]["links"]
+    if link.startswith("https://www.example.com")
+]
+
+# Filter by file type
+pdf_links = [
+    link for link in result["data"]["links"]
+    if link.endswith(".pdf")
+]
+```
+
+# Use cases
+
+## Content monitoring
+
+Track page changes over time:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Capture current state
+result = nimble.extract({
+    "url": "https://www.example.com/pricing",
+    "formats": ["html", "screenshot", "markdown"]
+})
+
+# Store for comparison
+store_snapshot(result["data"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Capture current state
+const result = await nimble.extract({
+  url: "https://www.example.com/pricing",
+  formats: ["html", "screenshot", "markdown"]
+});
+
+// Store for comparison
+storeSnapshot(result.data);
+```
+
+</CodeGroup>
+
+## Content archival
+
+Archive pages with multiple representations:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["html", "markdown"],
+    "render": True
+})
+
+# Save both formats
+save_archive(result["data"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  formats: ["html", "markdown"],
+  render: true
+});
+
+// Save both formats
+saveArchive(result.data);
+```
+
+</CodeGroup>
+
+## Link discovery for crawling
+
+Find all links for further processing:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["links"]
+})
+
+# Queue discovered links for crawling
+for link in result["data"]["links"]:
+    queue_for_crawl(link)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  formats: ["links"]
+});
+
+// Queue discovered links for crawling
+result.data.links.forEach(link => queueForCrawl(link));
+```
+
+</CodeGroup>

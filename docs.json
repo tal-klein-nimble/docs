@@ -39,6 +39,7 @@
                 "group": "Extract",
                 "pages": [
                   "documentation/web-tools/extract/extract-overview",
+                  "documentation/web-tools/extract/f",
                   "documentation/web-tools/extract/geo-targeting",
                   "documentation/web-tools/extract/stealth-mode",
                   {
