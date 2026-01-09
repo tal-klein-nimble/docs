@@ -47,11 +47,12 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
-    "llm_prompt": "Search for 'laptop' and filter by 'On Sale' items"
+    "browser_actions": "Search for 'laptop' and filter by 'On Sale' items"
 })
 
 print(result)
 ```
+
 
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
@@ -61,11 +62,12 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
-  llm_prompt: "Search for 'laptop' and filter by 'On Sale' items"
+  browser_actions: "Search for 'laptop' and filter by 'On Sale' items"
 });
 
 console.log(result);
 ```
+
 
 ```bash cURL
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
@@ -74,7 +76,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com",
     "render": true,
-    "llm_prompt": "Search for '\''laptop'\'' and filter by '\''On Sale'\'' items"
+    "browser_actions": "Search for '\''laptop'\'' and filter by '\''On Sale'\'' items"
 }'
 ```
 
@@ -94,11 +96,12 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com/products",
     "render": True,
-    "llm_prompt": "Scroll down until all products are loaded"
+    "browser_actions": "Scroll down until all products are loaded"
 })
 
 print(result)
 ```
+
 
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
@@ -108,11 +111,12 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com/products",
   render: true,
-  llm_prompt: "Scroll down until all products are loaded"
+  browser_actions: "Scroll down until all products are loaded"
 });
 
 console.log(result);
 ```
+
 
 ```bash cURL
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
@@ -121,7 +125,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com/products",
     "render": true,
-    "llm_prompt": "Scroll down until all products are loaded"
+    "browser_actions": "Scroll down until all products are loaded"
 }'
 ```
 
@@ -141,11 +145,12 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
-    "llm_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+    "browser_actions": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 })
 
 print(result)
 ```
+
 
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
@@ -155,11 +160,12 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
-  llm_prompt: "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+  browser_actions: "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 });
 
 console.log(result);
 ```
+
 
 ```bash cURL
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
@@ -168,7 +174,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com",
     "render": true,
-    "llm_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+    "browser_actions": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 }'
 ```
 
@@ -183,7 +189,7 @@ When the LLM agent completes your prompt, you receive the final page state and e
   "status": "success",
   "data": {
     "html": "<!DOCTYPE html><html>...</html>",
-    "llm_execution": {
+    "browser_actions": {
       "prompt": "Search for 'laptop' and filter by 'On Sale' items",
       "actions_performed": [
         "Located search input field",
@@ -211,6 +217,7 @@ When the LLM agent completes your prompt, you receive the final page state and e
 ```
 
 The response includes:
+
 - **html**: Final DOM state after AI execution
 - **llm_execution**: Details about actions the AI performed
 - **actions_performed**: Step-by-step log of what the agent did
@@ -222,18 +229,21 @@ The response includes:
 ## Writing effective prompts
 
 **Be specific but flexible:**
+
 ```
 ✅ "Search for 'wireless headphones' and filter by price under $100"
 ❌ "Find some headphones"
 ```
 
 **Describe outcomes, not selectors:**
+
 ```
 ✅ "Click the 'Add to Cart' button"
 ❌ "Click button.btn-primary.add-cart"
 ```
 
 **Chain actions logically:**
+
 ```
 ✅ "Sort by price ascending, then scroll to load all items"
 ❌ "Do sorting and scrolling stuff"
@@ -249,6 +259,7 @@ The response includes:
 ## Error handling
 
 The AI agent handles common issues automatically:
+
 - **Missing elements**: Waits for elements to appear
 - **Dynamic content**: Adapts to lazy-loaded elements
 - **Page variations**: Adjusts to layout changes
@@ -261,6 +272,7 @@ The AI agent handles common issues automatically:
 # Pricing
 
 LLM mode costs include:
+
 - **vx14 driver usage**: Higher tier driver for AI capabilities
 - **Token consumption**: Based on prompt length and AI response
 - **API call**: Standard request fee
@@ -269,11 +281,11 @@ This is typically 3-5x more expensive than deterministic flows, but eliminates m
 
 # Comparison with Deterministic Mode
 
-| Aspect | Deterministic | LLM |
-|--------|--------------|-----|
-| **Setup time** | Minutes to hours | Seconds |
-| **Maintenance** | Update when pages change | Zero maintenance |
-| **Cost per request** | Lower | Higher |
-| **Execution speed** | Faster | Slower (LLM inference) |
-| **Reliability** | High (if maintained) | High (self-healing) |
-| **Use case** | Stable, predictable pages | Dynamic, changing pages |
+| Aspect               | Deterministic             | LLM                     |
+| -------------------- | ------------------------- | ----------------------- |
+| **Setup time**       | Minutes to hours          | Seconds                 |
+| **Maintenance**      | Update when pages change  | Zero maintenance        |
+| **Cost per request** | Lower                     | Higher                  |
+| **Execution speed**  | Faster                    | Slower (LLM inference)  |
+| **Reliability**      | High (if maintained)      | High (self-healing)     |
+| **Use case**         | Stable, predictable pages | Dynamic, changing pages |
