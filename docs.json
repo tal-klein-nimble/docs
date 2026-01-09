@@ -16,29 +16,20 @@
           {
             "group": "Introduction",
             "icon": "book-open",
-            "pages": ["introduction/overview", "introduction/release-notes"]
+            "pages": [
+              "introduction/overview",
+              "introduction/release-notes"
+            ]
           },
           {
             "group": "Getting Started",
             "icon": "play",
             "pages": [
-              "getting-started/proxy",
               "getting-started/web-api",
               "getting-started/agents",
               "getting-started/mcp-server",
-              "getting-started/account-management"
-            ]
-          },
-          {
-            "group": "Residential Proxy",
-            "icon": "shield",
-            "pages": [
-              "residential-proxy/overview",
-              "residential-proxy/quickstart",
-              "residential-proxy/authentication",
-              "residential-proxy/geotargeting",
-              "residential-proxy/session-control",
-              "residential-proxy/response-codes"
+              "getting-started/account-management",
+              "getting-started/proxy"
             ]
           },
           {
@@ -49,6 +40,19 @@
               "ai-tools/cursor",
               "ai-tools/windsurf"
             ]
+          },
+          {
+            "group": "Residential Proxy",
+            "icon": "shield",
+            "hidden": true,
+            "pages": [
+              "residential-proxy/overview",
+              "residential-proxy/quickstart",
+              "residential-proxy/authentication",
+              "residential-proxy/geotargeting",
+              "residential-proxy/session-control",
+              "residential-proxy/response-codes"
+            ]
           }
         ]
       },
@@ -58,7 +62,9 @@
           {
             "group": "Overview",
             "icon": "package",
-            "pages": ["nimble-sdk/sdk-overview"]
+            "pages": [
+              "nimble-sdk/sdk-overview"
+            ]
           },
           {
             "group": "Web API",
@@ -104,7 +110,9 @@
           {
             "group": "Reference",
             "icon": "book-open",
-            "pages": ["nimble-sdk/web-api/reference"]
+            "pages": [
+              "nimble-sdk/web-api/reference"
+            ]
           }
         ]
       },
@@ -114,7 +122,9 @@
           {
             "group": "Introduction",
             "icon": "info",
-            "pages": ["api-reference/introduction"]
+            "pages": [
+              "api-reference/introduction"
+            ]
           },
           {
             "group": "Endpoints",
