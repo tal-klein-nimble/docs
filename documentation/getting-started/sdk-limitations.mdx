@@ -1,3 +1,484 @@
 ---
-title: "Rate Limiting"
+title: "Limitations & Specifications"
+description: "Technical specifications, rate limits, and API constraints"
 ---
+
+Understanding API limitations and specifications helps you optimize performance, plan capacity, and avoid throttling. This guide covers rate limits, driver capabilities, request constraints, and best practices.
+
+## Overview
+
+Nimble's API implements tiered specifications based on:
+
+- **Driver selection**: Different drivers have different rate limits
+- **Subscription plan**: Higher tiers unlock better throughput
+- **Request complexity**: Complex operations may have additional constraints
+- **Resource usage**: Fair usage policies ensure platform stability
+
+# Rate Limits
+
+## By driver and plan
+
+Rate limits vary by driver tier and subscription level:
+
+| Driver | PAYG | Beginner | Essential | Advanced | Professional | Enterprise |
+|--------|------|----------|-----------|----------|--------------|------------|
+| **vx6** | 20 r/s | 40 r/s | 60 r/s | 80 r/s | 100 r/s | Unlimited |
+| **vx8** | 10 r/s | 20 r/s | 30 r/s | 45 r/s | 60 r/s | Unlimited |
+| **vx10** | 5 r/s | 10 r/s | 20 r/s | 30 r/s | 40 r/s | Unlimited |
+| **vx14** | 5 r/s | 5 r/s | 5 r/s | 5 r/s | 10 r/s | 20 r/s |
+
+<Note>
+  r/s = requests per second. Rate limits apply per API key. Enterprise plans can request custom rate limits.
+</Note>
+
+## Rate limit factors
+
+**Driver tier impact:**
+- Lower-tier drivers (vx6) support higher throughput
+- Advanced drivers (vx10, vx14) have lower limits due to resource intensity
+- Choose the simplest driver that meets your needs for maximum throughput
+
+**Plan tier impact:**
+- PAYG (Pay As You Go): Base rate limits
+- Beginner to Professional: Progressively higher limits
+- Enterprise: Unlimited for vx6/vx8/vx10, custom for vx14
+
+**Request complexity:**
+- Simple page fetches use minimal resources
+- Browser rendering increases processing time
+- LLM-powered features (vx14) are most resource-intensive
+
+## Handling rate limits
+
+When you exceed rate limits, the API returns a 429 status code:
+
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Rate limit exceeded for driver vx10. Current limit: 5 r/s",
+    "retry_after": 1000
+  }
+}
+```
+
+**Best practices:**
+- Implement exponential backoff on 429 responses
+- Use the `retry_after` value to schedule next request
+- Monitor rate limit headers in responses
+- Batch requests when possible
+- Use lower-tier drivers when sufficient
+
+# Driver Specifications
+
+## vx6 - Non-rendering
+
+**Best for:** Static pages, APIs, simple HTML
+
+**Capabilities:**
+- HTTP/HTTPS requests without browser rendering
+- Fast response times
+- Lowest resource usage
+- No JavaScript execution
+
+**Limitations:**
+- Cannot interact with dynamic content
+- No browser actions support
+- Limited to initial HTML response
+
+**Rate limits:** 20-100 r/s (PAYG to Professional)
+
+## vx8 - Headless rendering
+
+**Best for:** Dynamic pages, JavaScript-heavy sites
+
+**Capabilities:**
+- Full browser rendering (headless mode)
+- JavaScript execution
+- Browser actions supported
+- Network capture available
+- Format options: HTML, markdown, screenshots
+
+**Limitations:**
+- Slower than vx6 due to rendering
+- Higher resource usage
+- Moderate rate limits
+
+**Rate limits:** 10-60 r/s (PAYG to Professional)
+
+## vx10 - Stealth rendering
+
+**Best for:** Protected sites, anti-bot detection
+
+**Capabilities:**
+- All vx8 features
+- Advanced anti-detection
+- Stealth browser fingerprinting
+- Enhanced success rates on protected sites
+
+**Limitations:**
+- Lower rate limits due to complexity
+- Higher cost per request
+- Longer execution times
+
+**Rate limits:** 5-40 r/s (PAYG to Professional)
+
+## vx14 - LLM-powered
+
+**Best for:** AI extraction, complex data relationships
+
+**Capabilities:**
+- All vx10 features
+- Natural language parsing
+- AI-powered browser actions
+- Context-aware extraction
+- Self-healing selectors
+
+**Limitations:**
+- Lowest rate limits
+- Highest cost (includes token usage)
+- Longer processing times
+- Token consumption varies by complexity
+
+**Rate limits:** 5-20 r/s (PAYG to Enterprise)
+
+# Request Specifications
+
+## Request size limits
+
+| Component | Limit | Notes |
+|-----------|-------|-------|
+| URL length | 2048 characters | Standard URL length limit |
+| Request body | 10 MB | For POST requests with large payloads |
+| Headers | 32 KB total | Combined size of all request headers |
+| Browser actions | 50 actions | Maximum actions per request |
+| Network capture rules | 20 rules | Maximum concurrent capture rules |
+
+## Timeout specifications
+
+| Operation | Default Timeout | Maximum |
+|-----------|----------------|---------|
+| Request timeout | 120 seconds | 300 seconds |
+| Page load | 30 seconds | 120 seconds |
+| Browser action | 30 seconds | 60 seconds |
+| LLM extraction | 60 seconds | 180 seconds |
+| Network wait | 10 seconds | 60 seconds |
+
+<Note>
+  Timeouts can be configured per request. Enterprise plans can request custom timeout limits.
+</Note>
+
+## Concurrent requests
+
+| Plan | Concurrent Requests |
+|------|---------------------|
+| PAYG | 100 |
+| Beginner | 200 |
+| Essential | 500 |
+| Advanced | 1,000 |
+| Professional | 2,000 |
+| Enterprise | Custom |
+
+Concurrent requests are limited per API key to prevent resource exhaustion.
+
+# Response Specifications
+
+## Response size limits
+
+| Content Type | Limit | Notes |
+|--------------|-------|-------|
+| HTML content | 50 MB | Raw HTML response |
+| Markdown | 25 MB | Converted markdown |
+| Screenshot | 10 MB | Base64-encoded PNG |
+| JSON response | 50 MB | Complete API response |
+| Extracted data | 10 MB | Parsed/structured data |
+
+<Note>
+  Responses exceeding limits will be truncated. Use pagination or multiple requests for large datasets.
+</Note>
+
+## Response headers
+
+Every response includes metadata headers:
+
+```
+X-RateLimit-Limit: 20
+X-RateLimit-Remaining: 15
+X-RateLimit-Reset: 1704931200
+X-Request-ID: req_abc123xyz
+X-Driver-Used: vx8
+X-Execution-Time-Ms: 2150
+```
+
+Use these headers to:
+- Monitor rate limit usage
+- Track request IDs for debugging
+- Optimize driver selection
+- Measure performance
+
+# Data Retention
+
+## Request logs
+
+- **Retention period**: 30 days
+- **Enterprise plans**: Custom retention available
+- **Includes**: Request metadata, response status, execution time
+- **Excludes**: Actual response data (not stored)
+
+## Webhook data
+
+- **Retention period**: 7 days
+- **Retry attempts**: Up to 5 retries over 24 hours
+- **Failure handling**: Data discarded after retry exhaustion
+
+## Batch results
+
+- **Retention period**: 90 days
+- **Download window**: Must be retrieved within retention period
+- **Storage location**: AWS S3 (US/EU regions based on account)
+
+# Geographic Specifications
+
+## Proxy locations
+
+Nimble supports geo-targeting across:
+
+- **195+ countries**: Full global coverage
+- **US States**: All 50 states + DC
+- **City-level**: Major cities in 20+ countries
+- **ASN targeting**: Specific network providers
+
+## Data centers
+
+API requests are processed from:
+
+- **US East**: Primary region (Virginia)
+- **US West**: Secondary region (California)
+- **EU**: Frankfurt, Germany
+- **Asia**: Singapore
+
+<Note>
+  Your requests are automatically routed to the nearest region for optimal latency.
+</Note>
+
+# Browser Specifications
+
+## Browser versions
+
+| Driver | Browser | Version |
+|--------|---------|---------|
+| vx6 | N/A | HTTP client only |
+| vx8 | Chromium | Latest stable (updated weekly) |
+| vx10 | Chromium | Latest stable (updated weekly) |
+| vx14 | Chromium | Latest stable (updated weekly) |
+
+## Viewport settings
+
+**Default viewport:**
+- Width: 1920px
+- Height: 1080px
+- Device scale: 1.0
+- Mobile: false
+
+**Customizable per request:**
+- Width: 320-3840px
+- Height: 240-2160px
+- Device scale: 1.0-3.0
+- Mobile viewport emulation supported
+
+## JavaScript execution
+
+**Execution limits:**
+- Memory: 256 MB per page
+- CPU time: 30 seconds
+- Event loop iterations: 10,000
+- WebSocket connections: 10 concurrent
+
+# LLM Specifications
+
+## Token limits (vx14 driver)
+
+| Component | Limit | Notes |
+|-----------|-------|-------|
+| Input tokens | 200,000 | Per request |
+| Output tokens | 16,384 | Per response |
+| Context window | 200,000 | Total conversation |
+| Schema complexity | 100 fields | Max schema fields |
+
+## Token pricing
+
+Token usage is billed separately from request costs:
+
+- **Input tokens**: $3.00 per million
+- **Output tokens**: $15.00 per million
+- Included in response metadata for tracking
+
+# Best Practices
+
+## Optimize for rate limits
+
+**Choose the right driver:**
+```python
+# ✅ Use vx6 for static content (20-100 r/s)
+result = nimble.extract({
+    "url": "https://example.com/api/data",
+    "driver": "vx6"
+})
+
+# ❌ Don't use vx10 when vx6 works (5-40 r/s)
+result = nimble.extract({
+    "url": "https://example.com/api/data",
+    "driver": "vx10"  # Unnecessary and slower
+})
+```
+
+**Batch operations:**
+```python
+# ✅ Batch multiple URLs
+results = nimble.extract_batch([
+    {"url": "https://example.com/page1"},
+    {"url": "https://example.com/page2"},
+    {"url": "https://example.com/page3"}
+])
+
+# ❌ Don't make sequential requests
+for url in urls:
+    result = nimble.extract({"url": url})  # Slower, rate limited
+```
+
+## Handle rate limiting
+
+**Implement retry logic:**
+```python
+import time
+
+def extract_with_retry(url, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return nimble.extract({"url": url})
+        except RateLimitError as e:
+            if attempt < max_retries - 1:
+                wait_time = e.retry_after / 1000  # Convert to seconds
+                time.sleep(wait_time)
+            else:
+                raise
+```
+
+**Monitor usage:**
+```python
+result = nimble.extract({"url": url})
+
+# Check rate limit headers
+rate_limit = result.headers.get("X-RateLimit-Limit")
+remaining = result.headers.get("X-RateLimit-Remaining")
+reset_time = result.headers.get("X-RateLimit-Reset")
+
+if int(remaining) < 5:
+    print("Approaching rate limit!")
+```
+
+## Optimize request size
+
+**Use pagination for large datasets:**
+```python
+# ✅ Paginate results
+for page in range(1, 11):
+    result = nimble.extract({
+        "url": f"https://example.com/products?page={page}",
+        "schema": ProductList
+    })
+    process_results(result["data"])
+
+# ❌ Don't load everything at once
+result = nimble.extract({
+    "url": "https://example.com/products?all=true",  # May exceed size limits
+    "schema": ProductList
+})
+```
+
+**Request only needed formats:**
+```python
+# ✅ Request only what you need
+result = nimble.extract({
+    "url": "https://example.com",
+    "formats": ["html"]  # Only HTML
+})
+
+# ❌ Don't request all formats
+result = nimble.extract({
+    "url": "https://example.com",
+    "formats": ["html", "markdown", "screenshot", "links"]  # Larger response
+})
+```
+
+## Manage timeouts
+
+**Set appropriate timeouts:**
+```python
+# ✅ Configure based on expected load time
+result = nimble.extract({
+    "url": "https://slow-site.com",
+    "render": True,
+    "timeout": 60000  # 60 seconds for slow sites
+})
+
+# ✅ Use lower timeouts for fast responses
+result = nimble.extract({
+    "url": "https://fast-api.com/data",
+    "driver": "vx6",
+    "timeout": 10000  # 10 seconds
+})
+```
+
+## Track usage and costs
+
+**Monitor token consumption:**
+```python
+result = nimble.extract({
+    "url": "https://example.com",
+    "schema": ProductInfo
+})
+
+# Check token usage for vx14
+if "token_usage" in result.get("metadata", {}):
+    tokens = result["metadata"]["token_usage"]
+    cost = (tokens["prompt_tokens"] * 3 + tokens["completion_tokens"] * 15) / 1_000_000
+    print(f"Request cost: ${cost:.4f}")
+```
+
+# Upgrading Your Plan
+
+## When to upgrade
+
+Consider upgrading if you:
+
+- **Hit rate limits frequently**: Higher plans increase throughput
+- **Need lower latency**: Advanced plans include priority routing
+- **Require custom configurations**: Enterprise plans offer flexibility
+- **Want dedicated support**: Professional+ plans include dedicated support
+- **Need higher concurrent requests**: Scale beyond PAYG limits
+
+## Plan comparison
+
+| Feature | PAYG | Professional | Enterprise |
+|---------|------|--------------|------------|
+| Rate limits | Base | 5-10x higher | Unlimited* |
+| Concurrent requests | 100 | 2,000 | Custom |
+| Support | Email | Priority | Dedicated |
+| SLA | None | 99.5% | 99.9% |
+| Custom timeouts | No | No | Yes |
+| Volume discounts | No | Yes | Custom |
+
+*Unlimited for vx6/vx8/vx10; custom for vx14
+
+## Contact sales
+
+For custom requirements:
+- Enterprise-grade rate limits
+- Custom timeout configurations
+- Extended data retention
+- Private cloud deployment
+- Dedicated infrastructure
+
+Visit [nimbleway.com/pricing](https://nimbleway.com/pricing) or contact sales@nimbleway.com.

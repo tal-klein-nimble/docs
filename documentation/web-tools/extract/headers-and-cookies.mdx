@@ -1,4 +1,741 @@
 ---
-title: 'Headers & Cookies'
+title: "Custom Headers & Cookies"
+description: "Send custom headers and cookies to access personalized or authenticated content"
 ---
 
+Custom headers and cookies enable you to access personalized data, maintain user sessions, and interact with authenticated endpoints. Set headers and cookies in string or object format to mimic real user behavior and retrieve content that requires specific request contexts.
+
+## When to use
+
+Use custom headers and cookies when you need to:
+
+- **Access authenticated content**: Retrieve data behind login walls
+- **Maintain sessions**: Preserve user state across requests
+- **Mimic real users**: Include user-specific headers for personalized data
+- **API authentication**: Send API keys or tokens in headers
+- **Regional content**: Set language or region preferences
+
+<Note>
+  This is an advanced feature. Misconfigured headers or cookies may trigger anti-bot detection or cause requests to fail.
+</Note>
+
+# Parameters
+
+## Headers
+
+| Parameter | Type             | Description                               | Required            |
+| --------- | ---------------- | ----------------------------------------- | ------------------- |
+| `headers` | Object or String | Custom HTTP headers to send with request  | No                  |
+| `method`  | String           | HTTP method: GET, POST, PUT, DELETE, etc. | When using POST/PUT |
+| `body`    | String or Object | Request body for POST/PUT requests        | When using POST/PUT |
+
+## Cookies
+
+| Parameter          | Type            | Description                                    | Required               |
+| ------------------ | --------------- | ---------------------------------------------- | ---------------------- |
+| `cookies`          | String or Array | Cookies to include in request                  | No                     |
+| `cookies[].key`    | String          | Cookie name                                    | Yes (when using array) |
+| `cookies[].value`  | String          | Cookie value                                   | Yes (when using array) |
+| `cookies[].domain` | String          | Cookie domain (defaults to request URL domain) | No                     |
+
+<Note>
+  Do not mix headers and cookies in the same request. Choose one method based on your needs.
+</Note>
+
+# Usage
+
+## Send custom headers
+
+Include headers as an object:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://api.example.com/data",
+    "headers": {
+        "Authorization": "Bearer token123",
+        "User-Agent": "MyApp/1.0",
+        "Accept-Language": "en-US,en;q=0.9"
+    }
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://api.example.com/data",
+  headers: {
+    "Authorization": "Bearer token123",
+    "User-Agent": "MyApp/1.0",
+    "Accept-Language": "en-US,en;q=0.9"
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://api.example.com/data",
+    "headers": {
+        "Authorization": "Bearer token123",
+        "User-Agent": "MyApp/1.0",
+        "Accept-Language": "en-US,en;q=0.9"
+    }
+}'
+```
+
+</CodeGroup>
+
+## POST requests with headers
+
+Send POST requests with custom headers and body:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://api.example.com/submit",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
+    },
+    "body": {
+        "query": "product search",
+        "filters": ["category:electronics"]
+    }
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://api.example.com/submit",
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer token123"
+  },
+  body: {
+    query: "product search",
+    filters: ["category:electronics"]
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://api.example.com/submit",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
+    },
+    "body": {
+        "query": "product search",
+        "filters": ["category:electronics"]
+    }
+}'
+```
+
+</CodeGroup>
+
+## Send cookies (string format)
+
+Use simple string format for multiple cookies:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/account",
+    "cookies": "session_id=abc123xyz;user_pref=en_US;logged_in=true"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/account",
+  cookies: "session_id=abc123xyz;user_pref=en_US;logged_in=true"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/account",
+    "cookies": "session_id=abc123xyz;user_pref=en_US;logged_in=true"
+}'
+```
+
+</CodeGroup>
+
+## Send cookies (object format)
+
+Use object format for domain-specific cookies:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/dashboard",
+    "cookies": [
+        {
+            "key": "session_id",
+            "value": "abc123xyz",
+            "domain": "example.com"
+        },
+        {
+            "key": "user_token",
+            "value": "token456",
+            "domain": "api.example.com"
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/dashboard",
+  cookies: [
+    {
+      key: "session_id",
+      value: "abc123xyz",
+      domain: "example.com"
+    },
+    {
+      key: "user_token",
+      value: "token456",
+      domain: "api.example.com"
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/dashboard",
+    "cookies": [
+        {
+            "key": "session_id",
+            "value": "abc123xyz",
+            "domain": "example.com"
+        },
+        {
+            "key": "user_token",
+            "value": "token456",
+            "domain": "api.example.com"
+        }
+    ]
+}'
+```
+
+</CodeGroup>
+
+# Common use cases
+
+## API authentication
+
+Access authenticated API endpoints:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Bearer token authentication
+result = nimble.extract({
+    "url": "https://api.example.com/v1/users/me",
+    "headers": {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "Accept": "application/json"
+    }
+})
+
+# API key authentication
+result = nimble.extract({
+    "url": "https://api.example.com/data",
+    "headers": {
+        "X-API-Key": "your-api-key-here",
+        "Accept": "application/json"
+    }
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Bearer token authentication
+const result1 = await nimble.extract({
+  url: "https://api.example.com/v1/users/me",
+  headers: {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "Accept": "application/json"
+  }
+});
+
+// API key authentication
+const result2 = await nimble.extract({
+  url: "https://api.example.com/data",
+  headers: {
+    "X-API-Key": "your-api-key-here",
+    "Accept": "application/json"
+  }
+});
+```
+
+</CodeGroup>
+
+## Session-based access
+
+Access content requiring active sessions:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Access user dashboard with session cookies
+result = nimble.extract({
+    "url": "https://www.example.com/dashboard",
+    "cookies": [
+        {
+            "key": "session_id",
+            "value": "dGhpcyBpcyBhIHNlc3Npb24gaWQ=",
+            "domain": "example.com"
+        },
+        {
+            "key": "csrf_token",
+            "value": "abc123xyz789",
+            "domain": "example.com"
+        }
+    ]
+})
+
+print(result["data"]["html"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Access user dashboard with session cookies
+const result = await nimble.extract({
+  url: "https://www.example.com/dashboard",
+  cookies: [
+    {
+      key: "session_id",
+      value: "dGhpcyBpcyBhIHNlc3Npb24gaWQ=",
+      domain: "example.com"
+    },
+    {
+      key: "csrf_token",
+      value: "abc123xyz789",
+      domain: "example.com"
+    }
+  ]
+});
+
+console.log(result.data.html);
+```
+
+</CodeGroup>
+
+## Personalized content
+
+Retrieve region-specific or personalized data:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Get content for specific region and language
+result = nimble.extract({
+    "url": "https://www.example.com/products",
+    "headers": {
+        "Accept-Language": "de-DE,de;q=0.9",
+        "Accept": "text/html,application/xhtml+xml"
+    },
+    "cookies": "country_pref=DE;currency=EUR;user_segment=premium"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Get content for specific region and language
+const result = await nimble.extract({
+  url: "https://www.example.com/products",
+  headers: {
+    "Accept-Language": "de-DE,de;q=0.9",
+    "Accept": "text/html,application/xhtml+xml"
+  },
+  cookies: "country_pref=DE;currency=EUR;user_segment=premium"
+});
+
+console.log(result);
+```
+
+</CodeGroup>
+
+## Form submission
+
+Submit forms with CSRF protection:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# First, get the form page to extract CSRF token
+# Then submit with token in headers
+result = nimble.extract({
+    "url": "https://www.example.com/submit-form",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRF-Token": "extracted-csrf-token"
+    },
+    "body": "name=John&email=john@example.com&message=Hello",
+    "cookies": "session_id=abc123"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// First, get the form page to extract CSRF token
+// Then submit with token in headers
+const result = await nimble.extract({
+  url: "https://www.example.com/submit-form",
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "X-CSRF-Token": "extracted-csrf-token"
+  },
+  body: "name=John&email=john@example.com&message=Hello",
+  cookies: "session_id=abc123"
+});
+
+console.log(result);
+```
+
+</CodeGroup>
+
+# Best practices
+
+## Security
+
+**Never expose sensitive credentials:**
+
+```python
+# ❌ Don't hardcode tokens
+result = nimble.extract({
+    "url": "https://api.example.com",
+    "headers": {"Authorization": "Bearer secret123"}
+})
+
+# ✅ Use environment variables
+import os
+result = nimble.extract({
+    "url": "https://api.example.com",
+    "headers": {"Authorization": f"Bearer {os.getenv('API_TOKEN')}"}
+})
+```
+
+**Rotate tokens regularly:**
+
+```python
+# Implement token refresh logic
+def get_fresh_token():
+    # Refresh token if expired
+    if is_token_expired():
+        return refresh_token()
+    return cached_token()
+
+result = nimble.extract({
+    "url": "https://api.example.com",
+    "headers": {"Authorization": f"Bearer {get_fresh_token()}"}
+})
+```
+
+## Cookie management
+
+**Set appropriate domains:**
+
+```python
+# ✅ Specify correct cookie domains
+cookies = [
+    {"key": "session", "value": "abc", "domain": "example.com"},  # Main domain
+    {"key": "api_key", "value": "xyz", "domain": "api.example.com"}  # Subdomain
+]
+
+# ❌ Wrong domain will cause cookies to be ignored
+cookies = [
+    {"key": "session", "value": "abc", "domain": "wrong-domain.com"}
+]
+```
+
+**Use string format for simplicity:**
+
+```python
+# ✅ String format for same-domain cookies
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "cookies": "session_id=abc;user_id=123;preferences=dark_mode"
+})
+
+# ✅ Object format for multi-domain
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "cookies": [
+        {"key": "session", "value": "abc", "domain": "example.com"},
+        {"key": "cdn_pref", "value": "xyz", "domain": "cdn.example.com"}
+    ]
+})
+```
+
+## Header configuration
+
+**Mimic real browsers:**
+
+```python
+# ✅ Include common browser headers
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "DNT": "1",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1"
+}
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "headers": headers
+})
+```
+
+**Don't override critical headers:**
+
+```python
+# ❌ Avoid setting these headers (managed by Nimble)
+bad_headers = {
+    "Host": "example.com",  # Automatically set
+    "Content-Length": "123",  # Calculated automatically
+    "Connection": "close"  # Managed by proxy
+}
+
+# ✅ Set application-level headers only
+good_headers = {
+    "Authorization": "Bearer token",
+    "X-Custom-Header": "value",
+    "Accept-Language": "en-US"
+}
+```
+
+## Error handling
+
+**Handle authentication failures:**
+
+```python
+from nimble.exceptions import HTTPError
+
+try:
+    result = nimble.extract({
+        "url": "https://api.example.com/protected",
+        "headers": {"Authorization": "Bearer token"}
+    })
+except HTTPError as e:
+    if e.status_code == 401:
+        print("Authentication failed - token may be expired")
+    elif e.status_code == 403:
+        print("Access forbidden - insufficient permissions")
+    else:
+        print(f"Request failed: {e.message}")
+```
+
+**Validate cookie format:**
+
+```python
+def validate_cookie_string(cookie_str):
+    """Ensure cookie string is properly formatted"""
+    if not cookie_str:
+        return False
+
+    # Check for proper key=value format
+    pairs = cookie_str.split(";")
+    for pair in pairs:
+        if "=" not in pair:
+            return False
+
+    return True
+
+cookie_string = "session_id=abc123;user=john"
+if validate_cookie_string(cookie_string):
+    result = nimble.extract({
+        "url": "https://www.example.com",
+        "cookies": cookie_string
+    })
+```
+
+## Performance
+
+**Reuse sessions when possible:**
+
+```python
+# Extract cookies from initial login
+login_result = perform_login()
+session_cookies = extract_cookies_from_response(login_result)
+
+# Reuse cookies for multiple requests
+urls = ["https://example.com/page1", "https://example.com/page2"]
+for url in urls:
+    result = nimble.extract({
+        "url": url,
+        "cookies": session_cookies
+    })
+```
+
+# Limitations
+
+## Supported endpoints
+
+Custom headers and cookies work with:
+
+- ✅ Real-time Web API
+- ✅ Asynchronous Web API
+- ✅ Batch Web API
+
+Not supported on:
+
+- ❌ Social endpoints
+- ❌ SERP endpoints
+- ❌ Maps endpoints
+- ❌ E-commerce endpoints
+
+## Important constraints
+
+**Don't mix headers and cookies:**
+
+```python
+# ❌ Don't send both in same request
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "headers": {"Authorization": "Bearer token"},
+    "cookies": "session_id=abc"  # May cause conflicts
+})
+
+# ✅ Use one method
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "headers": {"Authorization": "Bearer token"}
+})
+```
+
+**Detection risk:**
+
+- Improper headers may trigger anti-bot detection
+- Invalid cookies can cause request failures
+- Test thoroughly before production use
+- Monitor success rates when using custom headers/cookies
+
+**Header size limits:**
+
+- Total header size: 32 KB
+- Individual header: 8 KB
+- Cookie header: 4 KB
+
+<Note>
+  This is an advanced feature requiring careful configuration. Always test in a development environment first.
+</Note>

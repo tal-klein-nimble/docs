@@ -1,4 +1,813 @@
 ---
-title: 'Template Gallery'
+title: "Discover Templates"
+description: "Browse, search, and inspect available extraction templates"
 ---
 
+The Templates Discovery APIs help you find and understand available templates before using them. Browse templates by category, search by keyword, and inspect detailed schemas to understand inputs and outputs.
+
+## When to use
+
+Use these APIs when you need to:
+
+- **Browse available templates**: See what platforms are supported
+- **Filter by category**: Find templates for specific industries
+- **Search by keyword**: Locate templates for specific platforms
+- **Inspect template details**: Understand input requirements and output structure
+- **Validate before use**: Check supported countries and rate limits
+
+# Two discovery APIs
+
+## 1. List Templates
+
+Browse and search the template catalog:
+
+```
+GET https://api.webit.live/api/v1/templates
+```
+
+## 2. Get Template Details
+
+Get comprehensive information about a specific template:
+
+```
+GET https://api.webit.live/api/v1/templates/{template_name}
+```
+
+# List Templates API
+
+## Parameters
+
+| Parameter  | Type    | Description                                          | Required |
+| ---------- | ------- | ---------------------------------------------------- | -------- |
+| `category` | String  | Filter by category (ecommerce, social, search, etc.) | No       |
+| `search`   | String  | Search templates by name or description              | No       |
+| `page`     | Integer | Page number (default: 1)                             | No       |
+| `limit`    | Integer | Results per page (default: 20, max: 100)             | No       |
+
+## Usage
+
+### List all templates
+
+Get all available templates:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Get first page of templates
+templates = nimble.list_templates(
+    page=1,
+    limit=20
+)
+
+print(f"Total templates: {templates['total']}")
+for template in templates["items"]:
+    print(f"- {template['name']}: {template['description']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Get first page of templates
+const templates = await nimble.listTemplates({
+  page: 1,
+  limit: 20
+});
+
+console.log(`Total templates: ${templates.total}`);
+templates.items.forEach(template => {
+  console.log(`- ${template.name}: ${template.description}`);
+});
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates?page=1&limit=20' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### Filter by category
+
+Get templates for a specific category:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Get all e-commerce templates
+templates = nimble.list_templates(
+    category="ecommerce",
+    limit=50
+)
+
+for template in templates["items"]:
+    print(f"{template['name']} - {template['domain']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Get all e-commerce templates
+const templates = await nimble.listTemplates({
+  category: "ecommerce",
+  limit: 50
+});
+
+templates.items.forEach(template => {
+  console.log(`${template.name} - ${template.domain}`);
+});
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=50' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### Search templates
+
+Find templates by keyword:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Search for Amazon templates
+templates = nimble.list_templates(
+    search="amazon"
+)
+
+for template in templates["items"]:
+    print(f"{template['name']}: {template['description']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Search for Amazon templates
+const templates = await nimble.listTemplates({
+  search: "amazon"
+});
+
+templates.items.forEach(template => {
+  console.log(`${template.name}: ${template.description}`);
+});
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates?search=amazon' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### List response example
+
+```json
+{
+  "status": "success",
+  "data": {
+    "items": [
+      {
+        "name": "amazon_product",
+        "description": "Extract detailed product information from Amazon",
+        "category": "ecommerce",
+        "domain": "amazon.com",
+        "supported_countries": ["US", "UK", "DE", "FR", "IT", "ES", "CA"],
+        "features": ["pricing", "reviews", "availability", "images"],
+        "rate_limit": 100
+      },
+      {
+        "name": "amazon_search",
+        "description": "Search Amazon and get product listings",
+        "category": "ecommerce",
+        "domain": "amazon.com",
+        "supported_countries": ["US", "UK", "DE", "FR", "IT", "ES", "CA"],
+        "features": ["search_results", "sponsored_ads", "filters"],
+        "rate_limit": 100
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 156,
+      "total_pages": 8
+    }
+  }
+}
+```
+
+# Get Template Details API
+
+## Parameters
+
+| Parameter       | Type   | Description                                       | Required |
+| --------------- | ------ | ------------------------------------------------- | -------- |
+| `template_name` | String | The name of the template (e.g., "amazon_product") | Yes      |
+
+## Usage
+
+### Get template details
+
+Retrieve full information for a specific template:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Get details for amazon_product template
+template = nimble.get_template("amazon_product")
+
+print(f"Template: {template['name']}")
+print(f"Description: {template['description']}")
+print(f"Domain: {template['domain']}")
+print(f"Category: {template['category']}")
+print(f"Rate limit: {template['rate_limit']} requests/minute")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Get details for amazon_product template
+const template = await nimble.getTemplate("amazon_product");
+
+console.log(`Template: ${template.name}`);
+console.log(`Description: ${template.description}`);
+console.log(`Domain: ${template.domain}`);
+console.log(`Category: ${template.category}`);
+console.log(`Rate limit: ${template.rate_limit} requests/minute`);
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### Inspect input schema
+
+Review required and optional inputs:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+template = nimble.get_template("amazon_product")
+
+# Review input schema
+print("Required inputs:")
+for field_name, field_info in template["input_schema"].items():
+    if field_info.get("required"):
+        print(f"  - {field_name}: {field_info['type']} - {field_info['description']}")
+
+print("\nOptional inputs:")
+for field_name, field_info in template["input_schema"].items():
+    if not field_info.get("required"):
+        print(f"  - {field_name}: {field_info['type']} - {field_info['description']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const template = await nimble.getTemplate("amazon_product");
+
+// Review input schema
+console.log("Required inputs:");
+Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
+  if (fieldInfo.required) {
+    console.log(`  - ${fieldName}: ${fieldInfo.type} - ${fieldInfo.description}`);
+  }
+});
+
+console.log("\nOptional inputs:");
+Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
+  if (!fieldInfo.required) {
+    console.log(`  - ${fieldName}: ${fieldInfo.type} - ${fieldInfo.description}`);
+  }
+});
+```
+
+</CodeGroup>
+
+### Review output schema
+
+Understand what data you'll receive:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+template = nimble.get_template("amazon_product")
+
+# Review output schema
+print("Output fields:")
+for field_name, field_info in template["output_schema"].items():
+    print(f"  - {field_name}: {field_info['type']} - {field_info['description']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const template = await nimble.getTemplate("amazon_product");
+
+// Review output schema
+console.log("Output fields:");
+Object.entries(template.output_schema).forEach(([fieldName, fieldInfo]) => {
+  console.log(`  - ${fieldName}: ${fieldInfo.type} - ${fieldInfo.description}`);
+});
+```
+
+</CodeGroup>
+
+### Check supported countries
+
+Verify geographic availability:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+template = nimble.get_template("amazon_product")
+
+# Check supported countries
+print(f"Supported countries: {', '.join(template['supported_countries'])}")
+
+# Verify specific country
+if "US" in template['supported_countries']:
+    print("✓ US is supported")
+else:
+    print("✗ US is not supported")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const template = await nimble.getTemplate("amazon_product");
+
+// Check supported countries
+console.log(`Supported countries: ${template.supported_countries.join(", ")}`);
+
+// Verify specific country
+if (template.supported_countries.includes("US")) {
+  console.log("✓ US is supported");
+} else {
+  console.log("✗ US is not supported");
+}
+```
+
+</CodeGroup>
+
+### Details response example
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "amazon_product",
+    "description": "Extract detailed product information from Amazon",
+    "category": "ecommerce",
+    "domain": "amazon.com",
+    "supported_countries": ["US", "UK", "DE", "FR", "IT", "ES", "CA", "JP", "AU"],
+    "rate_limit": 100,
+    "input_schema": {
+      "asin": {
+        "type": "string",
+        "description": "Amazon Standard Identification Number (10 alphanumeric characters)",
+        "required": true,
+        "pattern": "^[A-Z0-9]{10}$",
+        "example": "B08N5WRWNW"
+      },
+      "country": {
+        "type": "string",
+        "description": "Target country code (e.g., US, UK, DE)",
+        "required": false,
+        "default": "US",
+        "enum": ["US", "UK", "DE", "FR", "IT", "ES", "CA", "JP", "AU"]
+      },
+      "zipcode": {
+        "type": "string",
+        "description": "ZIP code for pricing and availability (US only)",
+        "required": false,
+        "example": "90210"
+      }
+    },
+    "output_schema": {
+      "asin": {
+        "type": "string",
+        "description": "Product ASIN"
+      },
+      "title": {
+        "type": "string",
+        "description": "Product title"
+      },
+      "price": {
+        "type": "object",
+        "description": "Pricing information",
+        "properties": {
+          "current": {
+            "type": "number",
+            "description": "Current price"
+          },
+          "original": {
+            "type": "number",
+            "description": "Original price (before discount)"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code (USD, EUR, etc.)"
+          }
+        }
+      },
+      "rating": {
+        "type": "number",
+        "description": "Average customer rating (0-5)"
+      },
+      "reviews_count": {
+        "type": "integer",
+        "description": "Total number of reviews"
+      },
+      "availability": {
+        "type": "string",
+        "description": "Stock availability status"
+      },
+      "images": {
+        "type": "array",
+        "description": "Product image URLs"
+      }
+    },
+    "features": ["pricing", "reviews", "availability", "images", "seller_info"],
+    "version": "2.1.0",
+    "last_updated": "2026-01-05T10:30:00Z"
+  }
+}
+```
+
+# Available categories
+
+Filter templates by these categories:
+
+| Category       | Description                  | Example Templates                                 |
+| -------------- | ---------------------------- | ------------------------------------------------- |
+| `ecommerce`    | Online shopping platforms    | amazon_product, walmart_search, ebay_listing      |
+| `professional` | Career and business networks | linkedin_profile, glassdoor_reviews, indeed_jobs  |
+| `search`       | Search engines               | google_search, bing_search, google_maps           |
+| `social`       | Social media platforms       | twitter_profile, instagram_posts, facebook_page   |
+| `real-estate`  | Property listings            | zillow_listing, realtor_search, redfin_property   |
+| `news`         | News and media sites         | cnn_article, bbc_news, reuters_story              |
+| `travel`       | Travel and hospitality       | booking_hotel, airbnb_listing, expedia_search     |
+| `finance`      | Financial data               | yahoo_finance_stock, bloomberg_quote, marketwatch |
+
+# Use cases
+
+## Build dynamic forms
+
+Generate input forms based on template schema:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def generate_form_fields(template_name):
+    """Generate form fields from template input schema"""
+    template = nimble.get_template(template_name)
+
+    form_fields = []
+    for field_name, field_info in template["input_schema"].items():
+        form_fields.append({
+            "name": field_name,
+            "type": field_info["type"],
+            "label": field_info["description"],
+            "required": field_info.get("required", False),
+            "default": field_info.get("default"),
+            "options": field_info.get("enum"),
+            "placeholder": field_info.get("example")
+        })
+
+    return form_fields
+
+# Use in UI
+fields = generate_form_fields("amazon_product")
+for field in fields:
+    print(f"{field['label']}: {field['name']} ({'required' if field['required'] else 'optional'})")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function generateFormFields(templateName) {
+  const template = await nimble.getTemplate(templateName);
+
+  const formFields = Object.entries(template.input_schema).map(([fieldName, fieldInfo]) => ({
+    name: fieldName,
+    type: fieldInfo.type,
+    label: fieldInfo.description,
+    required: fieldInfo.required || false,
+    default: fieldInfo.default,
+    options: fieldInfo.enum,
+    placeholder: fieldInfo.example
+  }));
+
+  return formFields;
+}
+
+// Use in UI
+const fields = await generateFormFields("amazon_product");
+fields.forEach(field => {
+  console.log(`${field.label}: ${field.name} (${field.required ? "required" : "optional"})`);
+});
+```
+
+</CodeGroup>
+
+## Validate inputs
+
+Check inputs against template schema before execution:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+import re
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def validate_inputs(template_name, inputs):
+    """Validate inputs against template schema"""
+    template = nimble.get_template(template_name)
+    errors = []
+
+    # Check required fields
+    for field_name, field_info in template["input_schema"].items():
+        if field_info.get("required") and field_name not in inputs:
+            errors.append(f"Missing required field: {field_name}")
+
+    # Validate patterns
+    for field_name, value in inputs.items():
+        field_info = template["input_schema"].get(field_name, {})
+        pattern = field_info.get("pattern")
+        if pattern and not re.match(pattern, value):
+            errors.append(f"Invalid format for {field_name}: {value}")
+
+    return errors
+
+# Validate before extraction
+errors = validate_inputs("amazon_product", {
+    "asin": "B08N5WRWNW",
+    "country": "US"
+})
+
+if errors:
+    print("Validation errors:")
+    for error in errors:
+        print(f"  - {error}")
+else:
+    print("✓ All inputs valid")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function validateInputs(templateName, inputs) {
+  const template = await nimble.getTemplate(templateName);
+  const errors = [];
+
+  // Check required fields
+  Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
+    if (fieldInfo.required && !(fieldName in inputs)) {
+      errors.push(`Missing required field: ${fieldName}`);
+    }
+  });
+
+  // Validate patterns
+  Object.entries(inputs).forEach(([fieldName, value]) => {
+    const fieldInfo = template.input_schema[fieldName] || {};
+    const pattern = fieldInfo.pattern;
+    if (pattern && !new RegExp(pattern).test(value)) {
+      errors.push(`Invalid format for ${fieldName}: ${value}`);
+    }
+  });
+
+  return errors;
+}
+
+// Validate before extraction
+const errors = await validateInputs("amazon_product", {
+  asin: "B08N5WRWNW",
+  country: "US"
+});
+
+if (errors.length > 0) {
+  console.log("Validation errors:");
+  errors.forEach(error => console.log(`  - ${error}`));
+} else {
+  console.log("✓ All inputs valid");
+}
+```
+
+</CodeGroup>
+
+## Compare templates
+
+Evaluate multiple templates for your use case:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def compare_templates(template_names):
+    """Compare capabilities of multiple templates"""
+    comparison = []
+
+    for name in template_names:
+        template = nimble.get_template(name)
+        comparison.append({
+            "name": name,
+            "description": template["description"],
+            "inputs": len(template["input_schema"]),
+            "outputs": len(template["output_schema"]),
+            "countries": len(template["supported_countries"]),
+            "rate_limit": template["rate_limit"]
+        })
+
+    return comparison
+
+# Compare e-commerce templates
+templates = compare_templates([
+    "amazon_product",
+    "walmart_product",
+    "ebay_product"
+])
+
+for t in templates:
+    print(f"{t['name']}: {t['inputs']} inputs, {t['outputs']} outputs, {t['countries']} countries")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function compareTemplates(templateNames) {
+  const comparison = await Promise.all(
+    templateNames.map(async (name) => {
+      const template = await nimble.getTemplate(name);
+      return {
+        name,
+        description: template.description,
+        inputs: Object.keys(template.input_schema).length,
+        outputs: Object.keys(template.output_schema).length,
+        countries: template.supported_countries.length,
+        rate_limit: template.rate_limit
+      };
+    })
+  );
+
+  return comparison;
+}
+
+// Compare e-commerce templates
+const templates = await compareTemplates([
+  "amazon_product",
+  "walmart_product",
+  "ebay_product"
+]);
+
+templates.forEach(t => {
+  console.log(`${t.name}: ${t.inputs} inputs, ${t.outputs} outputs, ${t.countries} countries`);
+});
+```
+
+</CodeGroup>
+
+# Best practices
+
+## Cache template information
+
+Reduce API calls by caching template data:
+
+```python
+import time
+
+class TemplateCache:
+    def __init__(self, nimble_client, ttl=86400):  # 24 hour default
+        self.client = nimble_client
+        self.ttl = ttl
+        self.cache = {}
+        self.last_update = {}
+
+    def get_template(self, template_name):
+        # Check cache validity
+        if (template_name in self.cache and
+            time.time() - self.last_update[template_name] < self.ttl):
+            return self.cache[template_name]
+
+        # Fetch and cache
+        template = self.client.get_template(template_name)
+        self.cache[template_name] = template
+        self.last_update[template_name] = time.time()
+
+        return template
+```
+
+## Error handling
+
+Handle API errors gracefully:
+
+```python
+try:
+    template = nimble.get_template("amazon_product")
+except TemplateNotFoundError:
+    print("Template doesn't exist")
+except APIError as e:
+    print(f"API error: {e.message}")
+```
+
+## Efficient pagination
+
+Fetch all templates efficiently:
+
+```python
+def get_all_templates(nimble_client, category=None):
+    """Get all templates with automatic pagination"""
+    all_templates = []
+    page = 1
+
+    while True:
+        response = nimble_client.list_templates(
+            category=category,
+            page=page,
+            limit=100
+        )
+
+        all_templates.extend(response["items"])
+
+        # Check if there are more pages
+        if page >= response["pagination"]["total_pages"]:
+            break
+
+        page += 1
+
+    return all_templates
+```

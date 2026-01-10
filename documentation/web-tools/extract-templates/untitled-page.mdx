@@ -1,0 +1,399 @@
+---
+title: "Extract Templates"
+description: "Ready-to-use extraction templates for popular platforms"
+---
+
+Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Skip complex configuration and use simple inputs like search terms or product IDs instead of URLs.
+
+Common uses:
+
+- **E-commerce scraping**: Amazon, eBay, Walmart product and search data
+- **Professional data**: LinkedIn profiles, job listings, company information
+- **Search engines**: Google, Bing search results and knowledge panels
+- **Social media**: Twitter, Facebook, Instagram public data
+- **Real estate**: Zillow, Realtor listings and property details
+
+<Note>
+  All templates are maintained by Nimble. When sites change, we update templates automatically—no maintenance required on your end.
+</Note>
+
+# Why use templates?
+
+**Zero configuration:**
+
+- Pre-configured browser settings
+- Optimized parsing logic
+- Built-in data normalization
+- Handles anti-bot challenges
+
+**Maintained by Nimble:**
+
+- Monitored 24/7 for changes
+- Fixed automatically when sites update
+- Optimized for performance and cost
+- Battle-tested on production workloads
+
+**Simple interface:**
+
+- Use inputs like ASINs or search terms
+- No need to construct URLs manually
+- Consistent response format across templates
+- Built-in validation and error handling
+
+# Two main APIs
+
+## 1. Discover Templates
+
+Browse and inspect available templates:
+
+```python
+# List templates
+templates = nimble.list_templates(
+    category="ecommerce",
+    page=1,
+    limit=20
+)
+
+# Get template details
+template_info = nimble.get_template("amazon_product")
+```
+
+## 2. Extract with Templates
+
+Run a template with simple inputs:
+
+```python
+result = nimble.extract_template(
+    template="amazon_product",
+    inputs={"asin": "B08N5WRWNW", "zipcode": "90210"}
+)
+```
+
+# Quick start
+
+## Using a template
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Extract Amazon product data
+result = nimble.extract_template(
+    template="amazon_product",
+    inputs={
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+)
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Extract Amazon product data
+const result = await nimble.extractTemplate({
+  template: "amazon_product",
+  inputs: {
+    asin: "B08N5WRWNW",
+    zipcode: "90210"
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "amazon_product",
+    "inputs": {
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+}'
+```
+
+</CodeGroup>
+
+## Browsing templates
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# List all e-commerce templates
+templates = nimble.list_templates(
+    category="ecommerce",
+    page=1,
+    limit=20
+)
+
+for template in templates["items"]:
+    print(f"{template['name']}: {template['description']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// List all e-commerce templates
+const templates = await nimble.listTemplates({
+  category: "ecommerce",
+  page: 1,
+  limit: 20
+});
+
+templates.items.forEach(template => {
+  console.log(`${template.name}: ${template.description}`);
+});
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&page=1&limit=20' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+## Getting template details
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Get full details for a template
+template = nimble.get_template("amazon_product")
+
+print("Description:", template["description"])
+print("Inputs:", template["input_schema"])
+print("Outputs:", template["output_schema"])
+print("Domain:", template["domain"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Get full details for a template
+const template = await nimble.getTemplate("amazon_product");
+
+console.log("Description:", template.description);
+console.log("Inputs:", template.input_schema);
+console.log("Outputs:", template.output_schema);
+console.log("Domain:", template.domain);
+```
+
+
+```bash cURL
+curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+# Popular templates
+
+## E-commerce
+
+| Template          | Description            | Key Inputs         |
+| ----------------- | ---------------------- | ------------------ |
+| `amazon_product`  | Amazon product details | `asin`, `zipcode`  |
+| `amazon_search`   | Amazon search results  | `query`, `zipcode` |
+| `walmart_product` | Walmart product data   | `product_id`       |
+| `ebay_product`    | eBay listing details   | `item_id`          |
+
+## Professional networks
+
+| Template           | Description           | Key Inputs          |
+| ------------------ | --------------------- | ------------------- |
+| `linkedin_profile` | LinkedIn profile data | `profile_url`       |
+| `linkedin_jobs`    | LinkedIn job listings | `query`, `location` |
+| `linkedin_company` | Company information   | `company_url`       |
+
+## Search engines
+
+| Template        | Description           | Key Inputs          |
+| --------------- | --------------------- | ------------------- |
+| `google_search` | Google search results | `query`, `country`  |
+| `google_maps`   | Google Maps listings  | `query`, `location` |
+| `bing_search`   | Bing search results   | `query`, `country`  |
+
+## Social media
+
+| Template            | Description            | Key Inputs |
+| ------------------- | ---------------------- | ---------- |
+| `twitter_profile`   | Twitter profile data   | `username` |
+| `twitter_search`    | Twitter search results | `query`    |
+| `instagram_profile` | Instagram profile data | `username` |
+
+# Example response
+
+When a template runs successfully, you receive structured, normalized data:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "asin": "B08N5WRWNW",
+    "title": "Apple AirPods Pro (2nd Generation)",
+    "price": {
+      "current": 249.99,
+      "original": 249.99,
+      "currency": "USD"
+    },
+    "rating": 4.7,
+    "reviews_count": 54329,
+    "availability": "In Stock",
+    "images": [
+      "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL1500_.jpg"
+    ],
+    "features": [
+      "Active Noise Cancellation",
+      "Transparency mode",
+      "Up to 6 hours listening time"
+    ],
+    "seller": {
+      "name": "Amazon.com",
+      "rating": 4.8
+    }
+  },
+  "metadata": {
+    "template": "amazon_product",
+    "execution_time_ms": 2150,
+    "timestamp": "2026-01-10T00:45:23Z"
+  }
+}
+```
+
+The response includes:
+
+- **data**: Structured, normalized data matching the template schema
+- **metadata**: Execution details including template name and timing
+- All data is validated and normalized to consistent formats
+
+# Template categories
+
+Browse templates by category:
+
+- **ecommerce**: Amazon, Walmart, eBay, Shopify
+- **professional**: LinkedIn, Glassdoor, Indeed
+- **search**: Google, Bing, DuckDuckGo
+- **social**: Twitter, Instagram, Facebook, TikTok
+- **real-estate**: Zillow, Realtor, Redfin
+- **news**: CNN, BBC, Reuters
+- **travel**: Booking, Airbnb, Expedia
+- **finance**: Yahoo Finance, Bloomberg, MarketWatch
+
+# Best practices
+
+## Input validation
+
+Templates validate inputs automatically:
+
+```python
+# ✅ Valid inputs
+result = nimble.extract_template(
+    template="amazon_product",
+    inputs={"asin": "B08N5WRWNW"}  # Valid ASIN format
+)
+
+# ❌ Invalid inputs (will return error)
+result = nimble.extract_template(
+    template="amazon_product",
+    inputs={"asin": "invalid"}  # Invalid ASIN
+)
+```
+
+## Error handling
+
+Handle template-specific errors:
+
+```python
+try:
+    result = nimble.extract_template(
+        template="amazon_product",
+        inputs={"asin": "B08N5WRWNW"}
+    )
+except TemplateNotFoundError:
+    print("Template doesn't exist")
+except InvalidInputError as e:
+    print(f"Invalid input: {e.message}")
+except TemplateExecutionError as e:
+    print(f"Execution failed: {e.message}")
+```
+
+## Rate limits
+
+Templates have rate limits to ensure quality:
+
+```python
+# Check template rate limits
+template = nimble.get_template("amazon_product")
+print(f"Rate limit: {template['rate_limit']} requests/minute")
+```
+
+## Cost optimization
+
+- Templates are optimized for cost efficiency
+- Pre-configured with optimal driver settings
+- No need to experiment with configurations
+- Billing is per successful extraction
+
+# Templates vs Custom Extract
+
+| Feature           | Templates            | Custom Extract            |
+| ----------------- | -------------------- | ------------------------- |
+| **Setup**         | Zero configuration   | Manual configuration      |
+| **Maintenance**   | Maintained by Nimble | You maintain              |
+| **Cost**          | Optimized pricing    | Variable based on config  |
+| **Customization** | Fixed schema         | Full control              |
+| **Time to value** | Immediate            | Minutes to hours          |
+| **Reliability**   | Battle-tested        | Depends on implementation |
+| **Best for**      | Common platforms     | Unique sites              |
+
+**Use templates when:**
+
+- Extracting from popular platforms
+- You want zero maintenance
+- Fast time to market is important
+- Standard data schemas work for you
+
+**Use custom extract when:**
+
+- Working with unique/niche sites
+- You need custom data structures
+- Site requires specific configurations
+- Template doesn't exist for your use case
+
+# Next steps
+
+<CardGroup cols={2}>
+  <Card title="Discover Templates" icon="magnifying-glass" href="/documentation/web-tools/extract-templates/discover">
+    Browse, search, and inspect available templates
+  </Card>
+  <Card title="Using Templates" icon="play" href="/documentation/web-tools/extract-templates/extract">
+    Run templates to extract structured data
+  </Card>
+</CardGroup>

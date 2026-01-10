@@ -1,4 +1,985 @@
 ---
-title: 'Extract Templates'
+title: "Using Templates"
+description: "Run templates with simple inputs to extract structured data"
 ---
 
+The Extract Template API runs pre-built templates with simple inputs like product IDs or search terms. Skip complex configuration and get structured, normalized data instantly from popular platforms.
+
+## When to use
+
+Use the Extract Template API when you need to:
+
+- **Quick extraction**: Get data without configuring selectors
+- **Production-ready**: Use battle-tested extractors maintained by Nimble
+- **Simple inputs**: Provide IDs or terms instead of constructing URLs
+- **Normalized data**: Receive consistent schemas across requests
+- **Zero maintenance**: Let Nimble handle site changes
+
+# API endpoint
+
+```
+POST https://api.webit.live/api/v1/templates/extract
+```
+
+# Parameters
+
+| Parameter  | Type   | Description                                     | Required |
+| ---------- | ------ | ----------------------------------------------- | -------- |
+| `template` | String | Template name (e.g., "amazon_product")          | Yes      |
+| `inputs`   | Object | Template-specific inputs (ASINs, queries, etc.) | Yes      |
+| `country`  | String | Target country code (template-dependent)        | No       |
+
+<Note>
+  Each template has unique input requirements. Use the [Get Template Details](/documentation/web-tools/extract-templates/details) API to review input schemas.
+</Note>
+
+# Usage
+
+## E-commerce extraction
+
+Extract product data from popular platforms:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Amazon product
+amazon_result = nimble.extract_template(
+    template="amazon_product",
+    inputs={
+        "asin": "B08N5WRWNW",
+        "country": "US",
+        "zipcode": "90210"
+    }
+)
+
+print(f"Product: {amazon_result['data']['title']}")
+print(f"Price: ${amazon_result['data']['price']['current']}")
+
+# Walmart product
+walmart_result = nimble.extract_template(
+    template="walmart_product",
+    inputs={
+        "product_id": "123456789"
+    }
+)
+
+print(f"Product: {walmart_result['data']['name']}")
+print(f"Rating: {walmart_result['data']['rating']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Amazon product
+const amazonResult = await nimble.extractTemplate({
+  template: "amazon_product",
+  inputs: {
+    asin: "B08N5WRWNW",
+    country: "US",
+    zipcode: "90210"
+  }
+});
+
+console.log(`Product: ${amazonResult.data.title}`);
+console.log(`Price: $${amazonResult.data.price.current}`);
+
+// Walmart product
+const walmartResult = await nimble.extractTemplate({
+  template: "walmart_product",
+  inputs: {
+    product_id: "123456789"
+  }
+});
+
+console.log(`Product: ${walmartResult.data.name}`);
+console.log(`Rating: ${walmartResult.data.rating}`);
+```
+
+
+```bash cURL
+# Amazon product
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "amazon_product",
+    "inputs": {
+        "asin": "B08N5WRWNW",
+        "country": "US",
+        "zipcode": "90210"
+    }
+}'
+
+# Walmart product
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "walmart_product",
+    "inputs": {
+        "product_id": "123456789"
+    }
+}'
+```
+
+</CodeGroup>
+
+## Search results extraction
+
+Extract search listings from e-commerce platforms:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Amazon search
+result = nimble.extract_template(
+    template="amazon_search",
+    inputs={
+        "query": "wireless headphones",
+        "country": "US",
+        "zipcode": "90210",
+        "page": 1
+    }
+)
+
+print(f"Found {len(result['data']['products'])} products")
+for product in result['data']['products']:
+    print(f"- {product['title']}: ${product['price']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Amazon search
+const result = await nimble.extractTemplate({
+  template: "amazon_search",
+  inputs: {
+    query: "wireless headphones",
+    country: "US",
+    zipcode: "90210",
+    page: 1
+  }
+});
+
+console.log(`Found ${result.data.products.length} products`);
+result.data.products.forEach(product => {
+  console.log(`- ${product.title}: $${product.price}`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "amazon_search",
+    "inputs": {
+        "query": "wireless headphones",
+        "country": "US",
+        "zipcode": "90210",
+        "page": 1
+    }
+}'
+```
+
+</CodeGroup>
+
+## Professional network extraction
+
+Extract LinkedIn profiles and job listings:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# LinkedIn profile
+profile_result = nimble.extract_template(
+    template="linkedin_profile",
+    inputs={
+        "profile_url": "https://www.linkedin.com/in/example-profile"
+    }
+)
+
+print(f"Name: {profile_result['data']['name']}")
+print(f"Title: {profile_result['data']['headline']}")
+print(f"Company: {profile_result['data']['current_company']}")
+
+# LinkedIn jobs
+jobs_result = nimble.extract_template(
+    template="linkedin_jobs",
+    inputs={
+        "query": "software engineer",
+        "location": "San Francisco, CA"
+    }
+)
+
+print(f"\nFound {len(jobs_result['data']['jobs'])} jobs")
+for job in jobs_result['data']['jobs']:
+    print(f"- {job['title']} at {job['company']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// LinkedIn profile
+const profileResult = await nimble.extractTemplate({
+  template: "linkedin_profile",
+  inputs: {
+    profile_url: "https://www.linkedin.com/in/example-profile"
+  }
+});
+
+console.log(`Name: ${profileResult.data.name}`);
+console.log(`Title: ${profileResult.data.headline}`);
+console.log(`Company: ${profileResult.data.current_company}`);
+
+// LinkedIn jobs
+const jobsResult = await nimble.extractTemplate({
+  template: "linkedin_jobs",
+  inputs: {
+    query: "software engineer",
+    location: "San Francisco, CA"
+  }
+});
+
+console.log(`\nFound ${jobsResult.data.jobs.length} jobs`);
+jobsResult.data.jobs.forEach(job => {
+  console.log(`- ${job.title} at ${job.company}`);
+});
+```
+
+
+```bash cURL
+# LinkedIn profile
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "linkedin_profile",
+    "inputs": {
+        "profile_url": "https://www.linkedin.com/in/example-profile"
+    }
+}'
+
+# LinkedIn jobs
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "linkedin_jobs",
+    "inputs": {
+        "query": "software engineer",
+        "location": "San Francisco, CA"
+    }
+}'
+```
+
+</CodeGroup>
+
+## Search engine extraction
+
+Get search results from Google and Bing:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Google search
+google_result = nimble.extract_template(
+    template="google_search",
+    inputs={
+        "query": "best laptop 2026",
+        "country": "US",
+        "page": 1
+    }
+)
+
+print("Google results:")
+for result in google_result['data']['organic_results']:
+    print(f"- {result['title']}")
+    print(f"  {result['url']}")
+
+# Google Maps
+maps_result = nimble.extract_template(
+    template="google_maps",
+    inputs={
+        "query": "coffee shops",
+        "location": "New York, NY"
+    }
+)
+
+print(f"\nFound {len(maps_result['data']['results'])} locations")
+for place in maps_result['data']['results']:
+    print(f"- {place['name']} ({place['rating']} stars)")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Google search
+const googleResult = await nimble.extractTemplate({
+  template: "google_search",
+  inputs: {
+    query: "best laptop 2026",
+    country: "US",
+    page: 1
+  }
+});
+
+console.log("Google results:");
+googleResult.data.organic_results.forEach(result => {
+  console.log(`- ${result.title}`);
+  console.log(`  ${result.url}`);
+});
+
+// Google Maps
+const mapsResult = await nimble.extractTemplate({
+  template: "google_maps",
+  inputs: {
+    query: "coffee shops",
+    location: "New York, NY"
+  }
+});
+
+console.log(`\nFound ${mapsResult.data.results.length} locations`);
+mapsResult.data.results.forEach(place => {
+  console.log(`- ${place.name} (${place.rating} stars)`);
+});
+```
+
+
+```bash cURL
+# Google search
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "google_search",
+    "inputs": {
+        "query": "best laptop 2026",
+        "country": "US",
+        "page": 1
+    }
+}'
+
+# Google Maps
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "google_maps",
+    "inputs": {
+        "query": "coffee shops",
+        "location": "New York, NY"
+    }
+}'
+```
+
+</CodeGroup>
+
+## Social media extraction
+
+Extract public social media data:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Twitter profile
+twitter_result = nimble.extract_template(
+    template="twitter_profile",
+    inputs={
+        "username": "example_user"
+    }
+)
+
+print(f"Profile: @{twitter_result['data']['username']}")
+print(f"Followers: {twitter_result['data']['followers_count']}")
+print(f"Bio: {twitter_result['data']['bio']}")
+
+# Instagram profile
+instagram_result = nimble.extract_template(
+    template="instagram_profile",
+    inputs={
+        "username": "example_user"
+    }
+)
+
+print(f"\nInstagram: @{instagram_result['data']['username']}")
+print(f"Posts: {instagram_result['data']['posts_count']}")
+print(f"Followers: {instagram_result['data']['followers_count']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Twitter profile
+const twitterResult = await nimble.extractTemplate({
+  template: "twitter_profile",
+  inputs: {
+    username: "example_user"
+  }
+});
+
+console.log(`Profile: @${twitterResult.data.username}`);
+console.log(`Followers: ${twitterResult.data.followers_count}`);
+console.log(`Bio: ${twitterResult.data.bio}`);
+
+// Instagram profile
+const instagramResult = await nimble.extractTemplate({
+  template: "instagram_profile",
+  inputs: {
+    username: "example_user"
+  }
+});
+
+console.log(`\nInstagram: @${instagramResult.data.username}`);
+console.log(`Posts: ${instagramResult.data.posts_count}`);
+console.log(`Followers: ${instagramResult.data.followers_count}`);
+```
+
+
+```bash cURL
+# Twitter profile
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "twitter_profile",
+    "inputs": {
+        "username": "example_user"
+    }
+}'
+
+# Instagram profile
+curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "instagram_profile",
+    "inputs": {
+        "username": "example_user"
+    }
+}'
+```
+
+</CodeGroup>
+
+# Example response
+
+When a template executes successfully, you receive normalized data:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "asin": "B08N5WRWNW",
+    "title": "Apple AirPods Pro (2nd Generation)",
+    "price": {
+      "current": 249.99,
+      "original": 249.99,
+      "currency": "USD",
+      "discount_percentage": 0
+    },
+    "rating": 4.7,
+    "reviews_count": 54329,
+    "availability": "In Stock",
+    "images": [
+      "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51KJ1s5FHDL._AC_SL1500_.jpg"
+    ],
+    "features": [
+      "Active Noise Cancellation reduces unwanted background noise",
+      "Adaptive Transparency lets outside sounds in while reducing loud environmental noise",
+      "Personalized Spatial Audio with dynamic head tracking places sound all around you",
+      "Multiple ear tips (XS, S, M, L)",
+      "Up to 6 hours of listening time with Active Noise Cancellation enabled"
+    ],
+    "description": "AirPods Pro feature up to 2x more Active Noise Cancellation...",
+    "seller": {
+      "name": "Amazon.com",
+      "rating": 4.8,
+      "fulfillment": "Amazon"
+    },
+    "variants": [
+      {
+        "color": "White",
+        "available": true
+      }
+    ],
+    "category": "Electronics > Headphones > Earbuds"
+  },
+  "metadata": {
+    "template": "amazon_product",
+    "template_version": "2.1.0",
+    "execution_time_ms": 2150,
+    "timestamp": "2026-01-10T00:45:23Z",
+    "country": "US"
+  }
+}
+```
+
+The response includes:
+
+- **data**: Structured, normalized data matching template schema
+- **metadata**: Template name, version, and execution details
+- All prices, dates, and numbers are normalized to consistent formats
+- Optional fields return null if not available
+
+# Best practices
+
+## Input validation
+
+Validate inputs before making requests:
+
+```python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def validate_asin(asin):
+    """Validate Amazon ASIN format"""
+    import re
+    return bool(re.match(r'^[A-Z0-9]{10}$', asin))
+
+# Validate before extraction
+asin = "B08N5WRWNW"
+if validate_asin(asin):
+    result = nimble.extract_template(
+        template="amazon_product",
+        inputs={"asin": asin}
+    )
+else:
+    print("Invalid ASIN format")
+```
+
+## Error handling
+
+Handle template-specific errors:
+
+```python
+from nimble import Nimble
+from nimble.exceptions import (
+    TemplateNotFoundError,
+    InvalidInputError,
+    TemplateExecutionError,
+    RateLimitError
+)
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+try:
+    result = nimble.extract_template(
+        template="amazon_product",
+        inputs={"asin": "B08N5WRWNW"}
+    )
+except TemplateNotFoundError:
+    print("Template doesn't exist")
+except InvalidInputError as e:
+    print(f"Invalid input: {e.message}")
+    print(f"Required inputs: {e.required_inputs}")
+except TemplateExecutionError as e:
+    print(f"Execution failed: {e.message}")
+    print(f"Error type: {e.error_type}")
+except RateLimitError as e:
+    print(f"Rate limit exceeded. Retry after {e.retry_after} seconds")
+```
+
+## Batch processing
+
+Process multiple items efficiently:
+
+```python
+from nimble import Nimble
+import asyncio
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+async def extract_multiple_products(asins):
+    """Extract multiple products concurrently"""
+    tasks = [
+        nimble.extract_template_async(
+            template="amazon_product",
+            inputs={"asin": asin}
+        )
+        for asin in asins
+    ]
+
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    # Filter successful results
+    successful = [r for r in results if not isinstance(r, Exception)]
+    failed = [r for r in results if isinstance(r, Exception)]
+
+    return successful, failed
+
+# Process batch
+asins = ["B08N5WRWNW", "B08N5KWB9H", "B08N5L6CGX"]
+successful, failed = asyncio.run(extract_multiple_products(asins))
+
+print(f"Successful: {len(successful)}")
+print(f"Failed: {len(failed)}")
+```
+
+## Caching results
+
+Cache template results to reduce costs:
+
+```python
+import time
+import hashlib
+import json
+
+class TemplateResultCache:
+    def __init__(self, nimble_client, ttl=3600):
+        self.client = nimble_client
+        self.ttl = ttl
+        self.cache = {}
+
+    def extract_template(self, template, inputs):
+        # Create cache key
+        cache_key = hashlib.md5(
+            f"{template}:{json.dumps(inputs, sort_keys=True)}".encode()
+        ).hexdigest()
+
+        # Check cache
+        if cache_key in self.cache:
+            cached_result, timestamp = self.cache[cache_key]
+            if time.time() - timestamp < self.ttl:
+                return cached_result
+
+        # Fetch and cache
+        result = self.client.extract_template(
+            template=template,
+            inputs=inputs
+        )
+        self.cache[cache_key] = (result, time.time())
+
+        return result
+```
+
+## Rate limit management
+
+Respect template rate limits:
+
+```python
+import time
+from collections import deque
+
+class RateLimiter:
+    def __init__(self, max_requests, time_window):
+        self.max_requests = max_requests
+        self.time_window = time_window
+        self.requests = deque()
+
+    def wait_if_needed(self):
+        now = time.time()
+
+        # Remove old requests outside time window
+        while self.requests and self.requests[0] < now - self.time_window:
+            self.requests.popleft()
+
+        # Wait if at limit
+        if len(self.requests) >= self.max_requests:
+            sleep_time = self.time_window - (now - self.requests[0])
+            if sleep_time > 0:
+                time.sleep(sleep_time)
+            self.requests.popleft()
+
+        # Record new request
+        self.requests.append(time.time())
+
+# Use with template (100 requests per minute)
+limiter = RateLimiter(max_requests=100, time_window=60)
+
+for asin in asins:
+    limiter.wait_if_needed()
+    result = nimble.extract_template(
+        template="amazon_product",
+        inputs={"asin": asin}
+    )
+```
+
+# Use cases
+
+## Price monitoring
+
+Track product prices over time:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+import schedule
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def monitor_price(asin):
+    """Monitor product price and alert on changes"""
+    result = nimble.extract_template(
+        template="amazon_product",
+        inputs={"asin": asin}
+    )
+
+    current_price = result['data']['price']['current']
+
+    # Check against stored price
+    if price_changed(asin, current_price):
+        send_alert(asin, current_price)
+
+    # Store current price
+    store_price(asin, current_price)
+
+# Monitor every hour
+schedule.every().hour.do(monitor_price, asin="B08N5WRWNW")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+import schedule from "node-schedule";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function monitorPrice(asin) {
+  // Monitor product price and alert on changes
+  const result = await nimble.extractTemplate({
+    template: "amazon_product",
+    inputs: { asin }
+  });
+
+  const currentPrice = result.data.price.current;
+
+  // Check against stored price
+  if (await priceChanged(asin, currentPrice)) {
+    await sendAlert(asin, currentPrice);
+  }
+
+  // Store current price
+  await storePrice(asin, currentPrice);
+}
+
+// Monitor every hour
+schedule.scheduleJob("0 * * * *", () => monitorPrice("B08N5WRWNW"));
+```
+
+</CodeGroup>
+
+## Lead generation
+
+Extract business contacts from LinkedIn:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def generate_leads(job_title, location, limit=100):
+    """Generate leads from LinkedIn job postings"""
+    leads = []
+
+    # Search for jobs
+    result = nimble.extract_template(
+        template="linkedin_jobs",
+        inputs={
+            "query": job_title,
+            "location": location
+        }
+    )
+
+    # Extract company information
+    for job in result['data']['jobs'][:limit]:
+        company_profile = nimble.extract_template(
+            template="linkedin_company",
+            inputs={
+                "company_url": job['company_url']
+            }
+        )
+
+        leads.append({
+            "company": job['company'],
+            "title": job['title'],
+            "location": job['location'],
+            "company_size": company_profile['data']['size'],
+            "industry": company_profile['data']['industry']
+        })
+
+    return leads
+
+# Generate leads
+leads = generate_leads("software engineer", "San Francisco, CA")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function generateLeads(jobTitle, location, limit = 100) {
+  // Generate leads from LinkedIn job postings
+  const leads = [];
+
+  // Search for jobs
+  const result = await nimble.extractTemplate({
+    template: "linkedin_jobs",
+    inputs: {
+      query: jobTitle,
+      location
+    }
+  });
+
+  // Extract company information
+  for (const job of result.data.jobs.slice(0, limit)) {
+    const companyProfile = await nimble.extractTemplate({
+      template: "linkedin_company",
+      inputs: {
+        company_url: job.company_url
+      }
+    });
+
+    leads.push({
+      company: job.company,
+      title: job.title,
+      location: job.location,
+      company_size: companyProfile.data.size,
+      industry: companyProfile.data.industry
+    });
+  }
+
+  return leads;
+}
+
+// Generate leads
+const leads = await generateLeads("software engineer", "San Francisco, CA");
+```
+
+</CodeGroup>
+
+## Competitor analysis
+
+Monitor competitor products and pricing:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def analyze_competitors(search_query):
+    """Analyze competitor products"""
+    # Get search results
+    result = nimble.extract_template(
+        template="amazon_search",
+        inputs={"query": search_query}
+    )
+
+    # Analyze each product
+    analysis = []
+    for product in result['data']['products'][:10]:
+        # Get detailed product info
+        details = nimble.extract_template(
+            template="amazon_product",
+            inputs={"asin": product['asin']}
+        )
+
+        analysis.append({
+            "name": details['data']['title'],
+            "price": details['data']['price']['current'],
+            "rating": details['data']['rating'],
+            "reviews": details['data']['reviews_count'],
+            "seller": details['data']['seller']['name']
+        })
+
+    # Sort by popularity
+    analysis.sort(key=lambda x: x['reviews'], reverse=True)
+
+    return analysis
+
+# Analyze competitors
+competitors = analyze_competitors("wireless earbuds")
+for comp in competitors:
+    print(f"{comp['name']}: ${comp['price']} ({comp['rating']} stars, {comp['reviews']} reviews)")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function analyzeCompetitors(searchQuery) {
+  // Analyze competitor products
+  const result = await nimble.extractTemplate({
+    template: "amazon_search",
+    inputs: { query: searchQuery }
+  });
+
+  // Analyze each product
+  const analysis = [];
+  for (const product of result.data.products.slice(0, 10)) {
+    // Get detailed product info
+    const details = await nimble.extractTemplate({
+      template: "amazon_product",
+      inputs: { asin: product.asin }
+    });
+
+    analysis.push({
+      name: details.data.title,
+      price: details.data.price.current,
+      rating: details.data.rating,
+      reviews: details.data.reviews_count,
+      seller: details.data.seller.name
+    });
+  }
+
+  // Sort by popularity
+  analysis.sort((a, b) => b.reviews - a.reviews);
+
+  return analysis;
+}
+
+// Analyze competitors
+const competitors = await analyzeCompetitors("wireless earbuds");
+competitors.forEach(comp => {
+  console.log(`${comp.name}: $${comp.price} (${comp.rating} stars, ${comp.reviews} reviews)`);
+});
+```
+
+</CodeGroup>

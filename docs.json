@@ -43,6 +43,7 @@
                   "documentation/web-tools/extract/extract-overview",
                   "documentation/web-tools/extract/f",
                   "documentation/web-tools/extract/geo-targeting",
+                  "documentation/web-tools/extract/js-rendering",
                   "documentation/web-tools/extract/stealth-mode",
                   {
                     "group": "Parsing Schema",
@@ -68,6 +69,7 @@
               {
                 "group": "Extract Templates",
                 "pages": [
+                  "documentation/web-tools/extract-templates/untitled-page",
                   "documentation/web-tools/extract-templates",
                   "documentation/web-tools/extract-templates/template-gallery"
                 ]
@@ -80,6 +82,7 @@
           {
             "group": "AI Tools",
             "icon": "robot",
+            "hidden": true,
             "pages": [
               "ai-tools/claude-code",
               "ai-tools/cursor",
