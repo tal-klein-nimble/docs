@@ -19,30 +19,33 @@ Common uses:
 
 # Why use templates?
 
-**Zero configuration:**
-
-- Pre-configured browser settings
-- Optimized parsing logic
-- Built-in data normalization
-- Handles anti-bot challenges
-
-**Maintained by Nimble:**
-
-- Monitored 24/7 for changes
-- Fixed automatically when sites update
-- Optimized for performance and cost
-- Battle-tested on production workloads
-
-**Simple interface:**
-
-- Use inputs like ASINs or search terms
-- No need to construct URLs manually
-- Consistent response format across templates
-- Built-in validation and error handling
+<Columns cols={3}>
+  <Card title="Zero configuration" icon="sparkles">
+    - Pre-configured browser settings
+    - Optimized parsing logic
+    - Built-in data normalization
+    - Handles anti-bot challenges
+  </Card>
+  <Card title="Maintained by Nimble" icon="sparkles">
+    - Monitored 24/7 for changes
+    - Fixed automatically when sites update
+    - Optimized for performance and cost
+    - Battle-tested on production workloads
+  </Card>
+  <Card title="Simple interface" icon="sparkles">
+    - Use inputs like ASINs or search terms
+    - No need to construct URLs manually
+    - Consistent response format across templates
+    - Built-in validation and error handling
+  </Card>
+</Columns>
 
 # Two main APIs
 
-## 1. Discover Templates
+## Discover Templates
+
+- Templates List
+- Template Details
 
 Browse and inspect available templates:
 
@@ -58,7 +61,7 @@ templates = nimble.list_templates(
 template_info = nimble.get_template("amazon_product")
 ```
 
-## 2. Extract with Templates
+## Extract with Templates
 
 Run a template with simple inputs:
 
@@ -126,7 +129,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Browsing templates
+## Discovering templates
 
 <CodeGroup>
 
@@ -324,34 +327,6 @@ result = nimble.extract_template(
     template="amazon_product",
     inputs={"asin": "invalid"}  # Invalid ASIN
 )
-```
-
-## Error handling
-
-Handle template-specific errors:
-
-```python
-try:
-    result = nimble.extract_template(
-        template="amazon_product",
-        inputs={"asin": "B08N5WRWNW"}
-    )
-except TemplateNotFoundError:
-    print("Template doesn't exist")
-except InvalidInputError as e:
-    print(f"Invalid input: {e.message}")
-except TemplateExecutionError as e:
-    print(f"Execution failed: {e.message}")
-```
-
-## Rate limits
-
-Templates have rate limits to ensure quality:
-
-```python
-# Check template rate limits
-template = nimble.get_template("amazon_product")
-print(f"Rate limit: {template['rate_limit']} requests/minute")
 ```
 
 ## Cost optimization

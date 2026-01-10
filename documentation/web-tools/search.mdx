@@ -1,4 +1,1210 @@
 ---
-title: 'Search'
+title: "Search API"
+description: "Execute web searches and retrieve parsed content from top results"
 ---
 
+The Search API enables you to perform web searches and automatically retrieve clean, parsed content from results. Choose between fast URL discovery or deep content extraction with automatic parsing.
+
+## When to use
+
+Use the Search API when you need to:
+
+- **Find relevant URLs**: Discover high-value pages for specific queries
+- **Research topics**: Get comprehensive content from top search results
+- **AI agent tasks**: Generate quick web answers with LLM summaries
+- **Content aggregation**: Extract full content from multiple search results
+- **Competitive analysis**: Monitor search visibility and content strategies
+
+<Note>
+  The Search API supports two modes: Fast Mode (1 credit) for URL discovery and Deep Search (1 credit + 1 per extracted page) for full content retrieval.
+</Note>
+
+# Two operating modes
+
+## Fast Mode (default)
+
+Quickly discover URLs or generate web answers for AI agents.
+
+**Best for:**
+
+- URL discovery without full content
+- Quick web answers with LLM summaries
+- Finding pages to selectively extract later
+- Low-cost search operations
+
+**Cost:** 1 credit per search
+
+## Deep Search
+
+Automatically extract and parse full content from search results.
+
+**Best for:**
+
+- Comprehensive research requiring full page content
+- Content analysis across multiple sources
+- Building knowledge bases from search results
+- Rich context for AI processing
+
+**Cost:** 1 credit per search + 1 credit per extracted page
+
+# Parameters
+
+## Core parameters
+
+| Parameter       | Type    | Description                                                      | Required |
+| --------------- | ------- | ---------------------------------------------------------------- | -------- |
+| `query`         | String  | The search query to execute                                      | Yes      |
+| `max_results`   | Integer | Number of results to return (max: 100)                           | No       |
+| `deep_search`   | Boolean | Fetch and parse full page content (default: false)               | No       |
+| `output_format` | String  | Format for parsed content: markdown, plain_text, simplified_html | No       |
+
+## Location & language
+
+| Parameter | Type   | Description                                   | Required |
+| --------- | ------ | --------------------------------------------- | -------- |
+| `country` | String | Country code for search results (default: US) | No       |
+| `locale`  | String | Language preference (default: en)             | No       |
+
+## Search refinement
+
+| Parameter         | Type    | Description                                  | Required |
+| ----------------- | ------- | -------------------------------------------- | -------- |
+| `include_answer`  | Boolean | Generate LLM answer summary (Fast Mode only) | No       |
+| `include_domains` | Array   | Focus on specific domains (max: 50)          | No       |
+| `exclude_domains` | Array   | Filter out unwanted domains (max: 50)        | No       |
+| `time_range`      | String  | Filter by time: hour, day, week, month, year | No       |
+| `start_date`      | String  | Start date for results (YYYY-MM-DD or YYYY)  | No       |
+| `end_date`        | String  | End date for results (YYYY-MM-DD or YYYY)    | No       |
+
+# Usage
+
+## Fast Mode search
+
+Get search results without extracting full content:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "best web scraping tools 2026",
+    "max_results": 10,
+    "country": "US"
+})
+
+# Access results
+for item in result["data"]["results"]:
+    print(f"{item['title']}: {item['url']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.search({
+  query: "best web scraping tools 2026",
+  max_results: 10,
+  country: "US"
+});
+
+// Access results
+result.data.results.forEach(item => {
+  console.log(`${item.title}: ${item.url}`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "best web scraping tools 2026",
+    "max_results": 10,
+    "country": "US"
+}'
+```
+
+</CodeGroup>
+
+## Deep Search with content extraction
+
+Extract full content from search results:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "python web scraping tutorial",
+    "max_results": 5,
+    "deep_search": True,
+    "output_format": "markdown"
+})
+
+# Access extracted content
+for item in result["data"]["results"]:
+    print(f"Title: {item['title']}")
+    print(f"URL: {item['url']}")
+    print(f"Content preview: {item['content'][:200]}...")
+    print("---")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.search({
+  query: "python web scraping tutorial",
+  max_results: 5,
+  deep_search: true,
+  output_format: "markdown"
+});
+
+// Access extracted content
+result.data.results.forEach(item => {
+  console.log(`Title: ${item.title}`);
+  console.log(`URL: ${item.url}`);
+  console.log(`Content preview: ${item.content.substring(0, 200)}...`);
+  console.log("---");
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "python web scraping tutorial",
+    "max_results": 5,
+    "deep_search": true,
+    "output_format": "markdown"
+}'
+```
+
+</CodeGroup>
+
+## Fast Mode with LLM answer
+
+Get AI-generated answer summary from search results:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "what are the benefits of TypeScript over JavaScript",
+    "max_results": 10,
+    "include_answer": True
+})
+
+# Access LLM-generated answer
+print("AI Answer:")
+print(result["data"]["answer"])
+
+# Still get result URLs for reference
+print("\nSources:")
+for item in result["data"]["results"]:
+    print(f"- {item['title']}: {item['url']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.search({
+  query: "what are the benefits of TypeScript over JavaScript",
+  max_results: 10,
+  include_answer: true
+});
+
+// Access LLM-generated answer
+console.log("AI Answer:");
+console.log(result.data.answer);
+
+// Still get result URLs for reference
+console.log("\nSources:");
+result.data.results.forEach(item => {
+  console.log(`- ${item.title}: ${item.url}`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "what are the benefits of TypeScript over JavaScript",
+    "max_results": 10,
+    "include_answer": true
+}'
+```
+
+</CodeGroup>
+
+## Domain filtering
+
+Focus on or exclude specific domains:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Include only trusted domains
+result = nimble.search({
+    "query": "climate change research",
+    "max_results": 20,
+    "include_domains": [
+        "nature.com",
+        "science.org",
+        "nasa.gov",
+        "noaa.gov"
+    ]
+})
+
+# Or exclude unwanted domains
+result = nimble.search({
+    "query": "web development tutorials",
+    "max_results": 15,
+    "exclude_domains": [
+        "pinterest.com",
+        "youtube.com"
+    ]
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Include only trusted domains
+const result1 = await nimble.search({
+  query: "climate change research",
+  max_results: 20,
+  include_domains: [
+    "nature.com",
+    "science.org",
+    "nasa.gov",
+    "noaa.gov"
+  ]
+});
+
+// Or exclude unwanted domains
+const result2 = await nimble.search({
+  query: "web development tutorials",
+  max_results: 15,
+  exclude_domains: [
+    "pinterest.com",
+    "youtube.com"
+  ]
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "climate change research",
+    "max_results": 20,
+    "include_domains": [
+        "nature.com",
+        "science.org",
+        "nasa.gov",
+        "noaa.gov"
+    ]
+}'
+```
+
+</CodeGroup>
+
+## Time-based filtering
+
+Get recent results only:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Results from last week
+result = nimble.search({
+    "query": "AI news",
+    "max_results": 20,
+    "time_range": "week"
+})
+
+# Or use specific date range
+result = nimble.search({
+    "query": "machine learning advances",
+    "max_results": 15,
+    "start_date": "2026-01-01",
+    "end_date": "2026-01-10"
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Results from last week
+const result1 = await nimble.search({
+  query: "AI news",
+  max_results: 20,
+  time_range: "week"
+});
+
+// Or use specific date range
+const result2 = await nimble.search({
+  query: "machine learning advances",
+  max_results: 15,
+  start_date: "2026-01-01",
+  end_date: "2026-01-10"
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "AI news",
+    "max_results": 20,
+    "time_range": "week"
+}'
+```
+
+</CodeGroup>
+
+## Localized search
+
+Get results for specific countries and languages:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# German results for Germany
+result = nimble.search({
+    "query": "beste Programmiersprache",
+    "max_results": 10,
+    "country": "DE",
+    "locale": "de"
+})
+
+# French results for France
+result = nimble.search({
+    "query": "meilleurs outils de développement",
+    "max_results": 10,
+    "country": "FR",
+    "locale": "fr"
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// German results for Germany
+const result1 = await nimble.search({
+  query: "beste Programmiersprache",
+  max_results: 10,
+  country: "DE",
+  locale: "de"
+});
+
+// French results for France
+const result2 = await nimble.search({
+  query: "meilleurs outils de développement",
+  max_results: 10,
+  country: "FR",
+  locale: "fr"
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "beste Programmiersprache",
+    "max_results": 10,
+    "country": "DE",
+    "locale": "de"
+}'
+```
+
+</CodeGroup>
+
+# Output formats
+
+The Search API offers three parsing formats for extracted content (Deep Search only):
+
+## Markdown (default)
+
+Converts HTML to markdown with preserved structure.
+
+**Best for:**
+
+- Documentation extraction
+- Content migration
+- LLM processing
+- Human-readable output
+
+**Features:**
+
+- Preserves headings, links, and basic formatting
+- Maintains semantic structure
+- Clean and readable
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "API documentation best practices",
+    "max_results": 5,
+    "deep_search": True,
+    "output_format": "markdown"
+})
+
+# Content includes markdown formatting
+print(result["data"]["results"][0]["content"])
+# Output: # Heading\n\n**Bold text**\n\n[Link](url)
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "API documentation best practices",
+  max_results: 5,
+  deep_search: true,
+  output_format: "markdown"
+});
+
+// Content includes markdown formatting
+console.log(result.data.results[0].content);
+// Output: # Heading\n\n**Bold text**\n\n[Link](url)
+```
+
+</CodeGroup>
+
+## Plain text
+
+Converts HTML to clean text with line breaks preserved.
+
+**Best for:**
+
+- Text analysis
+- NLP tasks
+- Content summarization
+- Pure content without markup
+
+**Features:**
+
+- Scripts, styles, and images removed
+- Preserved line breaks
+- No formatting tags
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "machine learning algorithms",
+    "max_results": 5,
+    "deep_search": True,
+    "output_format": "plain_text"
+})
+
+# Content is clean plain text
+print(result["data"]["results"][0]["content"])
+# Output: Heading\n\nBold text\n\nLink
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "machine learning algorithms",
+  max_results: 5,
+  deep_search: true,
+  output_format: "plain_text"
+});
+
+// Content is clean plain text
+console.log(result.data.results[0].content);
+// Output: Heading\n\nBold text\n\nLink
+```
+
+</CodeGroup>
+
+## Simplified HTML
+
+Strips unnecessary attributes while maintaining structure.
+
+**Best for:**
+
+- Web scraping projects
+- Custom parsing pipelines
+- Structure-aware processing
+- Preserving document hierarchy
+
+**Features:**
+
+- Removes bloat and unnecessary attributes
+- Maintains HTML structure
+- Clean structural elements
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "web development frameworks",
+    "max_results": 5,
+    "deep_search": True,
+    "output_format": "simplified_html"
+})
+
+# Content includes simplified HTML tags
+print(result["data"]["results"][0]["content"])
+# Output: <h1>Heading</h1><p><strong>Bold text</strong></p><a href="url">Link</a>
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "web development frameworks",
+  max_results: 5,
+  deep_search: true,
+  output_format: "simplified_html"
+});
+
+// Content includes simplified HTML tags
+console.log(result.data.results[0].content);
+// Output: <h1>Heading</h1><p><strong>Bold text</strong></p><a href="url">Link</a>
+```
+
+</CodeGroup>
+
+# Example response
+
+## Fast Mode response
+
+```json
+{
+  "status": "success",
+  "data": {
+    "query": "best web scraping tools 2026",
+    "results": [
+      {
+        "position": 1,
+        "title": "Top 10 Web Scraping Tools for 2026",
+        "description": "Comprehensive guide to the best web scraping tools available in 2026...",
+        "url": "https://example.com/scraping-tools-2026",
+        "domain": "example.com",
+        "entity_type": "organic"
+      },
+      {
+        "position": 2,
+        "title": "Web Scraping Made Easy - Professional Tools",
+        "description": "Compare leading web scraping platforms and choose the right one...",
+        "url": "https://scrapingpro.com/tools",
+        "domain": "scrapingpro.com",
+        "entity_type": "organic"
+      }
+    ],
+    "total_results": 10
+  },
+  "metadata": {
+    "country": "US",
+    "locale": "en",
+    "execution_time_ms": 850,
+    "credits_used": 1
+  }
+}
+```
+
+## Deep Search response
+
+````json
+{
+  "status": "success",
+  "data": {
+    "query": "python web scraping tutorial",
+    "results": [
+      {
+        "position": 1,
+        "title": "Complete Python Web Scraping Guide",
+        "description": "Learn web scraping with Python from basics to advanced techniques...",
+        "url": "https://example.com/python-scraping",
+        "domain": "example.com",
+        "entity_type": "organic",
+        "content": "# Complete Python Web Scraping Guide\n\nWeb scraping is the process of extracting data from websites...\n\n## Getting Started\n\nFirst, install the required libraries:\n```python\npip install requests beautifulsoup4\n```\n\n..."
+      }
+    ],
+    "total_results": 5
+  },
+  "metadata": {
+    "country": "US",
+    "locale": "en",
+    "output_format": "markdown",
+    "execution_time_ms": 12500,
+    "credits_used": 6
+  }
+}
+````
+
+## Fast Mode with answer
+
+```json
+{
+  "status": "success",
+  "data": {
+    "query": "what are the benefits of TypeScript over JavaScript",
+    "answer": "TypeScript offers several key benefits over JavaScript:\n\n1. **Static Type Checking**: Catches type-related errors during development rather than runtime\n2. **Enhanced IDE Support**: Better autocomplete, refactoring, and navigation\n3. **Improved Code Quality**: Type annotations make code more self-documenting\n4. **Better Tooling**: Advanced error detection and code analysis\n5. **Easier Refactoring**: Type system makes large-scale changes safer\n\nWhile JavaScript is more flexible, TypeScript's type safety makes it ideal for large codebases and team collaboration.",
+    "results": [
+      {
+        "position": 1,
+        "title": "TypeScript vs JavaScript: Key Differences",
+        "url": "https://example.com/typescript-benefits",
+        "domain": "example.com"
+      }
+    ]
+  },
+  "metadata": {
+    "credits_used": 2
+  }
+}
+```
+
+The response includes:
+
+- **results**: Array of search results with titles, URLs, and optional content
+- **answer**: LLM-generated summary (when `include_answer: true`)
+- **metadata**: Execution details and credit usage
+
+# Use cases
+
+## Research and content aggregation
+
+Gather comprehensive information on a topic:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def research_topic(topic, num_sources=10):
+    """Research a topic with deep content extraction"""
+    result = nimble.search({
+        "query": topic,
+        "max_results": num_sources,
+        "deep_search": True,
+        "output_format": "markdown",
+        "time_range": "year"  # Recent content only
+    })
+
+    # Compile research
+    research_data = []
+    for item in result["data"]["results"]:
+        research_data.append({
+            "source": item["title"],
+            "url": item["url"],
+            "content": item["content"]
+        })
+
+    return research_data
+
+# Use for research
+research = research_topic("quantum computing applications", num_sources=15)
+print(f"Gathered {len(research)} sources")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function researchTopic(topic, numSources = 10) {
+  // Research a topic with deep content extraction
+  const result = await nimble.search({
+    query: topic,
+    max_results: numSources,
+    deep_search: true,
+    output_format: "markdown",
+    time_range: "year"  // Recent content only
+  });
+
+  // Compile research
+  const researchData = result.data.results.map(item => ({
+    source: item.title,
+    url: item.url,
+    content: item.content
+  }));
+
+  return researchData;
+}
+
+// Use for research
+const research = await researchTopic("quantum computing applications", 15);
+console.log(`Gathered ${research.length} sources`);
+```
+
+</CodeGroup>
+
+## AI agent with web search
+
+Build AI agents that can search and answer questions:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def ai_web_assistant(question):
+    """Get AI answer with source URLs"""
+    result = nimble.search({
+        "query": question,
+        "max_results": 10,
+        "include_answer": True
+    })
+
+    return {
+        "answer": result["data"]["answer"],
+        "sources": [
+            {"title": r["title"], "url": r["url"]}
+            for r in result["data"]["results"]
+        ]
+    }
+
+# Ask questions
+response = ai_web_assistant("How does blockchain technology work?")
+print(f"Answer: {response['answer']}")
+print(f"\nBased on {len(response['sources'])} sources")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function aiWebAssistant(question) {
+  // Get AI answer with source URLs
+  const result = await nimble.search({
+    query: question,
+    max_results: 10,
+    include_answer: true
+  });
+
+  return {
+    answer: result.data.answer,
+    sources: result.data.results.map(r => ({
+      title: r.title,
+      url: r.url
+    }))
+  };
+}
+
+// Ask questions
+const response = await aiWebAssistant("How does blockchain technology work?");
+console.log(`Answer: ${response.answer}`);
+console.log(`\nBased on ${response.sources.length} sources`);
+```
+
+</CodeGroup>
+
+## Competitive monitoring
+
+Track competitor content and search visibility:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+def monitor_search_rankings(keywords, competitors):
+    """Monitor competitor rankings for keywords"""
+    rankings = {}
+
+    for keyword in keywords:
+        result = nimble.search({
+            "query": keyword,
+            "max_results": 50,
+            "country": "US"
+        })
+
+        # Find competitor positions
+        keyword_rankings = []
+        for item in result["data"]["results"]:
+            for competitor in competitors:
+                if competitor in item["domain"]:
+                    keyword_rankings.append({
+                        "domain": item["domain"],
+                        "position": item["position"],
+                        "title": item["title"],
+                        "url": item["url"]
+                    })
+
+        rankings[keyword] = keyword_rankings
+
+    return rankings
+
+# Monitor competitors
+competitors = ["competitor1.com", "competitor2.com"]
+keywords = ["web scraping tools", "data extraction API"]
+results = monitor_search_rankings(keywords, competitors)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+async function monitorSearchRankings(keywords, competitors) {
+  // Monitor competitor rankings for keywords
+  const rankings = {};
+
+  for (const keyword of keywords) {
+    const result = await nimble.search({
+      query: keyword,
+      max_results: 50,
+      country: "US"
+    });
+
+    // Find competitor positions
+    const keywordRankings = [];
+    result.data.results.forEach(item => {
+      competitors.forEach(competitor => {
+        if (item.domain.includes(competitor)) {
+          keywordRankings.push({
+            domain: item.domain,
+            position: item.position,
+            title: item.title,
+            url: item.url
+          });
+        }
+      });
+    });
+
+    rankings[keyword] = keywordRankings;
+  }
+
+  return rankings;
+}
+
+// Monitor competitors
+const competitors = ["competitor1.com", "competitor2.com"];
+const keywords = ["web scraping tools", "data extraction API"];
+const results = await monitorSearchRankings(keywords, competitors);
+```
+
+</CodeGroup>
+
+## Selective content extraction
+
+Discover URLs in Fast Mode, then selectively extract full content:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Step 1: Fast Mode to discover URLs
+search_result = nimble.search({
+    "query": "best practices for API design",
+    "max_results": 20
+})
+
+# Step 2: Filter results based on criteria
+high_authority_urls = [
+    item["url"] for item in search_result["data"]["results"]
+    if any(domain in item["domain"] for domain in ["microsoft.com", "google.com", "aws.amazon.com"])
+]
+
+# Step 3: Selectively extract only high-authority content
+extracted_content = []
+for url in high_authority_urls:
+    result = nimble.extract({
+        "url": url,
+        "formats": ["markdown"]
+    })
+    extracted_content.append(result["data"]["markdown"])
+
+print(f"Extracted {len(extracted_content)} high-authority sources")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Step 1: Fast Mode to discover URLs
+const searchResult = await nimble.search({
+  query: "best practices for API design",
+  max_results: 20
+});
+
+// Step 2: Filter results based on criteria
+const highAuthorityDomains = ["microsoft.com", "google.com", "aws.amazon.com"];
+const highAuthorityUrls = searchResult.data.results
+  .filter(item => highAuthorityDomains.some(domain => item.domain.includes(domain)))
+  .map(item => item.url);
+
+// Step 3: Selectively extract only high-authority content
+const extractedContent = [];
+for (const url of highAuthorityUrls) {
+  const result = await nimble.extract({
+    url,
+    formats: ["markdown"]
+  });
+  extractedContent.push(result.data.markdown);
+}
+
+console.log(`Extracted ${extractedContent.length} high-authority sources`);
+```
+
+</CodeGroup>
+
+# Best practices
+
+## Choose the right mode
+
+**Use Fast Mode when:**
+
+- You only need URLs and descriptions
+- Building a URL list for later extraction
+- Using `include_answer` for quick summaries
+- Cost optimization is important
+
+**Use Deep Search when:**
+
+- You need full page content immediately
+- Analyzing content across multiple sources
+- Building comprehensive research datasets
+- Content quality matters more than cost
+
+## Optimize credit usage
+
+**Cost-effective Fast Mode:**
+
+```python
+# ✅ Fast Mode (1 credit) + selective extraction
+search = nimble.search({
+    "query": "topic",
+    "max_results": 20  # 1 credit
+})
+
+# Extract only top 3 results (3 more credits = 4 total)
+top_urls = [r["url"] for r in search["data"]["results"][:3]]
+for url in top_urls:
+    content = nimble.extract({"url": url})
+
+# ❌ Deep Search all 20 (21 credits)
+search = nimble.search({
+    "query": "topic",
+    "max_results": 20,
+    "deep_search": True  # 1 + 20 = 21 credits
+})
+```
+
+## Domain filtering best practices
+
+**Use include_domains for trusted sources:**
+
+```python
+# ✅ Focus on authoritative sources
+result = nimble.search({
+    "query": "medical research",
+    "include_domains": [
+        "nih.gov",
+        "who.int",
+        "nejm.org",
+        "thelancet.com"
+    ]
+})
+```
+
+**Use exclude_domains to remove noise:**
+
+```python
+# ✅ Remove social media and aggregators
+result = nimble.search({
+    "query": "tech news",
+    "exclude_domains": [
+        "facebook.com",
+        "twitter.com",
+        "reddit.com",
+        "pinterest.com"
+    ]
+})
+```
+
+**Don't mix include and exclude:**
+
+```python
+# ❌ Don't use both (confusing logic)
+result = nimble.search({
+    "query": "topic",
+    "include_domains": ["domain1.com"],
+    "exclude_domains": ["domain2.com"]  # Use one or the other
+})
+```
+
+## Output format selection
+
+**Choose markdown for most use cases:**
+
+```python
+# ✅ Best for LLM processing and documentation
+output_format = "markdown"
+```
+
+**Use plain text for analysis:**
+
+```python
+# ✅ For NLP, text analysis, summarization
+output_format = "plain_text"
+```
+
+**Use simplified HTML for parsing:**
+
+```python
+# ✅ When you need structure but not full HTML
+output_format = "simplified_html"
+```
+
+## Time filtering strategies
+
+**Use time_range for recency:**
+
+```python
+# ✅ Get recent news/updates
+result = nimble.search({
+    "query": "AI breakthroughs",
+    "time_range": "week"  # Last week only
+})
+```
+
+**Use date range for specific periods:**
+
+```python
+# ✅ Historical research
+result = nimble.search({
+    "query": "COVID-19 impact",
+    "start_date": "2020-01-01",
+    "end_date": "2020-12-31"
+})
+```
+
+## Handle pagination
+
+**Process results in batches:**
+
+```python
+def search_with_batching(query, total_needed=100):
+    """Get more than 100 results by using multiple searches"""
+    all_results = []
+    batch_size = 50
+
+    # First batch
+    result = nimble.search({
+        "query": query,
+        "max_results": batch_size
+    })
+    all_results.extend(result["data"]["results"])
+
+    # Add domain exclusions for next batch to get different results
+    seen_domains = list(set([r["domain"] for r in all_results]))
+
+    # Second batch
+    result = nimble.search({
+        "query": query,
+        "max_results": batch_size,
+        "exclude_domains": seen_domains[:50]  # Max 50 domains
+    })
+    all_results.extend(result["data"]["results"])
+
+    return all_results[:total_needed]
+```
+
+# Limitations
+
+## Result limits
+
+- **Maximum results per search**: 100
+- **Domain filters**: Max 50 domains for include/exclude
+- **Output format**: Only applies to Deep Search mode
+- **Include answer**: Only available in Fast Mode
+
+## Credit usage
+
+| Mode               | Cost                            |
+| ------------------ | ------------------------------- |
+| Fast Mode          | 1 credit per search             |
+| Fast Mode + Answer | 2 credits per search            |
+| Deep Search        | 1 credit + 1 per extracted page |
+
+**Example calculations:**
+
+- Fast Mode with 10 results: 1 credit
+- Fast Mode with answer: 2 credits
+- Deep Search with 10 results: 1 + 10 = 11 credits
+- Deep Search with 5 results: 1 + 5 = 6 credits
+
+## Format availability
+
+Output formats (`markdown`, `plain_text`, `simplified_html`) only apply to:
+
+- ✅ Deep Search mode
+- ❌ Fast Mode (returns titles and descriptions only)
+
+## Country and locale
+
+- **Supported countries**: 195+ countries
+- **Default**: US (country), en (locale)
+- **Locale format**: ISO 639-1 language codes (en, es, fr, de, etc.)
+- **Country format**: ISO 3166-1 alpha-2 codes (US, GB, DE, FR, etc.)
