@@ -26,6 +26,7 @@
             "icon": "play",
             "pages": [
               "documentation/getting-started/quickstart",
+              "documentation/getting-started/authentication",
               "documentation/getting-started/mcp-server",
               "documentation/getting-started/installation",
               "documentation/getting-started/web-api",
