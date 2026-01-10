@@ -44,8 +44,8 @@ Common uses:
 
 ### Discover Templates
 
-- Templates List
-- Template Details
+1. Templates List
+2. Template Details
 
 Browse and inspect available templates:
 
@@ -250,91 +250,6 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 | `twitter_profile`   | Twitter profile data   | `username` |
 | `twitter_search`    | Twitter search results | `query`    |
 | `instagram_profile` | Instagram profile data | `username` |
-
-## Example response
-
-When a template runs successfully, you receive structured, normalized data:
-
-```json
-{
-  "status": "success",
-  "data": {
-    "asin": "B08N5WRWNW",
-    "title": "Apple AirPods Pro (2nd Generation)",
-    "price": {
-      "current": 249.99,
-      "original": 249.99,
-      "currency": "USD"
-    },
-    "rating": 4.7,
-    "reviews_count": 54329,
-    "availability": "In Stock",
-    "images": [
-      "https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL1500_.jpg"
-    ],
-    "features": [
-      "Active Noise Cancellation",
-      "Transparency mode",
-      "Up to 6 hours listening time"
-    ],
-    "seller": {
-      "name": "Amazon.com",
-      "rating": 4.8
-    }
-  },
-  "metadata": {
-    "template": "amazon_product",
-    "execution_time_ms": 2150,
-    "timestamp": "2026-01-10T00:45:23Z"
-  }
-}
-```
-
-The response includes:
-
-- **data**: Structured, normalized data matching the template schema
-- **metadata**: Execution details including template name and timing
-- All data is validated and normalized to consistent formats
-
-## Template categories
-
-Browse templates by category:
-
-- **ecommerce**: Amazon, Walmart, eBay, Shopify
-- **professional**: LinkedIn, Glassdoor, Indeed
-- **search**: Google, Bing, DuckDuckGo
-- **social**: Twitter, Instagram, Facebook, TikTok
-- **real-estate**: Zillow, Realtor, Redfin
-- **news**: CNN, BBC, Reuters
-- **travel**: Booking, Airbnb, Expedia
-- **finance**: Yahoo Finance, Bloomberg, MarketWatch
-
-## Best practices
-
-### Input validation
-
-Templates validate inputs automatically:
-
-```python
-# ✅ Valid inputs
-result = nimble.extract_template(
-    template="amazon_product",
-    inputs={"asin": "B08N5WRWNW"}  # Valid ASIN format
-)
-
-# ❌ Invalid inputs (will return error)
-result = nimble.extract_template(
-    template="amazon_product",
-    inputs={"asin": "invalid"}  # Invalid ASIN
-)
-```
-
-## Cost optimization
-
-- Templates are optimized for cost efficiency
-- Pre-configured with optimal driver settings
-- No need to experiment with configurations
-- Billing is per successful extraction
 
 ## Templates vs Custom Extract
 
