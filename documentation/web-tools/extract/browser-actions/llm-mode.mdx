@@ -251,7 +251,7 @@ The response includes:
 
 ### Cost optimization
 
-- Use deterministic mode for repetitive, stable workflows
+- Use Instructions mode for repetitive, stable workflows
 - Reserve LLM mode for complex or frequently changing pages
 - Test prompts in development to optimize token usage
 - Monitor token consumption in production
@@ -279,9 +279,9 @@ LLM mode costs include:
 
 This is typically 3-5x more expensive than deterministic flows, but eliminates maintenance costs when pages change.
 
-## Comparison with Deterministic Mode
+## Comparison with Instructions Mode
 
-| Aspect               | Deterministic             | LLM                     |
+| Aspect               | Instructions              | LLM                     |
 | -------------------- | ------------------------- | ----------------------- |
 | **Setup time**       | Minutes to hours          | Seconds                 |
 | **Maintenance**      | Update when pages change  | Zero maintenance        |

@@ -16,7 +16,10 @@ Common uses:
 
 Browser Actions offers two approaches to automate webpage interactions:
 
-### Deterministic Mode
+1. Instructions Mode
+2. LLM Mode
+
+### Instructions Mode
 
 Manually define each action step with full control over execution sequence.
 
@@ -35,7 +38,7 @@ Manually define each action step with full control over execution sequence.
 
 **Pricing:** Based on driver usage (vx6, vx8, vx10, etc.) - no token costs
 
-<Card title="Deterministic Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
+<Card title="Instructions Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
   Full control with predefined action steps
 </Card>
 
@@ -64,7 +67,7 @@ Describe desired interactions in natural language and let AI determine the best 
 
 ## Quick comparison
 
-| Feature         | Deterministic Mode         | LLM Mode                   |
+| Feature         | Instructions Mode          | LLM Mode                   |
 | --------------- | -------------------------- | -------------------------- |
 | **Setup**       | Manual step configuration  | Natural language prompt    |
 | **Cost**        | Lower (driver only)        | Higher (driver + tokens)   |
@@ -80,7 +83,7 @@ Describe desired interactions in natural language and let AI determine the best 
 
 ## Choosing the right mode
 
-**Use Deterministic Mode when:**
+**Use Instructions Mode when:**
 
 - You need low-cost, predictable automation
 - Page structure is stable and selectors don't change often
@@ -96,7 +99,7 @@ Describe desired interactions in natural language and let AI determine the best 
 
 ## Usage examples
 
-### Deterministic Mode
+### Instructions Mode
 
 Define exact steps to execute:
 
@@ -233,7 +236,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Deterministic Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
+  <Card title="Instructions Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">
     Learn about all available actions and parameters
   </Card>
   <Card title="LLM Mode" icon="sparkles" href="/documentation/web-tools/extract/browser-actions-llm">
