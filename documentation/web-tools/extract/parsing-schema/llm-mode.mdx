@@ -408,39 +408,32 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 When LLM parsing completes, you receive structured data with AI execution details. The response includes:
 
-- **data**: Extracted data matching your schema or prompt
-- **llm_extraction**: AI execution details and confidence score
-- **token_usage**: Token consumption for cost tracking
-- **metadata**: Execution details including driver (vx14) and timing
+- **data**: All related extacted data
+  - **data.parsing**: Extracted data matching your schema or prompt
+- **metadata**: Execution details including task id, driver used, execution time and more
 
 ```json
 {
   "status": "success",
   "data": {
-    "name": "Wireless Bluetooth Headphones",
-    "price": 79.99,
-    "rating": 4.5,
-    "reviews_count": 1234,
-    "in_stock": true,
-    "features": [
-      "Active Noise Cancellation",
-      "30-hour battery life",
-      "Quick charge technology"
-    ]
-  },
-  "llm_extraction": {
-    "schema_prompt": "Extract product information including all key features",
-    "confidence": 0.95,
-    "fields_extracted": 6,
-    "extraction_method": "llm"
-  },
+	"html":"<!DOCTYPE html><html>...</html>",
+	"parsing":{
+    	"name": "Wireless Bluetooth Headphones",
+    	"price": 79.99,
+    	"rating": 4.5,
+    	"reviews_count": 1234,
+    	"in_stock": true,
+    	"features": [
+      		"Active Noise Cancellation",
+      		"30-hour battery life",
+      		"Quick charge technology"
+    	]
+  	}
+   },
   "metadata": {
+	"task_id":".....",
+	"country":"US",
     "driver": "vx14",
-    "token_usage": {
-      "prompt_tokens": 850,
-      "completion_tokens": 280,
-      "total_tokens": 1130
-    },
     "execution_time_ms": 2100
   }
 }

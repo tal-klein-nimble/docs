@@ -477,35 +477,39 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 When parsing completes successfully, you receive structured data matching your schema. The response includes:
 
-- **data**: Structured JSON matching your schema
-- **metadata**: Execution details including driver and timing
-- **items_extracted**: Count of items successfully parsed
+- **data**: All related extacted data
+  - **data.parsing**: Structured JSON matching your schema
+- **metadata**: Execution details including task id, driver used, execution time and more
 
 ```json
 {
   "status": "success",
   "data": {
-    "products": [
-      {
-        "name": "Wireless Headphones",
-        "price": 79.99,
-        "rating": 4.5,
-        "url": "/product/wireless-headphones",
-        "in_stock": true
-      },
-      {
-        "name": "Bluetooth Speaker",
-        "price": 49.99,
-        "rating": 4.2,
-        "url": "/product/bluetooth-speaker",
-        "in_stock": true
-      }
-    ]
-  },
+	"html":"<!DOCTYPE html><html>...</html>",
+	"parsing":{
+    	"products": [
+      		{
+        		"name": "Wireless Headphones",
+        		"price": 79.99,
+        		"rating": 4.5,
+        		"url": "/product/wireless-headphones",
+        		"in_stock": true
+      		},
+      		{
+        		"name": "Bluetooth Speaker",
+        		"price": 49.99,
+        		"rating": 4.2,
+        		"url": "/product/bluetooth-speaker",
+        		"in_stock": true
+      		}
+    	]
+  	}
+   },
   "metadata": {
-    "driver": "vx8",
-    "execution_time_ms": 1250,
-    "items_extracted": 2
+	"task_id":".....",
+	"country":"US",
+    "driver": "vx14",
+    "execution_time_ms": 2100
   }
 }
 ```

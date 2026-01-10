@@ -1074,11 +1074,13 @@ When browser actions complete successfully, you'll receive the final page state 
 
 The response includes:
 
-- **html**: Final DOM state after all actions
-- **screenshot**: Page screenshot if requested
-- **cookies**: Collected cookies if `get_cookies` was used
-- **network_capture**: Captured network requests if configured
-- **metadata**: Execution details including driver used and timing
+- **data**: All related extacted data
+  - **data.html**: Final DOM state after all actions
+  - **data.screenshot**: Page screenshot if used
+  - **data.cookies**: Collected cookies if `get_cookies` was used by order
+  - **data.http_request**: HTTP response if `http_request` was used by order
+- **metadata**: Execution details including task id, driver used, execution time and more
+  - **metadata.browser_actions**: The browser actions results per step
 
 ```json
 {
@@ -1097,18 +1099,33 @@ The response includes:
         "secure": true
       }
     ],
-    "network_capture": [
-      {
-        "url": "https://api.example.com/products",
-        "status": 200,
-        "response_body": "{\"products\": [...]}"
-      }
-    ]
+	"http_response":[
+	  {
+		"status": 200,
+		"duration": 235,
+		"input_filter":{},
+		"headers":{},
+		"body":"..."
+	  }
+	]
   },
   "metadata": {
+	"task_id":".....",
+	"country":"US",
     "driver": "vx10",
     "execution_time_ms": 3450,
-    "actions_executed": 4
+	"browser_actions":[
+	  {
+		"status":"success",
+		"action":"wait",
+		"duration":300
+  	  },
+	  {
+		"status":"success",
+		"action":"type",
+		"duration":300
+  	  }
+	]
   }
 }
 ```

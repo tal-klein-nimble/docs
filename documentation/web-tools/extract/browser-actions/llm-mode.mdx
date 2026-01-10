@@ -193,18 +193,25 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 When the LLM agent completes your prompt, you receive the final page state and execution details. The response includes:
 
-- **html**: Final DOM state after AI execution
+- **data**: All related extacted data
+  - **data.html**: Final DOM state after AI execution
 - **llm_execution**: Details about actions the AI performed
 - **actions_performed**: Step-by-step log of what the agent did
-- **token_usage**: Token consumption for cost tracking
-- **metadata**: Execution details including driver (vx14) and timing
+- **metadata**: Execution details including task id, driver used, execution time and more
+  - **metadata.browser_actions**: The browser actions results per step
 
 ```json
 {
   "status": "success",
   "data": {
-    "html": "<!DOCTYPE html><html>...</html>",
-    "browser_actions": {
+	"html":"<!DOCTYPE html><html>...</html>"
+   },
+  "metadata": {
+	"task_id":".....",
+	"country":"US",
+    "driver": "vx14",
+    "execution_time_ms": 2100,
+	"browser_actions": {
       "prompt": "Search for 'laptop' and filter by 'On Sale' items",
       "actions_performed": [
         "Located search input field",
@@ -218,15 +225,6 @@ When the LLM agent completes your prompt, you receive the final page state and e
       "success": true,
       "execution_time_ms": 5200
     }
-  },
-  "metadata": {
-    "driver": "vx14",
-    "token_usage": {
-      "prompt_tokens": 450,
-      "completion_tokens": 320,
-      "total_tokens": 770
-    },
-    "execution_time_ms": 5200
   }
 }
 ```
