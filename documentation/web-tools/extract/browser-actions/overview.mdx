@@ -81,7 +81,7 @@ Describe desired interactions in natural language and let AI determine the best 
   Both modes require page rendering to be enabled (`render: true`) and operate within a global **120-second timeout**.
 </Note>
 
-## Choosing the right mode
+### Choosing the right mode
 
 **Use Instructions Mode when:**
 
@@ -198,7 +198,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
-    "browser_actions": "Search for 'laptop' and apply filters for 'On Sale' items"
+    "browser_actions_prompt": "Search for 'laptop' and apply filters for 'On Sale' items"
 })
 
 print(result)
@@ -213,7 +213,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
-  browser_actions: "Search for 'laptop' and apply filters for 'On Sale' items"
+  browser_actions_prompt: "Search for 'laptop' and apply filters for 'On Sale' items"
 });
 
 console.log(result);
@@ -227,7 +227,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com",
     "render": true,
-    "browser_actions": "Search for '\''laptop'\'' and apply filters for '\''On Sale'\'' items"
+    "browser_actions_prompt": "Search for '\''laptop'\'' and apply filters for '\''On Sale'\'' items"
 }'
 ```
 

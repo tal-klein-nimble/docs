@@ -3,7 +3,7 @@ title: "LLM Mode"
 description: "AI-powered data extraction with natural language prompts"
 ---
 
-LLM mode enables intelligent data extraction using AI. Describe what data you need in natural language or provide a loose schema, and the AI dynamically analyzes each page to extract and structure information—adapting to variations without schema maintenance.
+LLM mode enables intelligent data extraction using AI. Describe what data you need in natural language or provide a loose schema, and the AI dynamically analyzes each page to extract and structure information - adapting to variations without schema maintenance.
 
 ## When to use
 
@@ -28,6 +28,16 @@ Use LLM mode when you need:
 <Note>
   The AI analyzes each page individually, adapting to its specific structure. You can provide a schema model for structure, a prompt for guidance, or both.
 </Note>
+
+## Supported parameters
+
+Available in - Extract.
+
+| **Parameter**   | **Type** | **Description**                                             | **Default** |
+| :-------------- | :------- | :---------------------------------------------------------- | :---------: |
+| `parse`         | Boolean  | Enable or disable HTML parsing  (required to be `true`)     | `false`     |
+| `schema`        | Object   | Set the desired output JSON schema                          | -           |
+| `schema_prompt` | String   | Described the required parsing with natural language prompt | -           |
 
 ## Usage
 
@@ -213,7 +223,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Extracting lists
+### Extracting lists
 
 Extract multiple items with AI intelligence:
 
@@ -270,7 +280,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Complex extraction
+### Complex extraction
 
 Let AI handle intricate data relationships:
 
@@ -316,126 +326,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Example response
-
-When LLM parsing completes, you receive structured data with AI execution details:
-
-```json
-{
-  "status": "success",
-  "data": {
-    "name": "Wireless Bluetooth Headphones",
-    "price": 79.99,
-    "rating": 4.5,
-    "reviews_count": 1234,
-    "in_stock": true,
-    "features": [
-      "Active Noise Cancellation",
-      "30-hour battery life",
-      "Quick charge technology"
-    ]
-  },
-  "llm_extraction": {
-    "schema_prompt": "Extract product information including all key features",
-    "confidence": 0.95,
-    "fields_extracted": 6,
-    "extraction_method": "llm"
-  },
-  "metadata": {
-    "driver": "vx14",
-    "token_usage": {
-      "prompt_tokens": 850,
-      "completion_tokens": 280,
-      "total_tokens": 1130
-    },
-    "execution_time_ms": 2100
-  }
-}
-```
-
-The response includes:
-
-- **data**: Extracted data matching your schema or prompt
-- **llm_extraction**: AI execution details and confidence score
-- **token_usage**: Token consumption for cost tracking
-- **metadata**: Execution details including driver (vx14) and timing
-
-## Best practices
-
-### Writing effective prompts
-
-**Be specific about requirements:**
-
-```
-✅ "Extract product name, current price (not original price), average rating, and stock status"
-❌ "Get product info"
-```
-
-**Describe data relationships:**
-
-```
-✅ "Extract all review comments with their associated ratings and dates"
-❌ "Get reviews"
-```
-
-**Clarify ambiguities:**
-
-```
-✅ "For price, use the discounted price if available, otherwise use the regular price"
-❌ "Extract price"
-```
-
-### Schema design
-
-**Use descriptive field names:**
-
-```python
-class Product(BaseModel):
-    current_price: float  # ✅ Clear intent
-    price: float          # ❌ Ambiguous
-```
-
-**Provide context with prompts:**
-
-```python
-result = nimble.extract(
-    schema=Product,
-    schema_prompt="Extract current selling price (not MSRP)"  # ✅ Clarifies which price
-)
-```
-
-### Cost optimization
-
-- Use schema mode for stable, high-volume extraction
-- Reserve LLM mode for complex or frequently changing pages
-- Be concise in prompts to reduce token usage
-- Monitor token consumption in production
-- Test prompts to optimize extraction accuracy
-
-## Error handling
-
-The AI handles various scenarios automatically:
-
-- **Missing data**: Returns null for optional fields
-- **Multiple formats**: Normalizes data (e.g., "\$79.99" → 79.99)
-- **Variations**: Adapts to different page layouts
-- **Context**: Understands semantic meaning
-
-<Note>
-  The AI analyzes the entire page context to extract accurate data, even when elements aren't explicitly labeled.
-</Note>
-
-## Pricing
-
-LLM mode costs include:
-
-- **vx14 driver usage**: Higher tier driver for AI capabilities
-- **Token consumption**: Based on page size and prompt length
-- **API call**: Standard request fee
-
-Typical cost is 3-5x higher than schema mode, but eliminates maintenance when pages change.
-
-## Combining with browser actions
+### Combining with browser actions
 
 Use AI extraction after dynamic interactions:
 
@@ -513,13 +404,98 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Comparison with Schema Mode
+## Example response
 
-| Aspect               | Schema Mode                      | LLM Mode               |
-| -------------------- | -------------------------------- | ---------------------- |
-| **Setup time**       | Minutes to configure             | Seconds                |
-| **Maintenance**      | Update when pages change         | Zero maintenance       |
-| **Cost per request** | Lower                            | Higher                 |
-| **Accuracy**         | Precise (with correct selectors) | High (context-aware)   |
-| **Flexibility**      | Fixed selectors                  | Adapts to variations   |
-| **Use case**         | Stable, high-volume              | Dynamic, varying pages |
+When LLM parsing completes, you receive structured data with AI execution details. The response includes:
+
+- **data**: Extracted data matching your schema or prompt
+- **llm_extraction**: AI execution details and confidence score
+- **token_usage**: Token consumption for cost tracking
+- **metadata**: Execution details including driver (vx14) and timing
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "Wireless Bluetooth Headphones",
+    "price": 79.99,
+    "rating": 4.5,
+    "reviews_count": 1234,
+    "in_stock": true,
+    "features": [
+      "Active Noise Cancellation",
+      "30-hour battery life",
+      "Quick charge technology"
+    ]
+  },
+  "llm_extraction": {
+    "schema_prompt": "Extract product information including all key features",
+    "confidence": 0.95,
+    "fields_extracted": 6,
+    "extraction_method": "llm"
+  },
+  "metadata": {
+    "driver": "vx14",
+    "token_usage": {
+      "prompt_tokens": 850,
+      "completion_tokens": 280,
+      "total_tokens": 1130
+    },
+    "execution_time_ms": 2100
+  }
+}
+```
+
+## Best practices
+
+### Writing effective prompts
+
+**Be specific about requirements:**
+
+```
+✅ "Extract product name, current price (not original price), average rating, and stock status"
+❌ "Get product info"
+```
+
+**Describe data relationships:**
+
+```
+✅ "Extract all review comments with their associated ratings and dates"
+❌ "Get reviews"
+```
+
+**Clarify ambiguities:**
+
+```
+✅ "For price, use the discounted price if available, otherwise use the regular price"
+❌ "Extract price"
+```
+
+### Schema design
+
+**Use descriptive field names:**
+
+```python
+class Product(BaseModel):
+    current_price: float  # ✅ Clear intent
+    price: float          # ❌ Ambiguous
+```
+
+**Provide context with prompts:**
+
+```python
+result = nimble.extract(
+    schema=Product,
+    schema_prompt="Extract current selling price (not MSRP)"  # ✅ Clarifies which price
+)
+```
+
+## Pricing
+
+LLM mode costs include:
+
+- **vx14 driver usage**: Higher tier driver for AI capabilities
+- **Token consumption**: Based on page size and prompt length
+- **API call**: Standard request fee
+
+Typical cost is 3-5x higher than schema mode, but eliminates maintenance when pages change.

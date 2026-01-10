@@ -31,6 +31,15 @@ Use LLM mode when you need:
   The LLM agent executes actions in real-time based on the current page state. It's not translating your prompt into predefined steps—it's actually controlling the browser dynamically.
 </Note>
 
+## Supported parameters
+
+Available in - Extract.
+
+| **Parameter**            | **Type** | **Description**                                                       | **Default** |
+| :----------------------- | :------- | :-------------------------------------------------------------------- | :---------: |
+| `render`                 | Boolean  | Enable or disable JS rendering (required to be `true`)                | `false`     |
+| `browser_actions_prompt` | String   | Described the required page interactions with natural language prompt | -           |
+
 ## Usage
 
 ### Basic example
@@ -47,7 +56,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
-    "browser_actions": "Search for 'laptop' and filter by 'On Sale' items"
+    "browser_actions_prompt": "Search for 'laptop' and filter by 'On Sale' items"
 })
 
 print(result)
@@ -62,7 +71,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
-  browser_actions: "Search for 'laptop' and filter by 'On Sale' items"
+  browser_actions_prompt: "Search for 'laptop' and filter by 'On Sale' items"
 });
 
 console.log(result);
@@ -76,7 +85,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com",
     "render": true,
-    "browser_actions": "Search for '\''laptop'\'' and filter by '\''On Sale'\'' items"
+    "browser_actions_prompt": "Search for '\''laptop'\'' and filter by '\''On Sale'\'' items"
 }'
 ```
 
@@ -96,7 +105,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com/products",
     "render": True,
-    "browser_actions": "Scroll down until all products are loaded"
+    "browser_actions_prompt": "Scroll down until all products are loaded"
 })
 
 print(result)
@@ -111,7 +120,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com/products",
   render: true,
-  browser_actions: "Scroll down until all products are loaded"
+  browser_actions_prompt: "Scroll down until all products are loaded"
 });
 
 console.log(result);
@@ -125,7 +134,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com/products",
     "render": true,
-    "browser_actions": "Scroll down until all products are loaded"
+    "browser_actions_prompt": "Scroll down until all products are loaded"
 }'
 ```
 
@@ -145,7 +154,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
-    "browser_actions": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+    "browser_actions_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 })
 
 print(result)
@@ -160,7 +169,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
-  browser_actions: "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+  browser_actions_prompt: "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 });
 
 console.log(result);
@@ -174,7 +183,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --data-raw '{
     "url": "https://www.example.com",
     "render": true,
-    "browser_actions": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
+    "browser_actions_prompt": "Click the filters button, set price range to $500-$1000, select 4-star rating and above, then apply filters"
 }'
 ```
 
@@ -182,7 +191,13 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 ## Example response
 
-When the LLM agent completes your prompt, you receive the final page state and execution details.
+When the LLM agent completes your prompt, you receive the final page state and execution details. The response includes:
+
+- **html**: Final DOM state after AI execution
+- **llm_execution**: Details about actions the AI performed
+- **actions_performed**: Step-by-step log of what the agent did
+- **token_usage**: Token consumption for cost tracking
+- **metadata**: Execution details including driver (vx14) and timing
 
 ```json
 {
@@ -216,14 +231,6 @@ When the LLM agent completes your prompt, you receive the final page state and e
 }
 ```
 
-The response includes:
-
-- **html**: Final DOM state after AI execution
-- **llm_execution**: Details about actions the AI performed
-- **actions_performed**: Step-by-step log of what the agent did
-- **token_usage**: Token consumption for cost tracking
-- **metadata**: Execution details including driver (vx14) and timing
-
 ## Best practices
 
 ### Writing effective prompts
@@ -249,26 +256,6 @@ The response includes:
 ❌ "Do sorting and scrolling stuff"
 ```
 
-### Cost optimization
-
-- Use Instructions mode for repetitive, stable workflows
-- Reserve LLM mode for complex or frequently changing pages
-- Test prompts in development to optimize token usage
-- Monitor token consumption in production
-
-## Error handling
-
-The AI agent handles common issues automatically:
-
-- **Missing elements**: Waits for elements to appear
-- **Dynamic content**: Adapts to lazy-loaded elements
-- **Page variations**: Adjusts to layout changes
-- **Timeouts**: Reports when actions cannot be completed
-
-<Note>
-  The global 120-second timeout still applies. If the AI cannot complete your prompt within this time, the request will timeout.
-</Note>
-
 ## Pricing
 
 LLM mode costs include:
@@ -278,14 +265,3 @@ LLM mode costs include:
 - **API call**: Standard request fee
 
 This is typically 3-5x more expensive than deterministic flows, but eliminates maintenance costs when pages change.
-
-## Comparison with Instructions Mode
-
-| Aspect               | Instructions              | LLM                     |
-| -------------------- | ------------------------- | ----------------------- |
-| **Setup time**       | Minutes to hours          | Seconds                 |
-| **Maintenance**      | Update when pages change  | Zero maintenance        |
-| **Cost per request** | Lower                     | Higher                  |
-| **Execution speed**  | Faster                    | Slower (LLM inference)  |
-| **Reliability**      | High (if maintained)      | High (self-healing)     |
-| **Use case**         | Stable, predictable pages | Dynamic, changing pages |
