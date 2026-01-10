@@ -26,10 +26,12 @@
             "icon": "play",
             "pages": [
               "documentation/getting-started/untitled-page",
+              "getting-started/mcp-server",
               "getting-started/web-api",
               "getting-started/agents",
-              "getting-started/mcp-server",
-              "getting-started/account-management"
+              "getting-started/account-management",
+              "documentation/getting-started/sdk-limitations",
+              "documentation/getting-started/billing"
             ]
           },
           {
@@ -59,10 +61,17 @@
                     ]
                   },
                   "documentation/web-tools/extract/network-capture",
+                  "documentation/web-tools/extract/headers-and-cookies",
                   "documentation/web-tools/extract/advanced-settings"
                 ]
               },
-              "documentation/web-tools/extract-templates",
+              {
+                "group": "Extract Templates",
+                "pages": [
+                  "documentation/web-tools/extract-templates",
+                  "documentation/web-tools/extract-templates/template-gallery"
+                ]
+              },
               "documentation/web-tools/search",
               "documentation/web-tools/map",
               "documentation/web-tools/crawl"
