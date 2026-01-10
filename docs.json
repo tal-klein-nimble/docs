@@ -193,7 +193,10 @@
       }
     ]
   },
-  "logo": "/images/logo.png",
+  "logo": {
+    "light": "/images/light.svg",
+    "dark": "/images/dark.svg"
+  },
   "navbar": {
     "links": [
       {
