@@ -195,7 +195,8 @@
   },
   "logo": {
     "light": "/images/light.png",
-    "dark": "/images/dark.png"
+    "dark": "/images/dark.png",
+    "href": "https://www.nimbleway.com"
   },
   "navbar": {
     "links": [
@@ -212,5 +213,8 @@
   },
   "appearance": {
     "default": "dark"
+  },
+  "styling": {
+    "codeblocks": "system"
   }
 }
