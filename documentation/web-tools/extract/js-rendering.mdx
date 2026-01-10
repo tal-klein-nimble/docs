@@ -417,7 +417,7 @@ console.log(result.data.markdown);
 
 </CodeGroup>
 
-## Combining with browser actions
+### Combining with browser actions
 
 Rendering works seamlessly with browser actions:
 
@@ -662,35 +662,7 @@ api_responses = result["data"]["network_capture"]
 print(api_responses)
 ```
 
-## Error handling
-
-**Handle rendering timeouts:**
-
-```python
-from nimble.exceptions import TimeoutError
-
-try:
-    result = nimble.extract({
-        "url": "https://slow-site.com",
-        "render": True,
-        "render_options": {
-            "render_type": "idle0",
-            "timeout": 30000
-        }
-    })
-except TimeoutError:
-    # Retry with longer timeout or simpler render_type
-    result = nimble.extract({
-        "url": "https://slow-site.com",
-        "render": True,
-        "render_options": {
-            "render_type": "load",  # Simpler check
-            "timeout": 60000  # Longer timeout
-        }
-    })
-```
-
-## Performance optimization
+### Performance optimization
 
 **Choose the minimal driver:**
 
@@ -727,7 +699,7 @@ if exec_time > 10000:
     print("Consider blocking domains or changing render_type")
 ```
 
-## When to skip rendering
+### When to skip rendering
 
 Use non-rendering (vx6) when:
 

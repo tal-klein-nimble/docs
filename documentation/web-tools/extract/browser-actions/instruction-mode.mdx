@@ -947,7 +947,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   The first `http_request` in a `browser_actions` is free. Starting from the second request, each additional `http_request` is billed as a VX6 request.
 </Note>
 
-## Chaining actions
+### Chaining actions
 
 You can chain multiple actions together in the `browser_actions` array. They execute sequentially.
 
@@ -1103,7 +1103,8 @@ The response includes:
 	  {
 		"status": 200,
 		"duration": 235,
-		"input_filter":{},
+		"method":"POST",
+		"url":"https://api.example.com/data",
 		"headers":{},
 		"body":"..."
 	  }

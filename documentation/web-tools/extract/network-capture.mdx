@@ -459,3 +459,65 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 <Note>
   `is_xhr` only works when `render` is `false`. It sends XHR-specific headers and targets the API URL directly.
 </Note>
+
+## Example response
+
+When browser actions complete successfully, you'll receive the final page state along with any data captured.
+
+The response includes:
+
+- **data**: All related extacted data
+  - **data.html**: Final DOM state after all actions
+  - **data.network_capture**: The network capture response by order
+- **metadata**: Execution details including task id, driver used, execution time and more
+
+```json
+{
+  "status": "success",
+  "data": {
+    "html": "<!DOCTYPE html><html>...</html>",
+	"network_capture":[
+	  {
+		"filter": {
+			"method":"GET",
+			"resource_type":["xhr", "script"]
+		},
+		"result": [
+		  {
+			"request":{
+				"resource_type":"script",
+				"method": "GET",
+				"url": "https://www.example.com/script/0001.js",
+				"headers":{}
+			},
+			"response":{
+				"status":200,
+				"headers":{},
+				"body":"..."
+			}
+		  },
+		  {
+			"request":{
+				"resource_type":"xhr",
+				"method": "GET",
+				"url": "https://www.example.com/script/0002.js",
+				"headers":{}
+			},
+			"response":{
+				"status":200,
+				"headers":{},
+				"body":"..."
+			}
+		  }			
+		]
+	  }
+	]
+  },
+  "metadata": {
+	"task_id":".....",
+	"country":"US",
+    "driver": "vx10",
+    "execution_time_ms": 3450
+  }
+}
+```
