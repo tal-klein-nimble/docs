@@ -13,12 +13,18 @@ Common uses:
 
 ## Supported parameters
 
-You can pass these parameters to any Web Tool request (Extract, Search, Crawl, etc).
+Available in - Extract, Search, Map and Crawl.
 
-- `country` - Routes the request through a matching country exit. Use a 2-letter country code (example: `US`default, `FR`).
-- `state`(US Only) - Pins the request to a US state. Only available when `country="US"`. Use a 2-letter state code (example: `CA`, `NY`).
-- `city` - Pins the request to a city. For best matching, set `country` too.
-- `locale` - Sets the browser language for localization. Use BCP 47 locale strings (example: `en-US`, `fr-FR`).
+| Parameter | Type   | Description                                                    | Default |
+| :-------- | ------ | :------------------------------------------------------------- | :-----: |
+| `country` | String | Routes request through the specified country                   | `US`    |
+| `state`   | String | Routes request through a US state. Only for country `US`       | -       |
+| `city`    | String | Routes request through a specific city. Best used with country | -       |
+| `locale`  | String | Sets the browser language for localization                     | `en-US` |
+
+<Card title="Supprted Geo Locations" icon="sparkles" href="https://api.nimbleway.com/api/v1/location/cities">
+  
+</Card>
 
 <Note>
   `country`/`state`/`city` geo targeting changes **where** the request comes from. `locale` changes **which language** the browser prefers.

@@ -16,7 +16,15 @@ Common uses:
   You can combine multiple formats in a single request. All specified formats will be included in the response.
 </Note>
 
-## Available formats
+## Supported parameters
+
+Available in  - Extract and Crawl.
+
+| Parameter | Type | Description                                        | Default    |
+| :-------- | :--- | :------------------------------------------------- | :--------: |
+| `formats` | List | Sets what data types are included in your response | `["html"]` |
+
+### Available formats
 
 | Format       | Description               | Use Case                                        |
 | ------------ | ------------------------- | ----------------------------------------------- |
@@ -27,9 +35,14 @@ Common uses:
 
 ## Usage
 
-### Single format
+### Single HTML format
 
-Request one format type:
+Request one format type - html (default). **Best for:**
+
+- Custom HTML parsing
+- Preserving exact page structure
+- Accessing all DOM elements and attributes
+- Archival purposes
 
 <CodeGroup>
 
@@ -40,10 +53,12 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 
 result = nimble.extract({
     "url": "https://www.example.com",
-    "formats": ["html"]
+    "formats": ["html"] # default
 })
 
-print(result)
+# Access HTML content
+html_content = result["data"]["html"]
+print(html_content)
 ```
 
 
@@ -54,10 +69,12 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
 const result = await nimble.extract({
   url: "https://www.example.com",
-  formats: ["html"]
+  formats: ["html"] // default
 });
 
-console.log(result);
+// Access HTML content
+const htmlContent = result.data.html;
+console.log(htmlContent);
 ```
 
 
@@ -119,66 +136,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-### HTML format
-
-Get the raw HTML content of the page:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract({
-    "url": "https://www.example.com/article",
-    "formats": ["html"]
-})
-
-# Access HTML content
-html_content = result["data"]["html"]
-print(html_content)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extract({
-  url: "https://www.example.com/article",
-  formats: ["html"]
-});
-
-// Access HTML content
-const htmlContent = result.data.html;
-console.log(htmlContent);
-```
-
-
-```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "url": "https://www.example.com/article",
-    "formats": ["html"]
-}'
-```
-
-</CodeGroup>
-
-**Best for:**
-
-- Custom HTML parsing
-- Preserving exact page structure
-- Accessing all DOM elements and attributes
-- Archival purposes
-
 ### Markdown format
 
-Convert the page to clean, readable markdown:
+Convert the page to clean, readable markdown. **Best for:**
+
+- Clean text extraction
+- Content analysis
+- LLM processing
+- Human-readable output:
 
 <CodeGroup>
 
@@ -226,16 +191,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-**Best for:**
-
-- Clean text extraction
-- Content analysis
-- LLM processing
-- Human-readable output
-
 ### Screenshot format
 
-Capture a visual snapshot of the page:
+Capture a visual snapshot of the page. **Best for:**
+
+- Visual verification
+- Monitoring page changes
+- Documentation and reporting
+- Debugging layout issues:
 
 <CodeGroup>
 
@@ -298,16 +261,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   Screenshots require page rendering to be enabled (`render: true`). The image is returned as base64-encoded PNG data.
 </Note>
 
-**Best for:**
-
-- Visual verification
-- Monitoring page changes
-- Documentation and reporting
-- Debugging layout issues
-
 ### Links format
 
-Extract all URLs found on the page:
+Extract all URLs found on the page. **Best for:**
+
+- Link discovery
+- Building sitemaps
+- Crawling workflows
+- Finding internal/external links:
 
 <CodeGroup>
 
@@ -355,13 +316,6 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 ```
 
 </CodeGroup>
-
-**Best for:**
-
-- Link discovery
-- Building sitemaps
-- Crawling workflows
-- Finding internal/external links
 
 ## Combining with other features
 
@@ -449,7 +403,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 ## Example response
 
-When formats are specified, all requested data is included in the response:
+When formats are specified, all requested data is included in the response. The response includes:
+
+- **html**: Raw HTML if requested
+- **markdown**: Converted markdown if requested
+- **screenshot**: Base64-encoded PNG if requested
+- **links**: Array of extracted URLs if requested
+- **parsed**: Structured data if parsing was used
+- **metadata**: Execution details and formats included:
 
 ```json
 {
@@ -476,15 +437,6 @@ When formats are specified, all requested data is included in the response:
   }
 }
 ```
-
-The response includes:
-
-- **html**: Raw HTML if requested
-- **markdown**: Converted markdown if requested
-- **screenshot**: Base64-encoded PNG if requested
-- **links**: Array of extracted URLs if requested
-- **parsed**: Structured data if parsing was used
-- **metadata**: Execution details and formats included
 
 ## Best practices
 
@@ -514,26 +466,6 @@ formats=["markdown"]
 - HTML and markdown are faster to generate
 - Request only needed formats for optimal performance
 
-### Screenshot optimization
-
-**Control screenshot size with browser actions:**
-
-```python
-result = nimble.extract({
-    "url": "https://www.example.com",
-    "render": True,
-    "formats": ["screenshot"],
-    "browser_actions": [
-        {
-            "screenshot": {
-                "full_page": False,  # Viewport only
-                "format": "jpeg"     # Smaller file size
-            }
-        }
-    ]
-})
-```
-
 ### Link filtering
 
 **Process links after extraction:**
@@ -551,121 +483,3 @@ pdf_links = [
     if link.endswith(".pdf")
 ]
 ```
-
-## Use cases
-
-### Content monitoring
-
-Track page changes over time:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-# Capture current state
-result = nimble.extract({
-    "url": "https://www.example.com/pricing",
-    "formats": ["html", "screenshot", "markdown"]
-})
-
-# Store for comparison
-store_snapshot(result["data"])
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-// Capture current state
-const result = await nimble.extract({
-  url: "https://www.example.com/pricing",
-  formats: ["html", "screenshot", "markdown"]
-});
-
-// Store for comparison
-storeSnapshot(result.data);
-```
-
-</CodeGroup>
-
-### Content archival
-
-Archive pages with multiple representations:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract({
-    "url": "https://www.example.com/article",
-    "formats": ["html", "markdown"],
-    "render": True
-})
-
-# Save both formats
-save_archive(result["data"])
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extract({
-  url: "https://www.example.com/article",
-  formats: ["html", "markdown"],
-  render: true
-});
-
-// Save both formats
-saveArchive(result.data);
-```
-
-</CodeGroup>
-
-### Link discovery for crawling
-
-Find all links for further processing:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract({
-    "url": "https://www.example.com",
-    "formats": ["links"]
-})
-
-# Queue discovered links for crawling
-for link in result["data"]["links"]:
-    queue_for_crawl(link)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extract({
-  url: "https://www.example.com",
-  formats: ["links"]
-});
-
-// Queue discovered links for crawling
-result.data.links.forEach(link => queueForCrawl(link));
-```
-
-</CodeGroup>

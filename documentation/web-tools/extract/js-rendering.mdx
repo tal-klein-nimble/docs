@@ -19,9 +19,40 @@ Use JavaScript rendering when you need to:
   Rendering requires vx8, vx10, or vx14 drivers. The vx6 driver does not support rendering.
 </Note>
 
-## Basic rendering
+## Supported parameters
 
-### Enable rendering
+Available in  - Extract
+
+| Parameter        | Type    | Description                    | Default |
+| :--------------- | :------ | :----------------------------- | :------ |
+| `render`         | Boolean | Enable or disable JS rendering | `false` |
+| `render_options` | Object  | Max wait time in milliseconds  | -       |
+
+### Render options parameter
+
+The `render_options` parameter provides fine-grained control over rendering behavior:
+
+| Parameter         | Type    | Description                                                                          | Default |
+| :---------------- | :------ | :----------------------------------------------------------------------------------- | :------ |
+| `render_type`     | String  | When to consider page "loaded", refer to render types below to see available options | `load`  |
+| `timeout`         | Integer | Max wait time in milliseconds                                                        | `30000` |
+| `include_iframes` | Boolean | Whether to load iframe content                                                       | `false` |
+| `blocked_domains` | Array   | Domains to block from loading                                                        | `[]`    |
+
+### Render types
+
+Control when the page is considered fully loaded:
+
+| Type       | Description                                   | Use Case                          |
+| :--------- | :-------------------------------------------- | :-------------------------------- |
+| `load`     | Wait for standard load event                  | Default for most pages            |
+| `domready` | Wait for DOMContentLoaded event               | Faster, before all resources load |
+| `idle2`    | Wait for ≤2 network connections in last 500ms | Dynamic content still loading     |
+| `idle0`    | Wait for 0 network connections in last 500ms  | Ensure everything is loaded       |
+
+## Usage
+
+### Enable basic rendering
 
 Set `render: true` to enable JavaScript execution:
 
@@ -71,31 +102,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   When `render: false` (default), the API returns the raw HTML without JavaScript execution, suitable for static pages.
 </Note>
 
-## Advanced rendering options
-
-### Render options parameter
-
-The `render_options` parameter provides fine-grained control over rendering behavior:
-
-| Parameter         | Type    | Description                    | Default |
-| ----------------- | ------- | ------------------------------ | ------- |
-| `render_type`     | String  | When to consider page "loaded" | `load`  |
-| `timeout`         | Integer | Max wait time in milliseconds  | `30000` |
-| `include_iframes` | Boolean | Whether to load iframe content | `false` |
-| `blocked_domains` | Array   | Domains to block from loading  | `[]`    |
-
-### Render types
-
-Control when the page is considered fully loaded:
-
-| Type       | Description                                   | Use Case                          |
-| ---------- | --------------------------------------------- | --------------------------------- |
-| `load`     | Wait for standard load event                  | Default for most pages            |
-| `domready` | Wait for DOMContentLoaded event               | Faster, before all resources load |
-| `idle2`    | Wait for ≤2 network connections in last 500ms | Dynamic content still loading     |
-| `idle0`    | Wait for 0 network connections in last 500ms  | Ensure everything is loaded       |
-
-### Complete rendering configuration
+### Advanced JS rendering
 
 <CodeGroup>
 
@@ -156,8 +163,6 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 ```
 
 </CodeGroup>
-
-## Common use cases
 
 ### Dynamic content loading
 
@@ -722,55 +727,6 @@ if exec_time > 10000:
     print("Consider blocking domains or changing render_type")
 ```
 
-## Limitations
-
-### Supported endpoints
-
-JavaScript rendering works with:
-
-- ✅ Real-time Web API
-- ✅ Asynchronous Web API
-- ✅ Batch Web API
-
-Not supported on:
-
-- ❌ Social endpoints (use Extract Templates)
-- ❌ SERP endpoints (use Extract Templates)
-- ❌ Maps endpoints (use Extract Templates)
-- ❌ E-commerce endpoints (use Extract Templates)
-
-### Driver requirements
-
-| Driver | Rendering Support          |
-| ------ | -------------------------- |
-| vx6    | ❌ No rendering (HTTP only) |
-| vx8    | ✅ Full rendering support   |
-| vx10   | ✅ Full rendering support   |
-| vx14   | ✅ Full rendering support   |
-
-<Note>
-  Enterprise plans with automatic driver selection: vx6 disables rendering automatically; vx8/vx10/vx14 enable it by default.
-</Note>
-
-### Timeout limits
-
-| Plan         | Max Timeout |
-| ------------ | ----------- |
-| PAYG         | 120 seconds |
-| Beginner     | 120 seconds |
-| Essential    | 180 seconds |
-| Advanced     | 240 seconds |
-| Professional | 300 seconds |
-| Enterprise   | Custom      |
-
-### Resource limits
-
-- **Memory**: 256 MB per page
-- **JavaScript execution**: 30 seconds CPU time
-- **Maximum redirects**: 10 per request
-- **WebSocket connections**: 10 concurrent
-- **Local storage**: 10 MB per domain
-
 ## When to skip rendering
 
 Use non-rendering (vx6) when:
@@ -786,6 +742,5 @@ Use non-rendering (vx6) when:
 result = nimble.extract({
     "url": "https://static-site.com/page.html",
     "render": False,  # or omit (false is default)
-    "driver": "vx6"
 })
 ```
