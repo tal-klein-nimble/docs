@@ -15,13 +15,13 @@ Use the Extract Template API when you need to:
 - **Normalized data**: Receive consistent schemas across requests
 - **Zero maintenance**: Let Nimble handle site changes
 
-# API endpoint
+## API endpoint
 
 ```
 POST https://api.webit.live/api/v1/templates/extract
 ```
 
-# Parameters
+## Parameters
 
 | Parameter  | Type   | Description                                     | Required |
 | ---------- | ------ | ----------------------------------------------- | -------- |
@@ -33,9 +33,9 @@ POST https://api.webit.live/api/v1/templates/extract
   Each template has unique input requirements. Use the [Get Template Details](/documentation/web-tools/extract-templates/details) API to review input schemas.
 </Note>
 
-# Usage
+## Usage
 
-## E-commerce extraction
+### E-commerce extraction
 
 Extract product data from popular platforms:
 
@@ -131,7 +131,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Search results extraction
+### Search results extraction
 
 Extract search listings from e-commerce platforms:
 
@@ -199,7 +199,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Professional network extraction
+### Professional network extraction
 
 Extract LinkedIn profiles and job listings:
 
@@ -297,7 +297,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Search engine extraction
+### Search engine extraction
 
 Get search results from Google and Bing:
 
@@ -404,7 +404,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Social media extraction
+### Social media extraction
 
 Extract public social media data:
 
@@ -498,7 +498,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-# Example response
+## Example response
 
 When a template executes successfully, you receive normalized data:
 
@@ -559,9 +559,9 @@ The response includes:
 - All prices, dates, and numbers are normalized to consistent formats
 - Optional fields return null if not available
 
-# Best practices
+## Best practices
 
-## Input validation
+### Input validation
 
 Validate inputs before making requests:
 
@@ -586,7 +586,7 @@ else:
     print("Invalid ASIN format")
 ```
 
-## Error handling
+### Error handling
 
 Handle template-specific errors:
 
@@ -618,7 +618,7 @@ except RateLimitError as e:
     print(f"Rate limit exceeded. Retry after {e.retry_after} seconds")
 ```
 
-## Batch processing
+### Batch processing
 
 Process multiple items efficiently:
 
@@ -654,7 +654,7 @@ print(f"Successful: {len(successful)}")
 print(f"Failed: {len(failed)}")
 ```
 
-## Caching results
+### Caching results
 
 Cache template results to reduce costs:
 
@@ -733,9 +733,9 @@ for asin in asins:
     )
 ```
 
-# Use cases
+## Use cases
 
-## Price monitoring
+### Price monitoring
 
 Track product prices over time:
 
@@ -798,7 +798,7 @@ schedule.scheduleJob("0 * * * *", () => monitorPrice("B08N5WRWNW"));
 
 </CodeGroup>
 
-## Lead generation
+### Lead generation
 
 Extract business contacts from LinkedIn:
 
@@ -891,7 +891,7 @@ const leads = await generateLeads("software engineer", "San Francisco, CA");
 
 </CodeGroup>
 
-## Competitor analysis
+### Competitor analysis
 
 Monitor competitor products and pricing:
 

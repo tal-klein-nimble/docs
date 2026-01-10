@@ -25,7 +25,7 @@ Use deterministic mode when you need:
   Deterministic flows may break when page structure or selectors change. Monitor and update your flows as needed.
 </Note>
 
-# Available actions
+## Available actions
 
 Browser Actions are passed in the `browser_actions` array. Each action executes in sequence.
 
@@ -47,9 +47,9 @@ Browser Actions are passed in the `browser_actions` array. Each action executes 
   Browser Actions require page rendering to be enabled (`render: true`). All operations execute sequentially within a global **240-second timeout**.
 </Note>
 
-# Usage
+## Usage
 
-## Wait (delay)
+### Wait (delay)
 
 Add a delay between actions to simulate human behavior or allow elements to load.
 
@@ -119,7 +119,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Wait for selector
+### Wait for selector
 
 Wait until a specific element appears on the page before continuing.
 
@@ -193,7 +193,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Wait and click
+### Wait and click
 
 Wait for an element to appear and click it.
 
@@ -279,7 +279,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Wait and type
+### Wait and type
 
 Wait for an input field and type text into it.
 
@@ -369,7 +369,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Paste
+### Paste
 
 Quickly paste text into an input field.
 
@@ -459,7 +459,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Scroll to coordinates
+### Scroll to coordinates
 
 Scroll to specific X/Y coordinates on the page.
 
@@ -538,7 +538,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Scroll to selector
+### Scroll to selector
 
 Scroll to bring a specific element into view.
 
@@ -612,7 +612,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Infinite scroll
+### Infinite scroll
 
 Handle lazy-loading pages that reveal content as you scroll, like social media feeds.
 
@@ -700,7 +700,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   Use `loading_selector` to track loading indicators for reliable scrolling. Alternatively, use `delay_after_scroll` and `duration` for time-based scrolling.
 </Note>
 
-## Capture screenshot
+### Capture screenshot
 
 Take a screenshot of the page in PNG, JPEG, or WebP format.
 
@@ -778,7 +778,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Collect cookies
+### Collect cookies
 
 Capture and store cookies from the page.
 
@@ -848,7 +848,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Execute HTTP requests
+### Execute HTTP requests
 
 Perform additional HTTP GET/POST requests to internal APIs.
 
@@ -940,7 +940,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   The first `http_request` in a `browser_actions` is free. Starting from the second request, each additional `http_request` is billed as a VX6 request.
 </Note>
 
-# Chaining actions
+## Chaining actions
 
 You can chain multiple actions together in the `browser_actions` array. They execute sequentially.
 
@@ -1061,7 +1061,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Example response
+## Example response
 
 When browser actions complete successfully, you'll receive the final page state along with any data captured.
 

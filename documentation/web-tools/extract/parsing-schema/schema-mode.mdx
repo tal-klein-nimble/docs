@@ -18,7 +18,7 @@ Use schema mode when you need:
   Parsers may break when page structure or selectors change. Monitor source pages and update parsers as needed.
 </Note>
 
-# Parser structure
+## Parser structure
 
 Parsers define how to extract data using three core components:
 
@@ -28,7 +28,7 @@ Parsers define how to extract data using three core components:
 - `selectors` - CSS selectors identifying target elements (multiple for fallbacks)
 - `extractor` - What to extract: `text`, `html`, or attributes like `[href]`
 
-# Extraction types
+## Extraction types
 
 | Type          | Purpose                    | Returns                             |
 | ------------- | -------------------------- | ----------------------------------- |
@@ -39,7 +39,7 @@ Parsers define how to extract data using three core components:
 | `object`      | Custom structure           | Single element with multiple fields |
 | `object-list` | Multiple custom structures | Array of objects                    |
 
-# Extractors
+## Extractors
 
 Specify what to extract from matched elements:
 
@@ -47,9 +47,9 @@ Specify what to extract from matched elements:
 - `html` - Full inner HTML content
 - `[attribute]` - Specific attributes (e.g., `[href]`, `[src]`, `[data-id]`)
 
-# Usage
+## Usage
 
-## Basic extraction
+### Basic extraction
 
 Extract a single field:
 
@@ -115,7 +115,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Object extraction
+### Object extraction
 
 Extract multiple fields from a single element:
 
@@ -232,7 +232,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## List extraction
+### List extraction
 
 Extract multiple items with the same structure:
 
@@ -333,7 +333,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Table extraction
+### Table extraction
 
 Convert HTML tables to JSON:
 
@@ -394,7 +394,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Fallback selectors
+### Fallback selectors
 
 Provide multiple selectors for robustness:
 
@@ -464,7 +464,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   Nimble tries each selector in order and uses the first match. This creates fallback logic for varying page structures.
 </Note>
 
-# Example response
+## Example response
 
 When parsing completes successfully, you receive structured data matching your schema:
 
@@ -503,9 +503,9 @@ The response includes:
 - **metadata**: Execution details including driver and timing
 - **items_extracted**: Count of items successfully parsed
 
-# Best practices
+## Best practices
 
-## Selector specificity
+### Selector specificity
 
 **Use specific selectors:**
 

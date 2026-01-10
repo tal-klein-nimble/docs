@@ -15,9 +15,9 @@ Use these APIs when you need to:
 - **Inspect template details**: Understand input requirements and output structure
 - **Validate before use**: Check supported countries and rate limits
 
-# Two discovery APIs
+## Two discovery APIs
 
-## 1. List Templates
+### 1. List Templates
 
 Browse and search the template catalog:
 
@@ -25,7 +25,7 @@ Browse and search the template catalog:
 GET https://api.webit.live/api/v1/templates
 ```
 
-## 2. Get Template Details
+### 2. Get Template Details
 
 Get comprehensive information about a specific template:
 
@@ -33,9 +33,9 @@ Get comprehensive information about a specific template:
 GET https://api.webit.live/api/v1/templates/{template_name}
 ```
 
-# List Templates API
+## List Templates API
 
-## Parameters
+### Parameters
 
 | Parameter  | Type    | Description                                          | Required |
 | ---------- | ------- | ---------------------------------------------------- | -------- |
@@ -220,9 +220,9 @@ curl -X GET 'https://api.webit.live/api/v1/templates?search=amazon' \
 }
 ```
 
-# Get Template Details API
+## Get Template Details API
 
-## Parameters
+### Parameters
 
 | Parameter       | Type   | Description                                       | Required |
 | --------------- | ------ | ------------------------------------------------- | -------- |
@@ -491,7 +491,7 @@ if (template.supported_countries.includes("US")) {
 }
 ```
 
-# Available categories
+## Available categories
 
 Filter templates by these categories:
 
@@ -506,9 +506,9 @@ Filter templates by these categories:
 | `travel`       | Travel and hospitality       | booking_hotel, airbnb_listing, expedia_search     |
 | `finance`      | Financial data               | yahoo_finance_stock, bloomberg_quote, marketwatch |
 
-# Use cases
+## Use cases
 
-## Build dynamic forms
+### Build dynamic forms
 
 Generate input forms based on template schema:
 
@@ -574,7 +574,7 @@ fields.forEach(field => {
 
 </CodeGroup>
 
-## Validate inputs
+### Validate inputs
 
 Check inputs against template schema before execution:
 
@@ -664,7 +664,7 @@ if (errors.length > 0) {
 
 </CodeGroup>
 
-## Compare templates
+### Compare templates
 
 Evaluate multiple templates for your use case:
 
@@ -741,9 +741,9 @@ templates.forEach(t => {
 
 </CodeGroup>
 
-# Best practices
+## Best practices
 
-## Cache template information
+### Cache template information
 
 Reduce API calls by caching template data:
 
@@ -771,7 +771,7 @@ class TemplateCache:
         return template
 ```
 
-## Error handling
+### Error handling
 
 Handle API errors gracefully:
 
@@ -784,7 +784,7 @@ except APIError as e:
     print(f"API error: {e.message}")
 ```
 
-## Efficient pagination
+### Efficient pagination
 
 Fetch all templates efficiently:
 

@@ -16,7 +16,7 @@ Common uses:
   Network Capture requires page rendering to be enabled (`render: true`). For XHR/AJAX calls that don't need rendering, use the `is_xhr` parameter instead.
 </Note>
 
-# Supported parameters
+## Supported parameters
 
 - `network_capture` - Network capture uses filters to target specific requests. You can combine multiple filters in a single request.
 
@@ -30,9 +30,9 @@ Common uses:
 | `wait_for_requests_count`         | Integer | Minimum number of requests to capture. Default: `0`                         |
 | `wait_for_requests_count_timeout` | Integer | Max wait time (seconds) for request count. Default: `10`                    |
 
-# Usage
+## Usage
 
-## Filter by exact URL match
+### Filter by exact URL match
 
 Capture a specific API endpoint by matching the complete URL.
 
@@ -105,7 +105,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Filter by URL pattern
+### Filter by URL pattern
 
 Use `contains` to capture requests with URLs matching a pattern. This is useful for capturing file types (like `.css` or `.js`), requests with dynamic URL components, or when you don't know the exact URL.
 
@@ -175,7 +175,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Filter by resource type
+### Filter by resource type
 
 Capture specific types of resources like XHR, Fetch, or Script requests.
 
@@ -239,7 +239,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Multiple filters
+### Multiple filters
 
 Combine multiple filters to capture different request types in one call.
 
@@ -330,7 +330,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Wait for requests
+### Wait for requests
 
 Use `wait_for_requests_count` to ensure you capture a minimum number of network requests. The request duration will be extended until the count is reached or the timeout expires.
 
@@ -404,7 +404,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   This configuration will wait up to 5 seconds to capture at least 3 network requests matching the filter criteria.
 </Note>
 
-# XHR without rendering
+## XHR without rendering
 
 For direct API endpoints that don't require page rendering, use `is_xhr` for better performance.
 

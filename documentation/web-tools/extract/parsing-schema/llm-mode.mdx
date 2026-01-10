@@ -18,7 +18,7 @@ Use LLM mode when you need:
   LLM mode uses the vx14 driver and incurs additional token consumption costs. This is more expensive than schema mode but requires zero maintenance when pages change.
 </Note>
 
-# How it works
+## How it works
 
 1. **Define what you need**: Provide a schema model and/or natural language prompt
 2. **AI analyzes the page**: The LLM understands page structure and identifies relevant data
@@ -29,9 +29,9 @@ Use LLM mode when you need:
   The AI analyzes each page individually, adapting to its specific structure. You can provide a schema model for structure, a prompt for guidance, or both.
 </Note>
 
-# Usage
+## Usage
 
-## With schema model
+### With schema model
 
 Define your data structure and let AI find the data:
 
@@ -96,7 +96,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## With natural language prompt
+### With natural language prompt
 
 Describe what to extract without defining structure:
 
@@ -142,7 +142,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Combining schema and prompt
+### Combining schema and prompt
 
 Provide both structure and guidance for best results:
 
@@ -316,7 +316,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Example response
+## Example response
 
 When LLM parsing completes, you receive structured data with AI execution details:
 
@@ -360,9 +360,9 @@ The response includes:
 - **token_usage**: Token consumption for cost tracking
 - **metadata**: Execution details including driver (vx14) and timing
 
-# Best practices
+## Best practices
 
-## Writing effective prompts
+### Writing effective prompts
 
 **Be specific about requirements:**
 
@@ -385,7 +385,7 @@ The response includes:
 ❌ "Extract price"
 ```
 
-## Schema design
+### Schema design
 
 **Use descriptive field names:**
 
@@ -404,7 +404,7 @@ result = nimble.extract(
 )
 ```
 
-## Cost optimization
+### Cost optimization
 
 - Use schema mode for stable, high-volume extraction
 - Reserve LLM mode for complex or frequently changing pages
@@ -425,7 +425,7 @@ The AI handles various scenarios automatically:
   The AI analyzes the entire page context to extract accurate data, even when elements aren't explicitly labeled.
 </Note>
 
-# Pricing
+## Pricing
 
 LLM mode costs include:
 
@@ -435,7 +435,7 @@ LLM mode costs include:
 
 Typical cost is 3-5x higher than schema mode, but eliminates maintenance when pages change.
 
-# Combining with browser actions
+## Combining with browser actions
 
 Use AI extraction after dynamic interactions:
 
@@ -513,7 +513,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Comparison with Schema Mode
+## Comparison with Schema Mode
 
 | Aspect               | Schema Mode                      | LLM Mode               |
 | -------------------- | -------------------------------- | ---------------------- |

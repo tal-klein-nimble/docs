@@ -19,9 +19,9 @@ Use JavaScript rendering when you need to:
   Rendering requires vx8, vx10, or vx14 drivers. The vx6 driver does not support rendering.
 </Note>
 
-# Basic rendering
+## Basic rendering
 
-## Enable rendering
+### Enable rendering
 
 Set `render: true` to enable JavaScript execution:
 
@@ -71,9 +71,9 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
   When `render: false` (default), the API returns the raw HTML without JavaScript execution, suitable for static pages.
 </Note>
 
-# Advanced rendering options
+## Advanced rendering options
 
-## Render options parameter
+### Render options parameter
 
 The `render_options` parameter provides fine-grained control over rendering behavior:
 
@@ -84,7 +84,7 @@ The `render_options` parameter provides fine-grained control over rendering beha
 | `include_iframes` | Boolean | Whether to load iframe content | `false` |
 | `blocked_domains` | Array   | Domains to block from loading  | `[]`    |
 
-## Render types
+### Render types
 
 Control when the page is considered fully loaded:
 
@@ -95,7 +95,7 @@ Control when the page is considered fully loaded:
 | `idle2`    | Wait for ≤2 network connections in last 500ms | Dynamic content still loading     |
 | `idle0`    | Wait for 0 network connections in last 500ms  | Ensure everything is loaded       |
 
-## Complete rendering configuration
+### Complete rendering configuration
 
 <CodeGroup>
 
@@ -157,9 +157,9 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Common use cases
+## Common use cases
 
-## Dynamic content loading
+### Dynamic content loading
 
 Wait for AJAX-loaded content:
 
@@ -204,7 +204,7 @@ console.log(result.data.html);
 
 </CodeGroup>
 
-## Single Page Applications
+### Single Page Applications
 
 Extract from React, Vue, or Angular apps:
 
@@ -257,7 +257,7 @@ console.log(result.data);
 
 </CodeGroup>
 
-## Iframe content extraction
+### Iframe content extraction
 
 Include iframe content in extraction:
 
@@ -306,7 +306,7 @@ console.log(result.data.html);
 
 </CodeGroup>
 
-## Block unnecessary resources
+### Block unnecessary resources
 
 Improve performance by blocking ads and tracking:
 
@@ -365,7 +365,7 @@ console.log(result);
 
 </CodeGroup>
 
-## Fast rendering for simple sites
+### Fast rendering for simple sites
 
 Use DOMContentLoaded for faster responses:
 
@@ -412,7 +412,7 @@ console.log(result.data.markdown);
 
 </CodeGroup>
 
-# Combining with browser actions
+## Combining with browser actions
 
 Rendering works seamlessly with browser actions:
 
@@ -493,9 +493,9 @@ console.log(result);
 
 </CodeGroup>
 
-# Best practices
+## Best practices
 
-## Choose the right render type
+### Choose the right render type
 
 **`Use load for standard pages:`**
 
@@ -535,7 +535,7 @@ render_options = {
 }
 ```
 
-## Optimize timeout settings
+### Optimize timeout settings
 
 **Set appropriate timeouts:**
 
@@ -559,7 +559,7 @@ render_options = {
 }
 ```
 
-## Block unnecessary domains
+### Block unnecessary domains
 
 **Common domains to block:**
 
@@ -602,7 +602,7 @@ result = nimble.extract({
 - Reduced detection risk
 - Cleaner HTML output
 
-## Handle iframes carefully
+### Handle iframes carefully
 
 **Enable only when needed:**
 
@@ -624,7 +624,7 @@ else:
     }
 ```
 
-## Combine with network capture
+### Combine with network capture
 
 Monitor and capture API calls during rendering:
 
@@ -722,9 +722,9 @@ if exec_time > 10000:
     print("Consider blocking domains or changing render_type")
 ```
 
-# Limitations
+## Limitations
 
-## Supported endpoints
+### Supported endpoints
 
 JavaScript rendering works with:
 
@@ -739,7 +739,7 @@ Not supported on:
 - ❌ Maps endpoints (use Extract Templates)
 - ❌ E-commerce endpoints (use Extract Templates)
 
-## Driver requirements
+### Driver requirements
 
 | Driver | Rendering Support          |
 | ------ | -------------------------- |
@@ -752,7 +752,7 @@ Not supported on:
   Enterprise plans with automatic driver selection: vx6 disables rendering automatically; vx8/vx10/vx14 enable it by default.
 </Note>
 
-## Timeout limits
+### Timeout limits
 
 | Plan         | Max Timeout |
 | ------------ | ----------- |
@@ -763,7 +763,7 @@ Not supported on:
 | Professional | 300 seconds |
 | Enterprise   | Custom      |
 
-## Resource limits
+### Resource limits
 
 - **Memory**: 256 MB per page
 - **JavaScript execution**: 30 seconds CPU time
@@ -771,7 +771,7 @@ Not supported on:
 - **WebSocket connections**: 10 concurrent
 - **Local storage**: 10 MB per domain
 
-# When to skip rendering
+## When to skip rendering
 
 Use non-rendering (vx6) when:
 

@@ -12,11 +12,11 @@ Common uses:
 - **Navigate pages**: Click buttons, open dropdowns, and interact with UI elements
 - **Capture state**: Take screenshots, collect cookies, or record network traffic
 
-# Two modes
+## Two modes
 
 Browser Actions offers two approaches to automate webpage interactions:
 
-## Deterministic Mode
+### Deterministic Mode
 
 Manually define each action step with full control over execution sequence.
 
@@ -39,7 +39,7 @@ Manually define each action step with full control over execution sequence.
   Full control with predefined action steps
 </Card>
 
-## LLM Mode
+### LLM Mode
 
 Describe desired interactions in natural language and let AI determine the best execution strategy.
 
@@ -62,7 +62,7 @@ Describe desired interactions in natural language and let AI determine the best 
   AI-powered automation with natural language prompts
 </Card>
 
-# Quick comparison
+## Quick comparison
 
 | Feature         | Deterministic Mode         | LLM Mode                   |
 | --------------- | -------------------------- | -------------------------- |
@@ -78,7 +78,7 @@ Describe desired interactions in natural language and let AI determine the best 
   Both modes require page rendering to be enabled (`render: true`) and operate within a global **120-second timeout**.
 </Note>
 
-# Choosing the right mode
+## Choosing the right mode
 
 **Use Deterministic Mode when:**
 
@@ -94,9 +94,9 @@ Describe desired interactions in natural language and let AI determine the best 
 - You need intelligent handling of dynamic elements
 - Higher cost is acceptable for reduced maintenance
 
-# Usage examples
+## Usage examples
 
-## Deterministic Mode
+### Deterministic Mode
 
 Define exact steps to execute:
 
@@ -181,7 +181,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## LLM Mode
+### LLM Mode
 
 Let AI figure out the steps:
 
@@ -230,7 +230,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Next steps
+## Next steps
 
 <CardGroup cols={2}>
   <Card title="Deterministic Mode" icon="list-check" href="/documentation/web-tools/extract/browser-actions-deterministic">

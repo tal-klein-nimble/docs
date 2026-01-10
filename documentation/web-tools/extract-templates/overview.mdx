@@ -40,9 +40,9 @@ Common uses:
   </Card>
 </Columns>
 
-# Two main APIs
+## Two main APIs
 
-## Discover Templates
+### Discover Templates
 
 - Templates List
 - Template Details
@@ -61,7 +61,7 @@ templates = nimble.list_templates(
 template_info = nimble.get_template("amazon_product")
 ```
 
-## Extract with Templates
+### Extract with Templates
 
 Run a template with simple inputs:
 
@@ -72,9 +72,9 @@ result = nimble.extract_template(
 )
 ```
 
-# Quick start
+## Quick start
 
-## Using a template
+### Using a template
 
 <CodeGroup>
 
@@ -129,7 +129,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-## Discovering templates
+### Discovering templates
 
 <CodeGroup>
 
@@ -175,7 +175,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&page=1&l
 
 </CodeGroup>
 
-## Getting template details
+### Getting template details
 
 <CodeGroup>
 
@@ -216,9 +216,9 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 
 </CodeGroup>
 
-# Popular templates
+## Popular templates
 
-## E-commerce
+### E-commerce
 
 | Template          | Description            | Key Inputs         |
 | ----------------- | ---------------------- | ------------------ |
@@ -227,7 +227,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 | `walmart_product` | Walmart product data   | `product_id`       |
 | `ebay_product`    | eBay listing details   | `item_id`          |
 
-## Professional networks
+### Professional networks
 
 | Template           | Description           | Key Inputs          |
 | ------------------ | --------------------- | ------------------- |
@@ -235,7 +235,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 | `linkedin_jobs`    | LinkedIn job listings | `query`, `location` |
 | `linkedin_company` | Company information   | `company_url`       |
 
-## Search engines
+### Search engines
 
 | Template        | Description           | Key Inputs          |
 | --------------- | --------------------- | ------------------- |
@@ -243,7 +243,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 | `google_maps`   | Google Maps listings  | `query`, `location` |
 | `bing_search`   | Bing search results   | `query`, `country`  |
 
-## Social media
+### Social media
 
 | Template            | Description            | Key Inputs |
 | ------------------- | ---------------------- | ---------- |
@@ -251,7 +251,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 | `twitter_search`    | Twitter search results | `query`    |
 | `instagram_profile` | Instagram profile data | `username` |
 
-# Example response
+## Example response
 
 When a template runs successfully, you receive structured, normalized data:
 
@@ -296,7 +296,7 @@ The response includes:
 - **metadata**: Execution details including template name and timing
 - All data is validated and normalized to consistent formats
 
-# Template categories
+## Template categories
 
 Browse templates by category:
 
@@ -309,9 +309,9 @@ Browse templates by category:
 - **travel**: Booking, Airbnb, Expedia
 - **finance**: Yahoo Finance, Bloomberg, MarketWatch
 
-# Best practices
+## Best practices
 
-## Input validation
+### Input validation
 
 Templates validate inputs automatically:
 
@@ -336,7 +336,7 @@ result = nimble.extract_template(
 - No need to experiment with configurations
 - Billing is per successful extraction
 
-# Templates vs Custom Extract
+## Templates vs Custom Extract
 
 | Feature           | Templates            | Custom Extract            |
 | ----------------- | -------------------- | ------------------------- |
@@ -362,7 +362,7 @@ result = nimble.extract_template(
 - Site requires specific configurations
 - Template doesn't exist for your use case
 
-# Next steps
+## Next steps
 
 <CardGroup cols={2}>
   <Card title="Discover Templates" icon="magnifying-glass" href="/documentation/web-tools/extract-templates/discover">

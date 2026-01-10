@@ -20,7 +20,7 @@ Use LLM mode when you need:
   LLM mode uses the vx14 driver and incurs additional token consumption costs based on prompt and response length. This is more expensive than deterministic flows but requires zero maintenance.
 </Note>
 
-# How it works
+## How it works
 
 1. **Send a prompt**: Describe what you want to accomplish in natural language
 2. **AI takes control**: The LLM agent analyzes the page and determines the best action sequence
@@ -31,9 +31,9 @@ Use LLM mode when you need:
   The LLM agent executes actions in real-time based on the current page state. It's not translating your prompt into predefined steps—it's actually controlling the browser dynamically.
 </Note>
 
-# Usage
+## Usage
 
-## Basic example
+### Basic example
 
 Let the AI handle all interactions:
 
@@ -82,7 +82,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Infinite scroll
+### Infinite scroll
 
 Handle dynamic content loading:
 
@@ -131,7 +131,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Complex interaction
+### Complex interaction
 
 Multi-step workflows:
 
@@ -180,7 +180,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Example response
+## Example response
 
 When the LLM agent completes your prompt, you receive the final page state and execution details.
 
@@ -224,9 +224,9 @@ The response includes:
 - **token_usage**: Token consumption for cost tracking
 - **metadata**: Execution details including driver (vx14) and timing
 
-# Best practices
+## Best practices
 
-## Writing effective prompts
+### Writing effective prompts
 
 **Be specific but flexible:**
 
@@ -249,7 +249,7 @@ The response includes:
 ❌ "Do sorting and scrolling stuff"
 ```
 
-## Cost optimization
+### Cost optimization
 
 - Use deterministic mode for repetitive, stable workflows
 - Reserve LLM mode for complex or frequently changing pages
@@ -269,7 +269,7 @@ The AI agent handles common issues automatically:
   The global 120-second timeout still applies. If the AI cannot complete your prompt within this time, the request will timeout.
 </Note>
 
-# Pricing
+## Pricing
 
 LLM mode costs include:
 
@@ -279,7 +279,7 @@ LLM mode costs include:
 
 This is typically 3-5x more expensive than deterministic flows, but eliminates maintenance costs when pages change.
 
-# Comparison with Deterministic Mode
+## Comparison with Deterministic Mode
 
 | Aspect               | Deterministic             | LLM                     |
 | -------------------- | ------------------------- | ----------------------- |

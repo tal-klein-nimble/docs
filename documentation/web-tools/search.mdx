@@ -19,9 +19,9 @@ Use the Search API when you need to:
   The Search API supports two modes: Fast Mode (1 credit) for URL discovery and Deep Search (1 credit + 1 per extracted page) for full content retrieval.
 </Note>
 
-# Two operating modes
+## Two operating modes
 
-## Fast Mode (default)
+### Fast Mode (default)
 
 Quickly discover URLs or generate web answers for AI agents.
 
@@ -34,7 +34,7 @@ Quickly discover URLs or generate web answers for AI agents.
 
 **Cost:** 1 credit per search
 
-## Deep Search
+### Deep Search
 
 Automatically extract and parse full content from search results.
 
@@ -47,9 +47,9 @@ Automatically extract and parse full content from search results.
 
 **Cost:** 1 credit per search + 1 credit per extracted page
 
-# Parameters
+## Parameters
 
-## Core parameters
+### Core parameters
 
 | Parameter       | Type    | Description                                                      | Required |
 | --------------- | ------- | ---------------------------------------------------------------- | -------- |
@@ -58,14 +58,14 @@ Automatically extract and parse full content from search results.
 | `deep_search`   | Boolean | Fetch and parse full page content (default: false)               | No       |
 | `output_format` | String  | Format for parsed content: markdown, plain_text, simplified_html | No       |
 
-## Location & language
+### Location & language
 
 | Parameter | Type   | Description                                   | Required |
 | --------- | ------ | --------------------------------------------- | -------- |
 | `country` | String | Country code for search results (default: US) | No       |
 | `locale`  | String | Language preference (default: en)             | No       |
 
-## Search refinement
+### Search refinement
 
 | Parameter         | Type    | Description                                  | Required |
 | ----------------- | ------- | -------------------------------------------- | -------- |
@@ -76,9 +76,9 @@ Automatically extract and parse full content from search results.
 | `start_date`      | String  | Start date for results (YYYY-MM-DD or YYYY)  | No       |
 | `end_date`        | String  | End date for results (YYYY-MM-DD or YYYY)    | No       |
 
-# Usage
+## Usage
 
-## Fast Mode search
+### Fast Mode search
 
 Get search results without extracting full content:
 
@@ -132,7 +132,7 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-## Deep Search with content extraction
+### Deep Search with content extraction
 
 Extract full content from search results:
 
@@ -195,7 +195,7 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-## Fast Mode with LLM answer
+### Fast Mode with LLM answer
 
 Get AI-generated answer summary from search results:
 
@@ -259,7 +259,7 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-## Domain filtering
+### Domain filtering
 
 Focus on or exclude specific domains:
 
@@ -341,7 +341,7 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-## Time-based filtering
+### Time-based filtering
 
 Get recent results only:
 
@@ -404,7 +404,7 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-## Localized search
+### Localized search
 
 Get results for specific countries and languages:
 
@@ -470,11 +470,11 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
-# Output formats
+## Output formats
 
 The Search API offers three parsing formats for extracted content (Deep Search only):
 
-## Markdown (default)
+### Markdown (default)
 
 Converts HTML to markdown with preserved structure.
 
@@ -522,7 +522,7 @@ console.log(result.data.results[0].content);
 
 </CodeGroup>
 
-## Plain text
+### Plain text
 
 Converts HTML to clean text with line breaks preserved.
 
@@ -570,7 +570,7 @@ console.log(result.data.results[0].content);
 
 </CodeGroup>
 
-## Simplified HTML
+### Simplified HTML
 
 Strips unnecessary attributes while maintaining structure.
 
@@ -618,9 +618,9 @@ console.log(result.data.results[0].content);
 
 </CodeGroup>
 
-# Example response
+## Example response
 
-## Fast Mode response
+### Fast Mode response
 
 ```json
 {
@@ -656,7 +656,7 @@ console.log(result.data.results[0].content);
 }
 ```
 
-## Deep Search response
+### Deep Search response
 
 ````json
 {
@@ -686,7 +686,7 @@ console.log(result.data.results[0].content);
 }
 ````
 
-## Fast Mode with answer
+### Fast Mode with answer
 
 ```json
 {
@@ -715,9 +715,9 @@ The response includes:
 - **answer**: LLM-generated summary (when `include_answer: true`)
 - **metadata**: Execution details and credit usage
 
-# Use cases
+## Use cases
 
-## Research and content aggregation
+### Research and content aggregation
 
 Gather comprehensive information on a topic:
 
@@ -787,7 +787,7 @@ console.log(`Gathered ${research.length} sources`);
 
 </CodeGroup>
 
-## AI agent with web search
+### AI agent with web search
 
 Build AI agents that can search and answer questions:
 
@@ -851,7 +851,7 @@ console.log(`\nBased on ${response.sources.length} sources`);
 
 </CodeGroup>
 
-## Competitive monitoring
+### Competitive monitoring
 
 Track competitor content and search visibility:
 
@@ -941,7 +941,7 @@ const results = await monitorSearchRankings(keywords, competitors);
 
 </CodeGroup>
 
-## Selective content extraction
+### Selective content extraction
 
 Discover URLs in Fast Mode, then selectively extract full content:
 
@@ -1009,9 +1009,9 @@ console.log(`Extracted ${extractedContent.length} high-authority sources`);
 
 </CodeGroup>
 
-# Best practices
+## Best practices
 
-## Choose the right mode
+### Choose the right mode
 
 **Use Fast Mode when:**
 
@@ -1027,7 +1027,7 @@ console.log(`Extracted ${extractedContent.length} high-authority sources`);
 - Building comprehensive research datasets
 - Content quality matters more than cost
 
-## Optimize credit usage
+### Optimize credit usage
 
 **Cost-effective Fast Mode:**
 
@@ -1051,7 +1051,7 @@ search = nimble.search({
 })
 ```
 
-## Domain filtering best practices
+### Domain filtering best practices
 
 **Use include_domains for trusted sources:**
 
@@ -1094,7 +1094,7 @@ result = nimble.search({
 })
 ```
 
-## Output format selection
+### Output format selection
 
 **Choose markdown for most use cases:**
 
@@ -1117,7 +1117,7 @@ output_format = "plain_text"
 output_format = "simplified_html"
 ```
 
-## Time filtering strategies
+### Time filtering strategies
 
 **Use time_range for recency:**
 
@@ -1140,7 +1140,7 @@ result = nimble.search({
 })
 ```
 
-## Handle pagination
+### Handle pagination
 
 **Process results in batches:**
 
@@ -1171,16 +1171,16 @@ def search_with_batching(query, total_needed=100):
     return all_results[:total_needed]
 ```
 
-# Limitations
+## Limitations
 
-## Result limits
+### Result limits
 
 - **Maximum results per search**: 100
 - **Domain filters**: Max 50 domains for include/exclude
 - **Output format**: Only applies to Deep Search mode
 - **Include answer**: Only available in Fast Mode
 
-## Credit usage
+### Credit usage
 
 | Mode               | Cost                            |
 | ------------------ | ------------------------------- |
@@ -1195,14 +1195,14 @@ def search_with_batching(query, total_needed=100):
 - Deep Search with 10 results: 1 + 10 = 11 credits
 - Deep Search with 5 results: 1 + 5 = 6 credits
 
-## Format availability
+### Format availability
 
 Output formats (`markdown`, `plain_text`, `simplified_html`) only apply to:
 
 - ✅ Deep Search mode
 - ❌ Fast Mode (returns titles and descriptions only)
 
-## Country and locale
+### Country and locale
 
 - **Supported countries**: 195+ countries
 - **Default**: US (country), en (locale)

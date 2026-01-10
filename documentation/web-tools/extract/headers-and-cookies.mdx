@@ -19,9 +19,9 @@ Use custom headers and cookies when you need to:
   This is an advanced feature. Misconfigured headers or cookies may trigger anti-bot detection or cause requests to fail.
 </Note>
 
-# Parameters
+## Parameters
 
-## Headers
+### Headers
 
 | Parameter | Type             | Description                               | Required            |
 | --------- | ---------------- | ----------------------------------------- | ------------------- |
@@ -29,7 +29,7 @@ Use custom headers and cookies when you need to:
 | `method`  | String           | HTTP method: GET, POST, PUT, DELETE, etc. | When using POST/PUT |
 | `body`    | String or Object | Request body for POST/PUT requests        | When using POST/PUT |
 
-## Cookies
+### Cookies
 
 | Parameter          | Type            | Description                                    | Required               |
 | ------------------ | --------------- | ---------------------------------------------- | ---------------------- |
@@ -42,9 +42,9 @@ Use custom headers and cookies when you need to:
   Do not mix headers and cookies in the same request. Choose one method based on your needs.
 </Note>
 
-# Usage
+## Usage
 
-## Send custom headers
+### Send custom headers
 
 Include headers as an object:
 
@@ -102,7 +102,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## POST requests with headers
+### POST requests with headers
 
 Send POST requests with custom headers and body:
 
@@ -172,7 +172,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Send cookies (string format)
+### Send cookies (string format)
 
 Use simple string format for multiple cookies:
 
@@ -218,7 +218,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-## Send cookies (object format)
+### Send cookies (object format)
 
 Use object format for domain-specific cookies:
 
@@ -297,9 +297,9 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-# Common use cases
+## Common use cases
 
-## API authentication
+### API authentication
 
 Access authenticated API endpoints:
 
@@ -356,7 +356,7 @@ const result2 = await nimble.extract({
 
 </CodeGroup>
 
-## Session-based access
+### Session-based access
 
 Access content requiring active sessions:
 
@@ -415,7 +415,7 @@ console.log(result.data.html);
 
 </CodeGroup>
 
-## Personalized content
+### Personalized content
 
 Retrieve region-specific or personalized data:
 
@@ -460,7 +460,7 @@ console.log(result);
 
 </CodeGroup>
 
-## Form submission
+### Form submission
 
 Submit forms with CSRF protection:
 
@@ -511,9 +511,9 @@ console.log(result);
 
 </CodeGroup>
 
-# Best practices
+## Best practices
 
-## Security
+### Security
 
 **Never expose sensitive credentials:**
 
@@ -687,9 +687,9 @@ for url in urls:
     })
 ```
 
-# Limitations
+## Limitations
 
-## Supported endpoints
+### Supported endpoints
 
 Custom headers and cookies work with:
 
@@ -704,7 +704,7 @@ Not supported on:
 - ❌ Maps endpoints
 - ❌ E-commerce endpoints
 
-## Important constraints
+### Important constraints
 
 **Don't mix headers and cookies:**
 
