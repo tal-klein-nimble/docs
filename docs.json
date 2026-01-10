@@ -17,19 +17,20 @@
             "group": "Introduction",
             "icon": "book-open",
             "pages": [
-              "introduction/overview",
-              "introduction/release-notes"
+              "documentation/introduction/overview",
+              "documentation/introduction/release-notes"
             ]
           },
           {
             "group": "Getting Started",
             "icon": "play",
             "pages": [
-              "documentation/getting-started/untitled-page",
-              "getting-started/mcp-server",
-              "getting-started/web-api",
-              "getting-started/agents",
-              "getting-started/account-management",
+              "documentation/getting-started/quickstart",
+              "documentation/getting-started/mcp-server",
+              "documentation/getting-started/installation",
+              "documentation/getting-started/web-api",
+              "documentation/getting-started/agents",
+              "documentation/getting-started/account-management",
               "documentation/getting-started/sdk-limitations",
               "documentation/getting-started/billing"
             ]
@@ -41,24 +42,24 @@
                 "group": "Extract",
                 "pages": [
                   "documentation/web-tools/extract/extract-overview",
-                  "documentation/web-tools/extract/f",
+                  "documentation/web-tools/extract/formats",
                   "documentation/web-tools/extract/geo-targeting",
                   "documentation/web-tools/extract/js-rendering",
                   "documentation/web-tools/extract/stealth-mode",
                   {
                     "group": "Parsing Schema",
                     "pages": [
-                      "documentation/web-tools/extract/parsing-schema",
-                      "documentation/web-tools/extract/parsing-schema/untitled-page-1",
-                      "documentation/web-tools/extract/parsing-schema/untitled-page"
+                      "documentation/web-tools/extract/parsing-schema/overview",
+                      "documentation/web-tools/extract/parsing-schema/llm-mode",
+                      "documentation/web-tools/extract/parsing-schema/schema-mode"
                     ]
                   },
                   {
                     "group": "Browser Actions",
                     "pages": [
-                      "documentation/web-tools/extract/browser-actions/untitled-page",
-                      "documentation/web-tools/extract/browser-actions/untitled-page-2",
-                      "documentation/web-tools/extract/browser-actions/untitled-page-1"
+                      "documentation/web-tools/extract/browser-actions/overview",
+                      "documentation/web-tools/extract/browser-actions/llm-mode",
+                      "documentation/web-tools/extract/browser-actions/instruction-mode"
                     ]
                   },
                   "documentation/web-tools/extract/network-capture",
@@ -70,7 +71,7 @@
                 "group": "Extract Templates",
                 "pages": [
                   "documentation/web-tools/extract-templates/overview",
-                  "documentation/web-tools/extract-templates",
+                  "documentation/web-tools/extract-templates/extract-templates",
                   "documentation/web-tools/extract-templates/template-gallery"
                 ]
               },
@@ -84,9 +85,9 @@
             "icon": "robot",
             "hidden": true,
             "pages": [
-              "ai-tools/claude-code",
-              "ai-tools/cursor",
-              "ai-tools/windsurf"
+              "documentation/ai-tools/claude-code",
+              "documentation/ai-tools/cursor",
+              "documentation/ai-tools/windsurf"
             ]
           },
           {
@@ -94,13 +95,13 @@
             "icon": "shield",
             "hidden": true,
             "pages": [
-              "getting-started/proxy",
-              "residential-proxy/overview",
-              "residential-proxy/quickstart",
-              "residential-proxy/authentication",
-              "residential-proxy/geotargeting",
-              "residential-proxy/session-control",
-              "residential-proxy/response-codes"
+              "documentation/residential-proxy/proxy",
+              "documentation/residential-proxy/overview",
+              "documentation/residential-proxy/quickstart",
+              "documentation/residential-proxy/authentication",
+              "documentation/residential-proxy/geotargeting",
+              "documentation/residential-proxy/session-control",
+              "documentation/residential-proxy/response-codes"
             ]
           }
         ]
