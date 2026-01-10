@@ -1130,3 +1130,114 @@ The response includes:
   }
 }
 ```
+
+## Best practices
+
+### Use required parameter for optional steps
+
+**Make non-critical steps optional:**
+
+```python
+# ✅ Continue even if optional element isn't found
+browser_actions = [
+    {
+        "wait_and_click": {
+            "selector": ".cookie-banner button",
+            "required": False  # Don't fail if banner doesn't exist
+        }
+    },
+    {
+        "wait_and_click": {
+            "selector": ".submit-button",
+            "required": True  # This is critical
+        }
+    }
+]
+
+# ❌ Fail entire request if cookie banner isn't found
+browser_actions = [
+    {
+        "wait_and_click": {
+            "selector": ".cookie-banner button"
+            # required defaults to True
+        }
+    }
+]
+```
+
+### Chain actions with appropriate waits
+
+**Add delays between actions:**
+
+```python
+# ✅ Wait for content to load between actions
+browser_actions = [
+    {
+        "wait_and_click": {
+            "selector": "button.load-more"
+        }
+    },
+    {
+        "wait": {
+            "delay": 2000  # Wait for new content
+        }
+    },
+    {
+        "wait_for": {
+            "selectors": [".new-content"]
+        }
+    }
+]
+
+# ❌ No wait - may act on stale content
+browser_actions = [
+    {
+        "wait_and_click": {
+            "selector": "button.load-more"
+        }
+    },
+    {
+        "wait_and_click": {
+            "selector": ".new-content button"  # May not exist yet
+        }
+    }
+]
+```
+
+### Use specific selectors
+
+**Be precise with CSS selectors:**
+
+```python
+# ✅ Specific selector
+selector = "button[data-testid='submit-form']"
+
+# ✅ Unique class or ID
+selector = "#unique-submit-button"
+
+# ❌ Too generic - may match wrong element
+selector = "button"
+
+# ❌ Fragile - breaks with style changes
+selector = ".btn.btn-primary.btn-lg.mt-4"
+```
+
+### Optimize infinite scroll parameters
+
+**Set appropriate scroll limits:**
+
+```python
+# ✅ Controlled scrolling with limits
+infinite_scroll = {
+    "duration": 10000,  # 10 seconds max
+    "loading_selector": ".spinner",
+    "idle_timeout": 3000,  # Stop if no change for 3s
+    "delay_after_scroll": 1000  # Wait between scrolls
+}
+
+# ❌ Excessive scrolling - slow and costly
+infinite_scroll = {
+    "duration": 60000,  # 60 seconds - too long
+    "delay_after_scroll": 100  # Too fast - may miss content
+}
+```

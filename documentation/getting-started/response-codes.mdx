@@ -1,0 +1,194 @@
+---
+title: "Response Codes"
+description: "Understanding HTTP status codes and error responses"
+---
+
+Nimble's APIs use standard HTTP status codes to indicate the success or failure of requests.
+
+## HTTP status codes
+
+### Success codes
+
+| Code | Status | Description |
+|------|--------|-------------|
+| **200** | OK | Request succeeded and data was returned successfully |
+
+### Client error codes
+
+| Code | Status | Description |
+|------|--------|-------------|
+| **400** | Bad Request | Invalid URL, malformed parameters, or missing required fields |
+| **401** | Unauthorized | Account doesn't exist, invalid API key, or missing credentials |
+| **402** | Payment Required | No budget, limit reached, trial expired, or trial quota finished |
+| **403** | Forbidden | Account blocked or pipeline not activated |
+| **429** | Too Many Requests | Rate limit exceeded for your plan |
+
+### Server error codes
+
+| Code | Status | Description |
+|------|--------|-------------|
+| **500** | Internal Server Error | Unexpected server-side error occurred |
+| **501** | Not Implemented | Proxy service encountered an error |
+| **555** | Request Timeout | Request exceeded maximum execution time |
+
+## Common errors and solutions
+
+### 400 - Bad Request
+
+Invalid parameters or configuration.
+
+```python
+# ❌ Invalid URL format
+result = nimble.extract({
+    "url": "example.com"  # Missing protocol
+})
+
+# ✅ Correct URL format
+result = nimble.extract({
+    "url": "https://example.com"
+})
+```
+
+### 401 - Unauthorized
+
+Account doesn't exist or invalid API key.
+
+```python
+# Verify your API key in dashboard
+nimble = Nimble(api_key="YOUR-API-KEY")
+```
+
+### 402 - Payment Required
+
+No budget, limit reached, or trial expired. Check your account balance and plan limits in the dashboard.
+
+### 403 - Forbidden
+
+Account blocked or pipeline not activated. Contact support or activate the required pipeline in your dashboard.
+
+### 429 - Too Many Requests
+
+Rate limit exceeded. Reduce request rate or upgrade your plan for higher limits.
+
+```python
+# Implement rate limiting
+import time
+
+for url in urls:
+    result = nimble.extract({"url": url})
+    time.sleep(0.1)  # Add delay between requests
+```
+
+### 500 - Internal Server Error
+
+Unexpected server-side error. Retry the request with exponential backoff.
+
+```python
+import time
+
+def extract_with_retry(url, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return nimble.extract({"url": url})
+        except ServerError:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)  # Exponential backoff
+            else:
+                raise
+```
+
+### 501 - Proxy Service Error
+
+Proxy service error. Try a different country or retry the request.
+
+### 555 - Request Timeout
+
+Request exceeded maximum execution time. Increase timeout or use async mode.
+
+```python
+# ✅ Increase timeout
+result = nimble.extract({
+    "url": "https://slow-site.com",
+    "render": True,
+    "render_options": {
+        "timeout": 60000
+    }
+})
+
+# ✅ Use async mode
+task = nimble.extract_async({
+    "url": "https://slow-site.com",
+    "render": True
+})
+```
+
+## Best practices
+
+### Retry transient errors
+
+Use exponential backoff for server errors, proxy errors, and timeouts.
+
+```python
+import time
+from nimble import Nimble
+from nimble.exceptions import ServerError, ProxyError, TimeoutError
+
+def extract_with_retry(config, max_retries=3):
+    retryable_exceptions = (ServerError, ProxyError, TimeoutError)
+
+    for attempt in range(max_retries):
+        try:
+            return nimble.extract(config)
+        except retryable_exceptions:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)  # Exponential backoff
+            else:
+                raise
+```
+
+### Handle specific errors
+
+Catch and handle different error types appropriately.
+
+```python
+from nimble.exceptions import (
+    AuthenticationError,
+    InvalidParameterError,
+    TimeoutError
+)
+
+try:
+    result = nimble.extract({"url": "https://example.com"})
+except AuthenticationError:
+    print("Check your API key")
+except InvalidParameterError as e:
+    print(f"Invalid parameter: {e.parameter}")
+except TimeoutError:
+    print("Request timed out - increase timeout or use async mode")
+```
+
+### Monitor request metadata
+
+Check execution time and driver usage to optimize your requests.
+
+```python
+result = nimble.extract({"url": "https://example.com"})
+
+metadata = result.get("metadata", {})
+print(f"Execution time: {metadata.get('execution_time_ms')}ms")
+print(f"Driver used: {metadata.get('driver')}")
+```
+
+## Getting help
+
+If you encounter persistent errors:
+
+1. Check the documentation for the specific feature
+2. Verify all parameters and values are correct
+3. Test with a minimal configuration to isolate the issue
+4. Contact support with:
+   - Request configuration
+   - Error message and status code
+   - Task ID from response metadata
+
+**Support:** support@nimbleway.com

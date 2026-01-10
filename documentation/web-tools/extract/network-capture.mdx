@@ -521,3 +521,94 @@ The response includes:
   }
 }
 ```
+
+## Best practices
+
+### Use specific URL patterns
+
+**Be specific with URL matching:**
+
+```python
+# ✅ Specific pattern for API endpoints
+network_capture = [
+    {
+        "url": {
+            "type": "contains",
+            "value": "/api/v1/products"
+        }
+    }
+]
+
+# ❌ Too broad - captures everything
+network_capture = [
+    {
+        "url": {
+            "type": "contains",
+            "value": "/"
+        }
+    }
+]
+```
+
+### Filter by resource type
+
+**Narrow down to relevant resources:**
+
+```python
+# ✅ Capture only XHR and Fetch requests
+network_capture = [
+    {
+        "resource_type": ["xhr", "fetch"]
+    }
+]
+
+# ✅ Capture scripts and stylesheets
+network_capture = [
+    {
+        "resource_type": ["script", "stylesheet"]
+    }
+]
+```
+
+### Set appropriate wait counts
+
+**Use wait_for_requests_count for dynamic content:**
+
+```python
+# ✅ Wait for specific number of requests
+network_capture = [
+    {
+        "method": "GET",
+        "resource_type": ["xhr"],
+        "wait_for_requests_count": 3,
+        "wait_for_requests_count_timeout": 10
+    }
+]
+
+# ❌ No wait - may miss delayed requests
+network_capture = [
+    {
+        "method": "GET",
+        "resource_type": ["xhr"]
+    }
+]
+```
+
+### Use XHR mode for direct API calls
+
+**Skip rendering when accessing APIs directly:**
+
+```python
+# ✅ Direct API access without rendering
+result = nimble.extract({
+    "url": "https://api.example.com/data",
+    "is_xhr": True
+})
+
+# ❌ Unnecessary rendering for API endpoints
+result = nimble.extract({
+    "url": "https://api.example.com/data",
+    "render": True,
+    "network_capture": [...]
+})
+```

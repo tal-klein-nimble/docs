@@ -21,6 +21,7 @@ The Web API uses **Basic Authentication** with base64 encoded credentials.
 **Format:** `base64(username:password)`
 
 <CodeGroup>
+
 ```bash cURL
 curl --location --request POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Basic dXNlckBuaW1ibGV3YXkuY29tOnBhc3MxMjM=' \
@@ -29,6 +30,7 @@ curl --location --request POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com"
 }'
 ```
+
 
 ```python Python
 import requests
@@ -44,6 +46,7 @@ data = {
 
 response = requests.post(url, headers=headers, json=data)
 ```
+
 </CodeGroup>
 
 ## Your First Request
@@ -85,12 +88,14 @@ print(result)
 ## Key Features
 
 ### Real-time Data Collection
+
 - SERP collection for SEO/SEM analysis
 - Product data from major marketplaces
 - Training data for AI models
 - Lead enrichment for sales
 
 ### Advanced Capabilities
+
 - **High data accuracy** through Nimble Browser
 - **Robust fingerprinting** for unrestricted access
 - **Zero maintenance** fully-managed service

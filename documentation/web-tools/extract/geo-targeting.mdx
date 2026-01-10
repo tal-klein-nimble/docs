@@ -80,3 +80,77 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 ```
 
 </CodeGroup>
+
+## Best practices
+
+### Use geo targeting when content varies by location
+
+Only specify country/state/city when the content differs by location.
+
+```python
+# ✅ Use for location-specific content
+result = nimble.extract({
+    "url": "https://www.example.com/products",
+    "country": "UK"  # Prices and availability vary by country
+})
+
+# ❌ Unnecessary for global content
+result = nimble.extract({
+    "url": "https://www.example.com/about",
+    "country": "DE"  # About page is the same everywhere
+})
+```
+
+### Match locale to target country
+
+Set the locale to match the country for accurate localized content.
+
+```python
+# ✅ Locale matches country
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "country": "FR",
+    "locale": "fr-FR"
+})
+
+# ✅ Locale auto matching country
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "country": "FR",
+    "locale": "auto"
+})
+
+# ❌ Locale doesn't match country
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "country": "FR",
+    "locale": "en-US"  # May not get French content
+})
+```
+
+### Start with country-level targeting
+
+Use country-level targeting first, then add state/city if needed.
+
+```python
+# ✅ Start simple with country
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "country": "US"
+})
+
+# ✅ Add state if content differs
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "country": "US",
+    "state": "NY"  # Only if NY shows different content
+})
+
+# ❌ Overly specific when not needed
+result = nimble.extract({
+    "url": "https://www.example.com/global-page",
+    "country": "US",
+    "state": "NY",
+    "city": "New York"  # Unnecessary granularity
+})
+```
