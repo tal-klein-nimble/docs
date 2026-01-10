@@ -110,6 +110,7 @@
       },
       {
         "tab": "SDK",
+        "hidden": true,
         "groups": [
           {
             "group": "Overview",
