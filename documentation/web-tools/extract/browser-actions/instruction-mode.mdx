@@ -25,9 +25,16 @@ Use Instructions mode when you need:
   Instructions flows may break when page structure or selectors change. Monitor and update your flows as needed.
 </Note>
 
-## Available actions
+## Supported parameters
 
-Browser Actions are passed in the `browser_actions` array. Each action executes in sequence.
+Available in - Extract.
+
+| **Parameter**     | **Type**       | **Description**                                                | **Default** |
+| :---------------- | :------------- | :------------------------------------------------------------- | :---------: |
+| `render`          | Boolean        | Enable or disable JS rendering (required to be `true`)         | `false`     |
+| `browser_actions` | List (Objects) | List of sequenced page interactions to be executed on the page | -           |
+
+### Available actions
 
 | Action            | Description                                    |
 | ----------------- | ---------------------------------------------- |

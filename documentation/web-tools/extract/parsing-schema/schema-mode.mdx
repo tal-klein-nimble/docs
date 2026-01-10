@@ -18,7 +18,16 @@ Use schema mode when you need:
   Parsers may break when page structure or selectors change. Monitor source pages and update parsers as needed.
 </Note>
 
-## Parser structure
+## Supported parameters
+
+Available in - Extract.
+
+| **Parameter** | **Type** | **Description**                                        | **Default** |
+| :------------ | :------- | :----------------------------------------------------- | :---------: |
+| `parse`       | Boolean  | Enable or disable HTML parsing (required to be `true`) | `false`     |
+| `parser`      | Object   | Selector based HTML parser object                      | -           |
+
+### Parser structure
 
 Parsers define how to extract data using three core components:
 
@@ -28,7 +37,7 @@ Parsers define how to extract data using three core components:
 - `selectors` - CSS selectors identifying target elements (multiple for fallbacks)
 - `extractor` - What to extract: `text`, `html`, or attributes like `[href]`
 
-## Extraction types
+### Extraction types
 
 | Type          | Purpose                    | Returns                             |
 | ------------- | -------------------------- | ----------------------------------- |
@@ -39,7 +48,7 @@ Parsers define how to extract data using three core components:
 | `object`      | Custom structure           | Single element with multiple fields |
 | `object-list` | Multiple custom structures | Array of objects                    |
 
-## Extractors
+### Extractors
 
 Specify what to extract from matched elements:
 
@@ -466,7 +475,11 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 ## Example response
 
-When parsing completes successfully, you receive structured data matching your schema:
+When parsing completes successfully, you receive structured data matching your schema. The response includes:
+
+- **data**: Structured JSON matching your schema
+- **metadata**: Execution details including driver and timing
+- **items_extracted**: Count of items successfully parsed
 
 ```json
 {
@@ -497,12 +510,6 @@ When parsing completes successfully, you receive structured data matching your s
 }
 ```
 
-The response includes:
-
-- **data**: Structured JSON matching your schema
-- **metadata**: Execution details including driver and timing
-- **items_extracted**: Count of items successfully parsed
-
 ## Best practices
 
 ### Selector specificity
@@ -520,87 +527,3 @@ The response includes:
 ✅ "button[data-action='add-to-cart']"
 ❌ "button"
 ```
-
-## Error handling
-
-**Provide fallbacks:**
-
-```json
-{
-  "selectors": [".price-new", ".price-old", ".price"]
-}
-```
-
-**Use optional fields:**
-
-```python
-class Product(BaseModel):
-    name: str
-    price: float
-    rating: Optional[float] = None  # Optional field
-```
-
-## Performance optimization
-
-- Use specific selectors to reduce DOM traversal
-- Extract only needed fields
-- Leverage `object-list` for multiple similar items
-- Test parsers on sample pages before production
-
-## Managing parsers
-
-**Upload parsers for reuse:**
-
-```bash
-# Create parser
-curl -X POST 'https://api.webit.live/api/v1/parsers' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "product-parser",
-    "parser": {
-        "type": "object",
-        "selector": ".product",
-        "fields": {...}
-    }
-}'
-
-# Use by name
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "url": "https://www.example.com",
-    "parser_name": "product-parser"
-}'
-```
-
-**List all parsers:**
-
-```bash
-curl -X GET 'https://api.webit.live/api/v1/parsers' \
---header 'Authorization: Bearer <YOUR-API-KEY>'
-```
-
-**Update parser:**
-
-```bash
-curl -X PUT 'https://api.webit.live/api/v1/parsers' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "name": "product-parser",
-    "parser": {...}
-}'
-```
-
-**Delete parser:**
-
-```bash
-curl -X DELETE 'https://api.webit.live/api/v1/parsers/product-parser' \
---header 'Authorization: Bearer <YOUR-API-KEY>'
-```
-
-<Note>
-  Uploaded parsers are stored separately and can be reused across requests, making them ideal for production use.
-</Note>
