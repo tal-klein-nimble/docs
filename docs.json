@@ -44,7 +44,7 @@
                 "group": "Extract",
                 "pages": [
                   "documentation/web-tools/extract/extract-quickstart",
-                  "documentation/web-tools/extract/w",
+                  "documentation/web-tools/extract/extract",
                   "documentation/web-tools/extract/formats",
                   "documentation/web-tools/extract/geo-targeting",
                   "documentation/web-tools/extract/js-rendering",
