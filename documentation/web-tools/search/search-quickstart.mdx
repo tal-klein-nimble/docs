@@ -1,4 +1,117 @@
 ---
 title: "Quick Start"
+description: "Perform web searches and retrieve parsed content from top results"
 ---
 
+The Search API enables you to perform web searches and automatically retrieve clean, parsed content from results. Choose between fast URL discovery or deep content extraction with automatic parsing.
+
+<Note>
+  For comprehensive details, parameters, and advanced features, see the **Search Usage** page.
+</Note>
+
+## API endpoint
+
+```bash
+POST https://api.webit.live/api/v1/search
+```
+
+## Installation
+
+<CodeGroup>
+
+```python Python
+# pip install nimble-py
+
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+```
+
+
+```node Node.js
+// npm install @nimbleway/sdk
+
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
+```
+
+</CodeGroup>
+
+## Basic search
+
+Use `nimble.search()` to perform a web search and get results.
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+# Initialize client
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "best web scraping tools 2026",
+    "max_results": 10
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+// Initialize client
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
+
+const result = await nimble.search({
+  query: "best web scraping tools 2026",
+  max_results: 10
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "best web scraping tools 2026",
+    "max_results": 10
+}'
+```
+
+</CodeGroup>
+
+## Response
+
+```json
+{
+    "status": "success",
+    "data": {
+        "query": "best web scraping tools 2026",
+        "results": [
+            {
+                "position": 1,
+                "title": "Top 10 Web Scraping Tools for 2026",
+                "description": "Comprehensive guide to the best web scraping tools...",
+                "url": "https://example.com/scraping-tools-2026",
+                "domain": "example.com"
+            }
+        ],
+        "total_results": 10
+    },
+    "metadata": {
+        "country": "US",
+        "execution_time_ms": 850,
+        "credits_used": 1
+    }
+}
+```

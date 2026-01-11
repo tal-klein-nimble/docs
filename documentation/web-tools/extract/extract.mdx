@@ -1,3 +1,958 @@
 ---
 title: "Extract Usage"
+description: "Comprehensive guide to extracting clean data from any URL"
 ---
+
+The Extract API enables you to retrieve clean HTML, text, and structured data from any webpage. With built-in JavaScript rendering, stealth mode, browser actions, and intelligent parsing, you get reliable data extraction without manual configuration.
+
+## When to use
+
+Use the Extract API when you need to:
+
+- **Collect page content**: Get HTML, text, markdown, or structured data
+- **Handle dynamic sites**: Extract content from JavaScript-heavy applications
+- **Bypass anti-bot systems**: Use stealth mode for complex sites
+- **Automate interactions**: Click, scroll, and type with browser actions
+- **Parse structured data**: Define schemas for consistent data extraction
+- **Capture network traffic**: Intercept API calls and AJAX requests
+- **Access geo-restricted content**: Route through specific countries, states, or cities
+
+<Note>
+  Extract automatically handles browser fingerprinting, proxy routing, and rendering for reliable data collection.
+</Note>
+
+## API endpoint
+
+```bash
+POST https://api.webit.live/api/v1/extract
+```
+
+## Core parameters
+
+### Basic parameters
+
+| Parameter | Type    | Description                                        | Required |
+| --------- | ------- | -------------------------------------------------- | -------- |
+| `url`     | String  | The URL to extract content from                    | Yes      |
+| `formats` | Array   | Output formats: html, markdown, text, screenshot   | No       |
+| `render`  | Boolean | Enable JavaScript rendering (default: false)       | No       |
+| `driver`  | String  | Driver to use: vx6, vx8, vx10, vx14 (default: vx6) | No       |
+
+### Rendering options
+
+Available when `render: true`:
+
+| Parameter         | Type    | Description                                   | Default |
+| ----------------- | ------- | --------------------------------------------- | ------- |
+| `render_type`     | String  | When to capture: load, domready, idle2, idle0 | idle2   |
+| `timeout`         | Integer | Maximum render time in milliseconds           | 120000  |
+| `include_iframes` | Boolean | Include iframe content                        | false   |
+| `blocked_domains` | Array   | Block requests to specific domains            | -       |
+
+### Geo targeting
+
+| Parameter | Type   | Description                          | Default |
+| --------- | ------ | ------------------------------------ | ------- |
+| `country` | String | Country code (US, GB, FR, etc.)      | US      |
+| `state`   | String | US state code (only with country=US) | -       |
+| `city`    | String | City name for hyper-local targeting  | -       |
+| `locale`  | String | Browser language preference          | en-US   |
+
+## Usage
+
+### Basic HTML extraction
+
+Extract HTML content from any URL:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com"
+})
+
+# Access HTML content
+html = result["data"]["html"]
+print(html)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com"
+});
+
+// Access HTML content
+const html = result.data.html;
+console.log(html);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com"
+}'
+```
+
+</CodeGroup>
+
+### Multiple output formats
+
+Get content in multiple formats:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["html", "markdown", "text"]
+})
+
+# Access different formats
+html = result["data"]["html"]
+markdown = result["data"]["markdown"]
+text = result["data"]["text"]
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  formats: ["html", "markdown", "text"]
+});
+
+// Access different formats
+const { html, markdown, text } = result.data;
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/article",
+    "formats": ["html", "markdown", "text"]
+}'
+```
+
+</CodeGroup>
+
+### JavaScript rendering
+
+Enable rendering for dynamic sites:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/spa",
+    "render": True,
+    "render_options": {
+        "render_type": "idle0",
+        "timeout": 60000
+    }
+})
+
+print(result["data"]["html"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/spa",
+  render: true,
+  render_options: {
+    render_type: "idle0",
+    timeout: 60000
+  }
+});
+
+console.log(result.data.html);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/spa",
+    "render": true,
+    "render_options": {
+        "render_type": "idle0",
+        "timeout": 60000
+    }
+}'
+```
+
+</CodeGroup>
+
+### Stealth mode
+
+Use stealth mode for anti-bot protection:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.protected-site.com",
+    "render": True,
+    "driver": "vx10"  # Stealth driver
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.protected-site.com",
+  render: true,
+  driver: "vx10"  // Stealth driver
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.protected-site.com",
+    "render": true,
+    "driver": "vx10"
+}'
+```
+
+</CodeGroup>
+
+### Geo targeting
+
+Extract content from specific locations:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/products",
+    "country": "UK",
+    "locale": "en-GB"
+})
+
+# Get UK-specific content
+print(result["data"]["html"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/products",
+  country: "UK",
+  locale: "en-GB"
+});
+
+// Get UK-specific content
+console.log(result.data.html);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/products",
+    "country": "UK",
+    "locale": "en-GB"
+}'
+```
+
+</CodeGroup>
+
+### Browser actions
+
+Automate interactions before extraction:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_and_click": {
+                "selector": "#load-more"
+            }
+        },
+        {
+            "wait": {
+                "duration": 2000
+            }
+        }
+    ]
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_and_click: {
+        selector: "#load-more"
+      }
+    },
+    {
+      wait: {
+        duration: 2000
+      }
+    }
+  ]
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [
+        {
+            "wait_and_click": {
+                "selector": "#load-more"
+            }
+        },
+        {
+            "wait": {
+                "duration": 2000
+            }
+        }
+    ]
+}'
+```
+
+</CodeGroup>
+
+### Parsing with schema
+
+Extract structured data with a parsing schema:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/product",
+    "render": True,
+    "parsing": {
+        "title": {
+            "selector": "h1.product-title"
+        },
+        "price": {
+            "selector": ".price",
+            "type": "number"
+        },
+        "description": {
+            "selector": ".product-description"
+        }
+    }
+})
+
+# Access parsed data
+parsed = result["data"]["parsing"]
+print(f"Title: {parsed['title']}")
+print(f"Price: {parsed['price']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  render: true,
+  parsing: {
+    title: {
+      selector: "h1.product-title"
+    },
+    price: {
+      selector: ".price",
+      type: "number"
+    },
+    description: {
+      selector: ".product-description"
+    }
+  }
+});
+
+// Access parsed data
+const parsed = result.data.parsing;
+console.log(`Title: ${parsed.title}`);
+console.log(`Price: ${parsed.price}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "render": true,
+    "parsing": {
+        "title": {
+            "selector": "h1.product-title"
+        },
+        "price": {
+            "selector": ".price",
+            "type": "number"
+        },
+        "description": {
+            "selector": ".product-description"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+### Network capture
+
+Capture internal API calls:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "network_capture": [
+        {
+            "method": "GET",
+            "url": {
+                "type": "contains",
+                "value": "/api/data"
+            },
+            "resource_type": ["xhr", "fetch"]
+        }
+    ]
+})
+
+# Access captured network requests
+captured = result["data"]["network_capture"]
+for request in captured[0]["result"]:
+    print(request["response"]["body"])
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  network_capture: [
+    {
+      method: "GET",
+      url: {
+        type: "contains",
+        value: "/api/data"
+      },
+      resource_type: ["xhr", "fetch"]
+    }
+  ]
+});
+
+// Access captured network requests
+const captured = result.data.network_capture;
+captured[0].result.forEach(request => {
+  console.log(request.response.body);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "network_capture": [
+        {
+            "method": "GET",
+            "url": {
+                "type": "contains",
+                "value": "/api/data"
+            },
+            "resource_type": ["xhr", "fetch"]
+        }
+    ]
+}'
+```
+
+</CodeGroup>
+
+### Custom headers and cookies
+
+Add authentication or custom headers:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com/protected",
+    "headers": {
+        "User-Agent": "Custom Bot 1.0",
+        "X-API-Key": "your-api-key"
+    },
+    "cookies": [
+        {
+            "key": "session_id",
+            "value": "abc123xyz",
+            "domain": "example.com"
+        }
+    ]
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com/protected",
+  headers: {
+    "User-Agent": "Custom Bot 1.0",
+    "X-API-Key": "your-api-key"
+  },
+  cookies: [
+    {
+      key: "session_id",
+      value: "abc123xyz",
+      domain: "example.com"
+    }
+  ]
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/protected",
+    "headers": {
+        "User-Agent": "Custom Bot 1.0",
+        "X-API-Key": "your-api-key"
+    },
+    "cookies": [
+        {
+            "key": "session_id",
+            "value": "abc123xyz",
+            "domain": "example.com"
+        }
+    ]
+}'
+```
+
+</CodeGroup>
+
+## Output formats
+
+### HTML (default)
+
+Returns the full HTML source of the page.
+
+**Best for:**
+
+- Web scraping and data extraction
+- Custom HTML parsing
+- Preserving complete page structure
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["html"]
+})
+html = result["data"]["html"]
+```
+
+### Markdown
+
+Converts HTML to clean markdown format.
+
+**Best for:**
+
+- Documentation extraction
+- Content migration
+- LLM processing
+- Human-readable output
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["markdown"]
+})
+markdown = result["data"]["markdown"]
+```
+
+### Text
+
+Extracts plain text with scripts and styles removed.
+
+**Best for:**
+
+- Text analysis
+- NLP tasks
+- Content summarization
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["text"]
+})
+text = result["data"]["text"]
+```
+
+### Screenshot
+
+Captures a visual screenshot of the page.
+
+**Best for:**
+
+- Visual verification
+- Monitoring page changes
+- Documentation
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "formats": ["screenshot"]
+})
+screenshot_base64 = result["data"]["screenshot"]
+```
+
+## Driver selection
+
+### vx6 - Non-rendering
+
+Fast HTTP requests without JavaScript execution.
+
+**Best for:**
+
+- Static HTML pages
+- API endpoints
+- High-volume scraping
+- Cost optimization
+
+**Cost:** Lowest (1 credit base)
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "driver": "vx6"
+})
+```
+
+### vx8 - Headless browser
+
+JavaScript rendering with headless Chrome.
+
+**Best for:**
+
+- Dynamic websites
+- Single-page applications
+- Standard scraping needs
+
+**Cost:** Medium (requires `render: true`)
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com/spa",
+    "render": True,
+    "driver": "vx8"
+})
+```
+
+### vx10 - Stealth mode
+
+Advanced stealth browser with anti-detection.
+
+**Best for:**
+
+- Sites with bot protection
+- Complex anti-scraping measures
+- High-value targets
+
+**Cost:** Higher (requires `render: true`)
+
+```python
+result = nimble.extract({
+    "url": "https://www.protected-site.com",
+    "render": True,
+    "driver": "vx10"
+})
+```
+
+### vx14 - LLM-powered
+
+AI-powered extraction with natural language instructions.
+
+**Best for:**
+
+- Complex interactions
+- Dynamic selectors
+- Natural language parsing
+
+**Cost:** Highest (requires `render: true`)
+
+```python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "driver": "vx14",
+    "browser_actions": [
+        {
+            "llm_action": {
+                "instruction": "Click the 'Load More' button until all products are visible"
+            }
+        }
+    ]
+})
+```
+
+## Example response
+
+```json
+{
+  "status": "success",
+  "data": {
+    "html": "<!DOCTYPE html><html>...</html>",
+    "markdown": "# Page Title\n\nContent...",
+    "text": "Page Title\n\nContent...",
+    "parsing": {
+      "title": "Example Product",
+      "price": 29.99
+    },
+    "network_capture": [...]
+  },
+  "metadata": {
+    "task_id": "abc-123-def",
+    "url": "https://www.example.com",
+    "driver": "vx10",
+    "country": "US",
+    "execution_time_ms": 3450,
+    "credits_used": 2
+  }
+}
+```
+
+## Best practices
+
+### Choose the right driver
+
+**Use vx6 for static content:**
+
+```python
+# ✅ Fast and cheap for static HTML
+result = nimble.extract({
+    "url": "https://www.example.com/static",
+    "driver": "vx6"
+})
+
+# ❌ Unnecessary rendering
+result = nimble.extract({
+    "url": "https://www.example.com/static",
+    "render": True,
+    "driver": "vx10"  # Wasted cost
+})
+```
+
+**Use vx10 for protected sites:**
+
+```python
+# ✅ Stealth for anti-bot protection
+result = nimble.extract({
+    "url": "https://www.protected-site.com",
+    "render": True,
+    "driver": "vx10"
+})
+```
+
+### Optimize render settings
+
+**Use appropriate render type:**
+
+```python
+# ✅ Fast render for quick loads
+result = nimble.extract({
+    "url": "https://www.fast-site.com",
+    "render": True,
+    "render_options": {
+        "render_type": "load"  # Fastest
+    }
+})
+
+# ✅ Wait for idle for complete content
+result = nimble.extract({
+    "url": "https://www.slow-loading.com",
+    "render": True,
+    "render_options": {
+        "render_type": "idle0"  # Wait for all activity
+    }
+})
+```
+
+### Request only needed formats
+
+**Be selective with formats:**
+
+```python
+# ✅ Request only what you need
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["markdown"]  # Only markdown
+})
+
+# ❌ Requesting unnecessary formats
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "formats": ["html", "markdown", "text", "screenshot"]  # Overkill
+})
+```
+
+### Use parsing schemas for structured data
+
+**Define clear schemas:**
+
+```python
+# ✅ Well-defined schema
+result = nimble.extract({
+    "url": "https://www.example.com/product",
+    "parsing": {
+        "title": {"selector": "h1.product-name"},
+        "price": {"selector": ".price", "type": "number"},
+        "in_stock": {"selector": ".availability", "type": "boolean"}
+    }
+})
+
+# ❌ Vague or missing selectors
+result = nimble.extract({
+    "url": "https://www.example.com/product",
+    "parsing": {
+        "data": {"selector": "div"}  # Too broad
+    }
+})
+```
+
+## Limitations
+
+### Request limits
+
+- **Maximum timeout**: 180000ms (3 minutes)
+- **Maximum URL length**: 2048 characters
+- **Maximum cookies**: 100 per request
+- **Maximum headers**: 50 per request
+
+### Rate limits
+
+Varies by plan and driver:
+
+| Driver | Starter | Growth | Pro     |
+| ------ | ------- | ------ | ------- |
+| vx6    | 20 r/s  | 50 r/s | 100 r/s |
+| vx8    | 10 r/s  | 30 r/s | 60 r/s  |
+| vx10   | 5 r/s   | 20 r/s | 40 r/s  |
+| vx14   | 5 r/s   | 10 r/s | 20 r/s  |
+
+### Feature requirements
+
+- **JavaScript rendering**: Requires `render: true`
+- **Browser actions**: Requires `render: true`
+- **Network capture**: Requires `render: true`
+- **Screenshot**: Requires `render: true` and `formats: ["screenshot"]`
+- **Stealth mode**: Requires `driver: "vx10"` and `render: true`
+- **LLM mode**: Requires `driver: "vx14"` and `render: true`
+
+### Geographic coverage
+
+- **Countries supported**: 195+
+- **US states**: All 50 states
+- **Cities**: 100+ major cities globally
+- **Default location**: US

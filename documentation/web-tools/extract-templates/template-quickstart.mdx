@@ -3,18 +3,10 @@ title: "Quick Start"
 description: "Ready-to-use extraction templates for popular platforms"
 ---
 
-Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Skip complex configuration and use simple inputs like search terms or product IDs instead of URLs.
-
-Common uses:
-
-- **E-commerce scraping**: Amazon, eBay, Walmart product and search data
-- **Professional data**: LinkedIn profiles, job listings, company information
-- **Search engines**: Google, Bing search results and knowledge panels
-- **Social media**: Twitter, Facebook, Instagram public data
-- **Real estate**: Zillow, Realtor listings and property details
+Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Use simple inputs like product IDs or search terms instead of complex configurations.
 
 <Note>
-  All templates are maintained by Nimble. When sites change, we update templates automatically—no maintenance required on your end.
+  For comprehensive details, template discovery, and advanced usage, see the **Extract Templates** pages.
 </Note>
 
 # Why use templates?
@@ -40,57 +32,60 @@ Common uses:
   </Card>
 </Columns>
 
-## Two main APIs
+<Card title="Explore Template Gallery" icon="sparkles" href="https://online.nimbleway.com/pipeline-gallery">
+  
+</Card>
 
-### Discover Templates
+## API endpoint
 
-1. Templates List
-2. Template Details
-
-Browse and inspect available templates:
-
-```python
-# List templates
-templates = nimble.list_templates(
-    category="ecommerce",
-    page=1,
-    limit=20
-)
-
-# Get template details
-template_info = nimble.get_template("amazon_product")
+```bash
+POST https://api.webit.live/api/v1/extract-templates
 ```
 
-### Extract with Templates
+## Installation
 
-Run a template with simple inputs:
+<CodeGroup>
 
-```python
-result = nimble.extract_template(
-    template="amazon_product",
-    inputs={"asin": "B08N5WRWNW", "zipcode": "90210"}
-)
+```python Python
+# pip install nimble-py
+
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
 ```
 
-## Quick start
 
-### Using a template
+```node Node.js
+// npm install @nimbleway/sdk
+
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
+```
+
+</CodeGroup>
+
+## Using a template
+
+Use `nimble.extract_template()` to extract data from popular platforms.
 
 <CodeGroup>
 
 ```python Python
 from nimble import Nimble
 
+# Initialize client
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-# Extract Amazon product data
-result = nimble.extract_template(
-    template="amazon_product",
-    inputs={
+result = nimble.extract_template({
+    "template": "amazon_product",
+    "inputs": {
         "asin": "B08N5WRWNW",
         "zipcode": "90210"
     }
-)
+})
 
 print(result)
 ```
@@ -99,9 +94,11 @@ print(result)
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
 
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+// Initialize client
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
 
-// Extract Amazon product data
 const result = await nimble.extractTemplate({
   template: "amazon_product",
   inputs: {
@@ -129,99 +126,119 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 
 </CodeGroup>
 
-### Discovering templates
+**Response**
+
+```json
+{
+    "status": "success",
+    "data": {
+        "items": [
+            {
+                "name": "amazon_product",
+                "description": "Extract Amazon product details",
+                "category": "ecommerce",
+                "domain": "amazon.com",
+                "inputs": ["asin", "zipcode"]
+            },
+            {
+                "name": "amazon_search",
+                "description": "Extract Amazon search results",
+                "category": "ecommerce",
+                "domain": "amazon.com",
+                "inputs": ["query", "zipcode"]
+            }
+        ],
+        "total": 45,
+        "page": 1,
+        "limit": 20
+    }
+}
+```
+
+## Discovering templates
+
+Browse available templates before using them.
 
 <CodeGroup>
 
 ```python Python
 from nimble import Nimble
 
+# Initialize client
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-# List all e-commerce templates
-templates = nimble.list_templates(
-    category="ecommerce",
-    page=1,
-    limit=20
-)
+# List templates by category
+templates = nimble.list_templates({
+    "category": "ecommerce",
+    "limit": 20
+})
 
-for template in templates["items"]:
-    print(f"{template['name']}: {template['description']}")
+print(templates)
 ```
 
 
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
 
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+// Initialize client
+const nimble = new Nimble({
+  apiKey: "YOUR-API-KEY",
+});
 
-// List all e-commerce templates
+// List templates by category
 const templates = await nimble.listTemplates({
   category: "ecommerce",
-  page: 1,
   limit: 20
 });
 
-templates.items.forEach(template => {
-  console.log(`${template.name}: ${template.description}`);
-});
+console.log(templates);
 ```
 
 
 ```bash cURL
-curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&page=1&limit=20' \
+curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 
 </CodeGroup>
 
-### Getting template details
+**Response**
 
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-# Get full details for a template
-template = nimble.get_template("amazon_product")
-
-print("Description:", template["description"])
-print("Inputs:", template["input_schema"])
-print("Outputs:", template["output_schema"])
-print("Domain:", template["domain"])
+```json
+{
+    "status": "success",
+    "data": {
+        "title": "Apple AirPods Pro",
+        "price": 249.99,
+        "rating": 4.7,
+        "reviews_count": 45892,
+        "availability": "In Stock",
+        "prime_eligible": true,
+        "description": "Active Noise Cancellation for immersive sound...",
+        "images": [
+            "https://m.media-amazon.com/images/I/71bhWgQK-cL._AC_SL1500_.jpg"
+        ],
+        "features": [
+            "Active Noise Cancellation",
+            "Transparency mode",
+            "Adaptive EQ"
+        ]
+    },
+    "metadata": {
+        "task_id": "abc-123-def",
+        "template": "amazon_product",
+        "execution_time_ms": 2340,
+        "credits_used": 1
+    }
+}
 ```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-// Get full details for a template
-const template = await nimble.getTemplate("amazon_product");
-
-console.log("Description:", template.description);
-console.log("Inputs:", template.input_schema);
-console.log("Outputs:", template.output_schema);
-console.log("Domain:", template.domain);
-```
-
-
-```bash cURL
-curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
---header 'Authorization: Bearer <YOUR-API-KEY>'
-```
-
-</CodeGroup>
 
 ## Popular templates
 
 ### E-commerce
 
 | Template          | Description            | Key Inputs         |
-| ----------------- | ---------------------- | ------------------ |
+| :---------------- | :--------------------- | :----------------- |
 | `amazon_product`  | Amazon product details | `asin`, `zipcode`  |
 | `amazon_search`   | Amazon search results  | `query`, `zipcode` |
 | `walmart_product` | Walmart product data   | `product_id`       |
@@ -230,7 +247,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 ### Professional networks
 
 | Template           | Description           | Key Inputs          |
-| ------------------ | --------------------- | ------------------- |
+| :----------------- | :-------------------- | :------------------ |
 | `linkedin_profile` | LinkedIn profile data | `profile_url`       |
 | `linkedin_jobs`    | LinkedIn job listings | `query`, `location` |
 | `linkedin_company` | Company information   | `company_url`       |
@@ -238,7 +255,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 ### Search engines
 
 | Template        | Description           | Key Inputs          |
-| --------------- | --------------------- | ------------------- |
+| :-------------- | :-------------------- | :------------------ |
 | `google_search` | Google search results | `query`, `country`  |
 | `google_maps`   | Google Maps listings  | `query`, `location` |
 | `bing_search`   | Bing search results   | `query`, `country`  |
@@ -246,7 +263,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 ### Social media
 
 | Template            | Description            | Key Inputs |
-| ------------------- | ---------------------- | ---------- |
+| :------------------ | :--------------------- | :--------- |
 | `twitter_profile`   | Twitter profile data   | `username` |
 | `twitter_search`    | Twitter search results | `query`    |
 | `instagram_profile` | Instagram profile data | `username` |
@@ -254,7 +271,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
 ## Templates vs Custom Extract
 
 | Feature           | Templates            | Custom Extract            |
-| ----------------- | -------------------- | ------------------------- |
+| :---------------- | :------------------- | :------------------------ |
 | **Setup**         | Zero configuration   | Manual configuration      |
 | **Maintenance**   | Maintained by Nimble | You maintain              |
 | **Cost**          | Optimized pricing    | Variable based on config  |
