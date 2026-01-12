@@ -115,14 +115,14 @@ result = nimble.extract({
     "render": True,
     "browser_actions": [
         {
-            "wait_and_type": {
-                "selector": "input[type='search']",
-                "value": "laptop"
+            "fill": {
+                "selectors": ["input[type='search']"],
+                "text": "laptop"
             }
         },
         {
-            "wait_and_click": {
-                "selector": "button[type='submit']"
+            "click": {
+                "selectors": ["button[type='submit']"]
             }
         }
     ]
@@ -142,14 +142,14 @@ const result = await nimble.extract({
   render: true,
   browser_actions: [
     {
-      wait_and_type: {
-        selector: "input[type='search']",
-        value: "laptop"
+      fill: {
+        selectors: ["input[type='search']"],
+        text: "laptop"
       }
     },
     {
-      wait_and_click: {
-        selector: "button[type='submit']"
+      click: {
+        selectors: ["button[type='submit']"]
       }
     }
   ]
@@ -168,14 +168,14 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "render": true,
     "browser_actions": [
         {
-            "wait_and_type": {
-                "selector": "input[type='\''search'\'']",
-                "value": "laptop"
+            "fill": {
+                "selectors": ["input[type='\''search'\'']"],
+                "text": "laptop"
             }
         },
         {
-            "wait_and_click": {
-                "selector": "button[type='\''submit'\'']"
+            "click": {
+                "selectors": ["button[type='\''submit'\'']"]
             }
         }
     ]
