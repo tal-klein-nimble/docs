@@ -211,6 +211,7 @@
           {
             "group": "Endpoints",
             "icon": "server",
+            "hidden": true,
             "pages": [
               "endpoints/overview",
               "endpoints/user",
