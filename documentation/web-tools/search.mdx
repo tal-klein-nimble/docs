@@ -1047,30 +1047,6 @@ console.log(`Extracted ${extractedContent.length} high-authority sources`);
 - Building comprehensive research datasets
 - Content quality matters more than cost
 
-### Optimize credit usage
-
-**Cost-effective Fast Mode:**
-
-```python
-# ✅ Fast Mode (1 credit) + selective extraction
-search = nimble.search({
-    "query": "topic",
-    "max_results": 20  # 1 credit
-})
-
-# Extract only top 3 results (3 more credits = 4 total)
-top_urls = [r["url"] for r in search["data"]["results"][:3]]
-for url in top_urls:
-    content = nimble.extract({"url": url})
-
-# ❌ Deep Search all 20 (21 credits)
-search = nimble.search({
-    "query": "topic",
-    "max_results": 20,
-    "deep_search": True  # 1 + 20 = 21 credits
-})
-```
-
 ### Domain filtering best practices
 
 **Use include_domains for trusted sources:**
@@ -1114,29 +1090,6 @@ result = nimble.search({
 })
 ```
 
-### Output format selection
-
-**Choose markdown for most use cases:**
-
-```python
-# ✅ Best for LLM processing and documentation
-output_format = "markdown"
-```
-
-**Use plain text for analysis:**
-
-```python
-# ✅ For NLP, text analysis, summarization
-output_format = "plain_text"
-```
-
-**Use simplified HTML for parsing:**
-
-```python
-# ✅ When you need structure but not full HTML
-output_format = "simplified_html"
-```
-
 ### Time filtering strategies
 
 **Use time_range for recency:**
@@ -1158,35 +1111,4 @@ result = nimble.search({
     "start_date": "2020-01-01",
     "end_date": "2020-12-31"
 })
-```
-
-### Handle pagination
-
-**Process results in batches:**
-
-```python
-def search_with_batching(query, total_needed=100):
-    """Get more than 100 results by using multiple searches"""
-    all_results = []
-    batch_size = 50
-
-    # First batch
-    result = nimble.search({
-        "query": query,
-        "max_results": batch_size
-    })
-    all_results.extend(result["data"]["results"])
-
-    # Add domain exclusions for next batch to get different results
-    seen_domains = list(set([r["domain"] for r in all_results]))
-
-    # Second batch
-    result = nimble.search({
-        "query": query,
-        "max_results": batch_size,
-        "exclude_domains": seen_domains[:50]  # Max 50 domains
-    })
-    all_results.extend(result["data"]["results"])
-
-    return all_results[:total_needed]
 ```
