@@ -36,19 +36,20 @@ Available in - Extract.
 
 ### Available actions
 
-| Action            | Description                                    |
-| ----------------- | ---------------------------------------------- |
-| `sleep`           | Add a delay between actions (milliseconds)     |
-| `wait_for`        | Wait until a selector appears on the page      |
-| `wait_and_click`  | Wait for an element and click it               |
-| `wait_and_type`   | Wait for an input field and type text          |
-| `paste`           | Paste text into an input field quickly         |
-| `scroll`          | Scroll to specific X/Y coordinates             |
-| `scroll_to`       | Scroll to bring a selector into view           |
-| `infinite_scroll` | Handle lazy-loading pages with infinite scroll |
-| `screenshot`      | Capture a screenshot of the page               |
-| `get_cookies`     | Collect cookies from the page                  |
-| `http_request`    | Execute additional HTTP requests               |
+| Action            | Description                                        |
+| ----------------- | -------------------------------------------------- |
+| `goto`            | Navigate to a URL                                  |
+| `sleep`           | Add a delay between actions                        |
+| `wait_for`        | Wait until a selector appears on the page          |
+| `wait_for_url`    | Wait for navigation to URL matching a pattern      |
+| `click`           | Wait for an element and click it                   |
+| `press`           | Press keyboard key (Enter, Tab, Escape, etc.)      |
+| `fill`            | Input text using paste (fast) or type (keystrokes) |
+| `scroll`          | Scroll by pixels, to element, or auto-scroll       |
+| `infinite_scroll` | Handle lazy-loading pages with infinite scroll     |
+| `screenshot`      | Capture a screenshot of the page                   |
+| `get_cookies`     | Collect cookies from the page                      |
+| `http_request`    | Execute additional HTTP requests                   |
 
 <Note>
   Browser Actions require page rendering to be enabled (`render: true`). All operations execute sequentially within a global **240-second timeout**.
@@ -56,14 +57,22 @@ Available in - Extract.
 
 ## Usage
 
-### Sleep (delay)
+### Navigate to URL
 
-Add a delay between actions to simulate human behavior or allow elements to load.
+Navigate to a different URL during the browser session.
 
 **Parameters:**
 
-- `delay` (required) - Time to pause in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass URL as a string:
+
+- `goto` (required) - URL to navigate to
+
+**Extended form** - Use object with options:
+
+- `url` (required) - URL to navigate to (string)
+- `timeout` (optional) - Maximum wait time in milliseconds (number, default: 1000)
+- `referer` (optional) - Referer header to send (string)
+- `wait_until` (optional) - Navigation wait condition: `'load'`, `'domcontentloaded'`, `'networkidle'`, or `'commit'`
 
 <CodeGroup>
 
@@ -72,13 +81,28 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - simple navigation
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
-            "wait": {
-                "delay": 500
+            "goto": "https://www.example.com/products"  # Navigate to products page
+        }
+    ]
+})
+
+# Extended form - with wait condition
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "goto": {
+                "url": "https://www.example.com/products",
+                "wait_until": "networkidle",
+                "timeout": 5000,
+                "referer": "https://www.google.com"
             }
         }
     ]
@@ -93,13 +117,28 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - simple navigation
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
-      wait: {
-        delay: 500
+      goto: "https://www.example.com/products"  // Navigate to products page
+    }
+  ]
+});
+
+// Extended form - with wait condition
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      goto: {
+        url: "https://www.example.com/products",
+        wait_until: "networkidle",
+        timeout: 5000,
+        referer: "https://www.google.com"
       }
     }
   ]
@@ -110,6 +149,7 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -117,8 +157,135 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "wait": {
-            "delay": 500
+        "goto": "https://www.example.com/products"
+    }]
+}'
+
+# Extended form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "goto": {
+            "url": "https://www.example.com/products",
+            "wait_until": "networkidle",
+            "timeout": 5000,
+            "referer": "https://www.google.com"
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+### Sleep (delay)
+
+Add a delay between actions to simulate human behavior or allow elements to load.
+
+**Parameters:**
+
+**Direct form** - Pass duration as a string:
+
+- `sleep` (required) - Duration string (e.g., "2s", "500ms", "1.5s")
+
+**Extended form** - Use object with options:
+
+- `duration` (required) - Duration string (e.g., "2s", "500ms", "1.5s")
+- `required` (optional) - Set to `false` to make this step optional (boolean, default: `true`)
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Direct form - simple delay
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "sleep": "2s"  # Wait for 2 seconds
+        }
+    ]
+})
+
+# Extended form - with options
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "sleep": {
+                "duration": "500ms",
+                "required": False
+            }
+        }
+    ]
+})
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Direct form - simple delay
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      sleep: "2s"  // Wait for 2 seconds
+    }
+  ]
+});
+
+// Extended form - with options
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      sleep: {
+        duration: "500ms",
+        required: false
+      }
+    }
+  ]
+});
+```
+
+
+```bash cURL
+# Direct form
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "sleep": "2s"
+    }]
+}'
+
+# Extended form
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "sleep": {
+            "duration": "500ms",
+            "required": false
         }
     }]
 }'
@@ -132,9 +299,15 @@ Wait until a specific element appears on the page before continuing.
 
 **Parameters:**
 
-- `selectors` (required) - Array of CSS selectors to wait for
-- `timeout` (optional) - Maximum time to wait in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass selectors array directly:
+
+- `wait_for` (required) - Array of CSS selectors to wait for (any one matching triggers success)
+
+**Extended form** - Use object with options:
+
+- `selectors` (required) - Array of CSS selectors to wait for (any one matching triggers success)
+- `state` (optional) - Element state to wait for: `'attached'` (present in DOM), `'detached'` (not in DOM), `'visible'` (present and visible, default), or `'hidden'` (not visible)
+- `timeout` (optional) - Duration string (e.g., "2s", "500ms", "1.5s", default: "1s")
 
 <CodeGroup>
 
@@ -143,14 +316,27 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - simple selector wait
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_for": ["body", "#content"]  # Wait for any of these selectors
+        }
+    ]
+})
+
+# Extended form - with state and timeout options
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
             "wait_for": {
-                "selectors": ["body", "#content"],
-                "timeout": 2000
+                "selectors": [".dynamic-content", "#loaded"],
+                "state": "visible",  # Wait for element to be visible
+                "timeout": "5s"
             }
         }
     ]
@@ -165,14 +351,27 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - simple selector wait
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
+      wait_for: ["body", "#content"]  // Wait for any of these selectors
+    }
+  ]
+});
+
+// Extended form - with state and timeout options
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
       wait_for: {
-        selectors: ["body", "#content"],
-        timeout: 2000
+        selectors: [".dynamic-content", "#loaded"],
+        state: "visible",  // Wait for element to be visible
+        timeout: "5s"
       }
     }
   ]
@@ -183,6 +382,19 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_for": ["body", "#content"]
+    }]
+}'
+
+# Extended form
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -191,8 +403,9 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "render": true,
     "browser_actions": [{
         "wait_for": {
-            "selectors": ["body", "#content"],
-            "timeout": 2000
+            "selectors": [".dynamic-content", "#loaded"],
+            "state": "visible",
+            "timeout": "5s"
         }
     }]
 }'
@@ -200,18 +413,186 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-### Wait and click
+### Wait for URL
+
+Wait for navigation to a URL matching a pattern or glob.
+
+**Parameters:**
+
+**Direct form** - Pass URL pattern as a string:
+
+- `wait_for_url` (required) - URL pattern or glob to match (exact match if no wildcards)
+
+**Extended form** - Use object with options:
+
+- `url` (required) - URL pattern or glob to match (string). Without wildcards, waits for exact URL match.
+- `wait_until` (optional) - Navigation wait condition: `'load'`, `'domcontentloaded'`, `'networkidle'`, or `'commit'`
+- `timeout` (optional) - Maximum wait time (Duration string, default: "1s")
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Direct form - exact URL match
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_for_url": "https://www.example.com/products"  # Wait for exact URL
+        }
+    ]
+})
+
+# Direct form - glob pattern
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_for_url": "**\/products\/*"  # Wait for any products page
+        }
+    ]
+})
+
+# Extended form - with options
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "wait_for_url": {
+                "url": "**\/checkout\/*",
+                "wait_until": "networkidle",
+                "timeout": "10s"
+            }
+        }
+    ]
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Direct form - exact URL match
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_for_url: "https://www.example.com/products"  // Wait for exact URL
+    }
+  ]
+});
+
+// Direct form - glob pattern
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_for_url: "**/products/*"  // Wait for any products page
+    }
+  ]
+});
+
+// Extended form - with options
+const result3 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      wait_for_url: {
+        url: "**/checkout/*",
+        wait_until: "networkidle",
+        timeout: "10s"
+      }
+    }
+  ]
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+# Direct form - exact URL
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_for_url": "https://www.example.com/products"
+    }]
+}'
+
+# Direct form - glob pattern
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_for_url": "**/products/*"
+    }]
+}'
+
+# Extended form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "wait_for_url": {
+            "url": "**/checkout/*",
+            "wait_until": "networkidle",
+            "timeout": "10s"
+        }
+    }]
+}'
+```
+
+</CodeGroup>
+
+### Click
 
 Wait for an element to appear and click it.
 
 **Parameters:**
 
-- `selector` (required) - CSS selector of the element to click
-- `timeout` (optional) - Maximum time to wait for the click action in milliseconds
-- `delay` (optional) - Time to pause before executing the click in milliseconds
-- `scroll` (optional) - Scroll element into view if hidden (boolean)
-- `visible` (optional) - Wait for element to be visible, not just present in DOM (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass selectors array directly:
+
+- `click` (required) - Array of CSS selectors (clicks first matching element)
+
+**Extended form** - Use object with options:
+
+- `selectors` (required) - Array of CSS selectors (clicks first matching element)
+- `offset_x` (optional) - X offset in pixels from top-left corner of element (number, default: center)
+- `offset_y` (optional) - Y offset in pixels from top-left corner of element (number, default: center)
+- `button` (optional) - Mouse button to use: `'left'`, `'right'`, or `'middle'` (default: `'left'`)
+- `duration` (optional) - Delay between mousedown and mouseup (Duration string, default: "50ms")
+- `visible` (optional) - Wait for element to be visible (boolean)
+- `scroll` (optional) - Scroll element into view before clicking (boolean, default: `true`)
+- `click_count` (optional) - Number of clicks: 1 for single, 2 for double (number, default: 1)
+- `delay` (optional) - Alternative delay between mousedown and mouseup (Duration string)
+- `steps` (optional) - Number of mouse movement steps (number)
+- `timeout` (optional) - Maximum wait time for element (Duration string)
+- `force` (optional) - Skip actionability checks (boolean, default: `false`)
+- `modifiers` (optional) - Modifier keys to hold: `['Alt']`, `['Control']`, `['Meta']`, `['Shift']` (array)
+- `required` (optional) - Set to `false` to make this step optional (boolean, default: `true`)
 
 <CodeGroup>
 
@@ -220,17 +601,30 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - simple click
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
-            "wait_and_click": {
-                "selector": "button.load-more",
-                "timeout": 20000,
-                "delay": 500,
+            "click": ["button.load-more", "#show-more"]  # Click first matching element
+        }
+    ]
+})
+
+# Extended form - with options
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "click": {
+                "selectors": ["button.load-more"],
+                "timeout": "20s",
+                "delay": "500ms",
                 "scroll": True,
-                "visible": False
+                "visible": True,
+                "click_count": 2  # Double-click
             }
         }
     ]
@@ -245,17 +639,30 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - simple click
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
-      wait_and_click: {
-        selector: "button.load-more",
-        timeout: 20000,
-        delay: 500,
+      click: ["button.load-more", "#show-more"]  // Click first matching element
+    }
+  ]
+});
+
+// Extended form - with options
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      click: {
+        selectors: ["button.load-more"],
+        timeout: "20s",
+        delay: "500ms",
         scroll: true,
-        visible: false
+        visible: true,
+        click_count: 2  // Double-click
       }
     }
   ]
@@ -266,6 +673,7 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -273,12 +681,25 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "wait_and_click": {
-            "selector": "button.load-more",
-            "timeout": 20000,
-            "delay": 500,
+        "click": ["button.load-more", "#show-more"]
+    }]
+}'
+
+# Extended form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "click": {
+            "selectors": ["button.load-more"],
+            "timeout": "20s",
+            "delay": "500ms",
             "scroll": true,
-            "visible": false
+            "visible": true,
+            "click_count": 2
         }
     }]
 }'
@@ -286,19 +707,21 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-### Wait and type
+### Press
 
-Wait for an input field and type text into it.
+Press a keyboard key like Enter, Tab, Escape, or arrow keys.
 
 **Parameters:**
 
-- `selector` (required) - CSS selector of the input element
-- `value` (required) - Text to type into the element
-- `timeout` (optional) - Maximum time to wait for the action in milliseconds
-- `delay` (optional) - Time to pause before typing in milliseconds
-- `click_on_element` (optional) - Click the element before typing (boolean)
-- `visible` (optional) - Wait for element to be visible (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass key name as a string:
+
+- `press` (required) - Key name to press (e.g., "Enter", "Tab", "Escape", "ArrowDown")
+
+**Extended form** - Use object with options:
+
+- `key` (required) - Key name to press (string)
+- `delay` (optional) - Time to wait between keydown and keyup (Duration string, default: "0ms")
+- `timeout` (optional) - Maximum wait time in milliseconds (number, default: 10000)
 
 <CodeGroup>
 
@@ -307,18 +730,27 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - press Enter key
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
-            "wait_and_type": {
-                "selector": "input[type='search']",
-                "value": "eggplant",
-                "timeout": 20000,
-                "delay": 500,
-                "click_on_element": True,
-                "visible": False
+            "press": "Enter"  # Press Enter key
+        }
+    ]
+})
+
+# Extended form - press with delay
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "press": {
+                "key": "Tab",
+                "delay": "100ms",
+                "timeout": 5000
             }
         }
     ]
@@ -333,18 +765,27 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - press Enter key
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
-      wait_and_type: {
-        selector: "input[type='search']",
-        value: "eggplant",
-        timeout: 20000,
-        delay: 500,
-        click_on_element: true,
-        visible: false
+      press: "Enter"  // Press Enter key
+    }
+  ]
+});
+
+// Extended form - press with delay
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      press: {
+        key: "Tab",
+        delay: "100ms",
+        timeout: 5000
       }
     }
   ]
@@ -355,6 +796,7 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -362,13 +804,22 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "wait_and_type": {
-            "selector": "input[type='\''search'\'']",
-            "value": "eggplant",
-            "timeout": 20000,
-            "delay": 500,
-            "click_on_element": true,
-            "visible": false
+        "press": "Enter"
+    }]
+}'
+
+# Extended form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "press": {
+            "key": "Tab",
+            "delay": "100ms",
+            "timeout": 5000
         }
     }]
 }'
@@ -376,19 +827,20 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-### Paste
+### Fill
 
-Quickly paste text into an input field.
+Input text into an element using paste (fast) or type (simulates keystrokes).
 
 **Parameters:**
 
-- `selector` (required) - CSS selector of the input element
-- `value` (required) - Text to paste into the element
-- `timeout` (optional) - Maximum time to wait for the action in milliseconds
-- `delay` (optional) - Time to pause before pasting in milliseconds
-- `click_on_element` (optional) - Click the element before pasting (boolean)
-- `visible` (optional) - Wait for element to be visible (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Extended form only** - No direct form available:
+
+- `selectors` (required) - Array of CSS selectors for the input element
+- `text` (required) - Text to input into the element (string)
+- `method` (optional) - Input method: `'paste'` (default, faster) or `'type'` (simulates keystrokes)
+- `interval` (optional) - Typing interval in milliseconds (only for `method: "type"`, number)
+- `focus` (optional) - Focus element before input (boolean)
+- `timeout` (optional) - Maximum wait time for element (Duration string)
 
 <CodeGroup>
 
@@ -397,18 +849,35 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Paste method (default, faster)
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
-            "paste": {
-                "selector": "input[type='search']",
-                "value": "eggplant",
-                "timeout": 20000,
-                "delay": 500,
-                "click_on_element": True,
-                "visible": False
+            "fill": {
+                "selectors": ["input[type='search']", "#search-input"],
+                "text": "web scraping tools",
+                "method": "paste",  # Default method
+                "focus": True,
+                "timeout": "10s"
+            }
+        }
+    ]
+})
+
+# Type method (simulates keystrokes)
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "fill": {
+                "selectors": ["input[type='search']"],
+                "text": "web scraping",
+                "method": "type",
+                "interval": 100,  # 100ms between keystrokes
+                "focus": True
             }
         }
     ]
@@ -423,18 +892,35 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Paste method (default, faster)
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
-      paste: {
-        selector: "input[type='search']",
-        value: "eggplant",
-        timeout: 20000,
-        delay: 500,
-        click_on_element: true,
-        visible: false
+      fill: {
+        selectors: ["input[type='search']", "#search-input"],
+        text: "web scraping tools",
+        method: "paste",  // Default method
+        focus: true,
+        timeout: "10s"
+      }
+    }
+  ]
+});
+
+// Type method (simulates keystrokes)
+const result2 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      fill: {
+        selectors: ["input[type='search']"],
+        text: "web scraping",
+        method: "type",
+        interval: 100,  // 100ms between keystrokes
+        focus: true
       }
     }
   ]
@@ -445,6 +931,7 @@ console.log(result);
 
 
 ```bash cURL
+# Paste method (default)
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -452,13 +939,30 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "paste": {
-            "selector": "input[type='\''search'\'']",
-            "value": "eggplant",
-            "timeout": 20000,
-            "delay": 500,
-            "click_on_element": true,
-            "visible": false
+        "fill": {
+            "selectors": ["input[type='\''search'\'']", "#search-input"],
+            "text": "web scraping tools",
+            "method": "paste",
+            "focus": true,
+            "timeout": "10s"
+        }
+    }]
+}'
+
+# Type method
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "fill": {
+            "selectors": ["input[type='\''search'\'']"],
+            "text": "web scraping",
+            "method": "type",
+            "interval": 100,
+            "focus": true
         }
     }]
 }'
@@ -466,17 +970,39 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 </CodeGroup>
 
-### Scroll to coordinates
+### Scroll
 
-Scroll to specific X/Y coordinates on the page.
+Scroll the page by pixels, to a specific element, or continuously with auto-scroll mode.
 
 **Parameters:**
 
-- `x` (required) - Horizontal scroll position
-- `y` (required) - Vertical scroll position
-- `timeout` (optional) - Maximum time for scroll action in milliseconds
-- `scroll_in_element` (optional) - CSS selector of container to scroll within (for scrolling inside sidebars, modals, etc.)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass number for Y-axis pixel scroll:
+
+- `scroll` (required) - Number of pixels to scroll vertically (positive = down)
+
+**Extended form - Scroll by pixels:**
+
+- `y` (optional) - Scroll Y pixels (positive = down, number)
+- `x` (optional) - Scroll X pixels (positive = right, number)
+- `container` (optional) - Selectors array for scrolling within a container element
+
+**Extended form - Scroll to element:**
+
+- `to` (required) - Selectors array of element to scroll to
+- `visible` (optional) - Wait for element to be visible (boolean)
+- `timeout` (optional) - Maximum wait time (Duration string)
+- `container` (optional) - Selectors array for scrolling within a container element
+
+**Extended form - Auto scroll (continuous):**
+
+- `mode` (required) - Set to `"auto"` for continuous scrolling
+- `duration` (required) - Duration to scroll (Duration string)
+- `interval` (optional) - Milliseconds between scroll steps (number)
+- `step` (optional) - Pixels per scroll step (number)
+- `pause_on` (optional) - Selectors array to pause scrolling when element appears
+- `click_on` (optional) - Selectors array to click during auto scroll (e.g., "Load more" button)
+- `idle_timeout` (optional) - Stop after idle for this duration (Duration string)
+- `container` (optional) - Selectors array for scrolling within a container element
 
 <CodeGroup>
 
@@ -485,6 +1011,18 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - scroll Y by 500px
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "scroll": 500  # Scroll down 500 pixels
+        }
+    ]
+})
+
+# Extended form - scroll by pixels
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
@@ -492,8 +1030,39 @@ result = nimble.extract({
         {
             "scroll": {
                 "x": 0,
-                "y": 1000,
-                "timeout": 20000
+                "y": 1000
+            }
+        }
+    ]
+})
+
+# Extended form - scroll to element
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "scroll": {
+                "to": ["#footer", ".bottom-section"],
+                "visible": True,
+                "timeout": "5s"
+            }
+        }
+    ]
+})
+
+# Extended form - auto scroll (continuous)
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "scroll": {
+                "mode": "auto",
+                "duration": "25s",
+                "interval": 1000,
+                "step": 300,
+                "idle_timeout": "5s"
             }
         }
     ]
@@ -508,15 +1077,58 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - scroll Y by 500px
 const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      scroll: 500  // Scroll down 500 pixels
+    }
+  ]
+});
+
+// Extended form - scroll by pixels
+const result2 = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
       scroll: {
         x: 0,
-        y: 1000,
-        timeout: 20000
+        y: 1000
+      }
+    }
+  ]
+});
+
+// Extended form - scroll to element
+const result3 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      scroll: {
+        to: ["#footer", ".bottom-section"],
+        visible: true,
+        timeout: "5s"
+      }
+    }
+  ]
+});
+
+// Extended form - auto scroll (continuous)
+const result4 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      scroll: {
+        mode: "auto",
+        duration: "25s",
+        interval: 1000,
+        step: 300,
+        idle_timeout: "5s"
       }
     }
   ]
@@ -527,6 +1139,19 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "scroll": 500
+    }]
+}'
+
+# Extended form - scroll by pixels
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -536,72 +1161,12 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "browser_actions": [{
         "scroll": {
             "x": 0,
-            "y": 1000,
-            "timeout": 20000
+            "y": 1000
         }
     }]
 }'
-```
 
-</CodeGroup>
-
-### Scroll to selector
-
-Scroll to bring a specific element into view.
-
-**Parameters:**
-
-- `selector` (required) - CSS selector of the element to scroll to
-- `visible` (optional) - Wait for element to be visible before scrolling (boolean)
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract({
-    "url": "https://www.example.com",
-    "render": True,
-    "browser_actions": [
-        {
-            "scroll_to": {
-                "selector": "#footer",
-                "visible": False
-            }
-        }
-    ]
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extract({
-  url: "https://www.example.com",
-  render: true,
-  browser_actions: [
-    {
-      scroll_to: {
-        selector: "#footer",
-        visible: false
-      }
-    }
-  ]
-});
-
-console.log(result);
-```
-
-
-```bash cURL
+# Extended form - scroll to element
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -609,9 +1174,28 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "scroll_to": {
-            "selector": "#footer",
-            "visible": false
+        "scroll": {
+            "to": ["#footer", ".bottom-section"],
+            "visible": true,
+            "timeout": "5s"
+        }
+    }]
+}'
+
+# Extended form - auto scroll
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "scroll": {
+            "mode": "auto",
+            "duration": "25s",
+            "interval": 1000,
+            "step": 300,
+            "idle_timeout": "5s"
         }
     }]
 }'
@@ -857,15 +1441,21 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 ### Execute HTTP requests
 
-Perform additional HTTP GET/POST requests to internal APIs.
+Make HTTP requests from page context to internal APIs.
 
 **Parameters:**
 
-- `url` (required) - Target URL for the HTTP request
-- `method` (optional) - HTTP method: `GET` or `POST` (default: `GET`)
-- `headers` (optional) - Additional headers as JSON object
-- `timeout` (optional) - Request timeout in milliseconds
-- `required` (optional) - Set to `false` to make this step optional and continue execution on failure (boolean, default: `true`)
+**Direct form** - Pass URL as a string:
+
+- `http_request` (required) - URL for the HTTP request (GET method)
+
+**Extended form** - Use object with options:
+
+- `url` (required) - Target URL for the HTTP request (string)
+- `method` (optional) - HTTP method: `'GET'`, `'POST'`, `'PUT'`, `'DELETE'`, etc. (default: `'GET'`)
+- `headers` (optional) - Request headers as key-value object (default: `{}`)
+- `body` (optional) - Request body as string
+- `timeout` (optional) - Request timeout (Duration string, default: "5s")
 
 <CodeGroup>
 
@@ -874,6 +1464,18 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
+# Direct form - simple GET request
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "http_request": "https://api.example.com/data"  # Simple GET request
+        }
+    ]
+})
+
+# Extended form - POST with headers and body
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
@@ -885,7 +1487,8 @@ result = nimble.extract({
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "timeout": 5000
+                "body": '{"key": "value"}',
+                "timeout": "10s"
             }
         }
     ]
@@ -900,7 +1503,19 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
+// Direct form - simple GET request
 const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      http_request: "https://api.example.com/data"  // Simple GET request
+    }
+  ]
+});
+
+// Extended form - POST with headers and body
+const result2 = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
@@ -911,7 +1526,8 @@ const result = await nimble.extract({
         headers: {
           "Content-Type": "application/json"
         },
-        timeout: 5000
+        body: '{"key": "value"}',
+        timeout: "10s"
       }
     }
   ]
@@ -922,6 +1538,19 @@ console.log(result);
 
 
 ```bash cURL
+# Direct form
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "http_request": "https://api.example.com/data"
+    }]
+}'
+
+# Extended form
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -935,7 +1564,8 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
             "headers": {
                 "Content-Type": "application/json"
             },
-            "timeout": 5000
+            "body": "{\"key\": \"value\"}",
+            "timeout": "10s"
         }
     }]
 }'
@@ -963,26 +1593,23 @@ result = nimble.extract({
     "render": True,
     "browser_actions": [
         {
-            "wait_and_type": {
-                "selector": "input[type='search']",
-                "value": "laptop",
-                "click_on_element": True
+            "fill": {
+                "selectors": ["input[type='search']"],
+                "text": "laptop"
             }
         },
         {
-            "wait": {
-                "delay": 1000
-            }
+            "sleep": "1s"
         },
         {
-            "wait_and_click": {
-                "selector": "button[type='submit']"
+            "click": {
+                "selectors": ["button[type='submit']"]
             }
         },
         {
             "wait_for": {
                 "selectors": [".results"],
-                "timeout": 5000
+                "timeout": "5s"
             }
         }
     ]
@@ -1002,26 +1629,23 @@ const result = await nimble.extract({
   render: true,
   browser_actions: [
     {
-      wait_and_type: {
-        selector: "input[type='search']",
-        value: "laptop",
-        click_on_element: true
+      fill: {
+        selectors: ["input[type='search']"],
+        text: "laptop"
       }
     },
     {
-      wait: {
-        delay: 1000
-      }
+      sleep: "1s"
     },
     {
-      wait_and_click: {
-        selector: "button[type='submit']"
+      click: {
+        selectors: ["button[type='submit']"]
       }
     },
     {
       wait_for: {
         selectors: [".results"],
-        timeout: 5000
+        timeout: "5s"
       }
     }
   ]
@@ -1040,26 +1664,23 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "render": true,
     "browser_actions": [
         {
-            "wait_and_type": {
-                "selector": "input[type='\''search'\'']",
-                "value": "laptop",
-                "click_on_element": true
+            "fill": {
+                "selectors": ["input[type='\''search'\'']"],
+                "text": "laptop"
             }
         },
         {
-            "wait": {
-                "delay": 1000
-            }
+            "sleep": "1s"
         },
         {
-            "wait_and_click": {
-                "selector": "button[type='\''submit'\'']"
+            "click": {
+                "selectors": ["button[type='\''submit'\'']"]
             }
         },
         {
             "wait_for": {
                 "selectors": [".results"],
-                "timeout": 5000
+                "timeout": "5s"
             }
         }
     ]
@@ -1141,14 +1762,14 @@ The response includes:
 # ✅ Continue even if optional element isn't found
 browser_actions = [
     {
-        "wait_and_click": {
-            "selector": ".cookie-banner button",
+        "click": {
+            "selectors": [".cookie-banner button"],
             "required": False  # Don't fail if banner doesn't exist
         }
     },
     {
-        "wait_and_click": {
-            "selector": ".submit-button",
+        "click": {
+            "selectors": [".submit-button"],
             "required": True  # This is critical
         }
     }
@@ -1157,8 +1778,8 @@ browser_actions = [
 # ❌ Fail entire request if cookie banner isn't found
 browser_actions = [
     {
-        "wait_and_click": {
-            "selector": ".cookie-banner button"
+        "click": {
+            "selectors": [".cookie-banner button"]
             # required defaults to True
         }
     }
@@ -1173,14 +1794,12 @@ browser_actions = [
 # ✅ Wait for content to load between actions
 browser_actions = [
     {
-        "wait_and_click": {
-            "selector": "button.load-more"
+        "click": {
+            "selectors": ["button.load-more"]
         }
     },
     {
-        "wait": {
-            "delay": 2000  # Wait for new content
-        }
+        "sleep": "2s"  # Wait for new content to load
     },
     {
         "wait_for": {
@@ -1192,13 +1811,13 @@ browser_actions = [
 # ❌ No wait - may act on stale content
 browser_actions = [
     {
-        "wait_and_click": {
-            "selector": "button.load-more"
+        "click": {
+            "selectors": ["button.load-more"]
         }
     },
     {
-        "wait_and_click": {
-            "selector": ".new-content button"  # May not exist yet
+        "click": {
+            "selectors": [".new-content button"]  # May not exist yet
         }
     }
 ]
