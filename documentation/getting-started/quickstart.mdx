@@ -9,65 +9,209 @@ This guide will help you make your first request with Nimble in just a few minut
 
 ## 1. Get Your API Key
 
-First, obtain your API key from the Nimble dashboard.
+First, obtain your API key from the [Nimble dashboard](https://online.nimbleway.com).
 
-## 2. Make Your First Request
+## 2. Installation
 
-### Node.js
+Install the Nimble SDK in your preferred language:
 
-```javascript
-import { NimbleClient } from '@nimbleway/sdk';
+<CodeGroup>
 
-const client = new NimbleClient({
-  apiKey: 'your-api-key'
+```bash Python
+pip install nimble-py
+```
+
+
+```bash Node.js
+npm install @nimbleway/sdk
+```
+
+</CodeGroup>
+
+## 3. Quick Examples
+
+### Extract
+
+Get clean HTML and structured data from any URL:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true
 });
 
-const response = await client.webApi.get('https://example.com');
-console.log(response.data);
+console.log(result);
 ```
 
-### Python
 
-```python
-from nimble_sdk import NimbleClient
-
-client = NimbleClient(api_key='your-api-key')
-response = client.web_api.get('https://example.com')
-print(response.data)
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true
+}'
 ```
 
-## Next Steps
+</CodeGroup>
 
-Explore the **Web Tools** documentatiom
+### Extract Templates
+
+Use pre-built templates for popular platforms:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.extract_template({
+    "template": "amazon_pdp",
+    "params": {
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.extractTemplate({
+  template: "amazon_pdp",
+  params: {
+    asin: "B08N5WRWNW",
+    zipcode: "90210"
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract-template' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "amazon_pdp",
+    "params": {
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+}'
+```
+
+</CodeGroup>
+
+### Search
+
+Perform web searches and get structured results:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "data scraping tools",
+    "search_engine": "google",
+    "country": "US"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.search({
+  query: "data scraping tools",
+  search_engine: "google",
+  country: "US"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "data scraping tools",
+    "search_engine": "google",
+    "country": "US"
+}'
+```
+
+</CodeGroup>
+
+## 4. Next Steps
+
+Explore the **Web Tools** documentation:
 
 <Columns cols={3}>
-  <Card title="Extract" icon="arrows-to-circle">
+  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract-quickstart">
     Get clean & structured data from any URL
   </Card>
-  <Card title="Extract Templates" icon="sparkles">
+  <Card title="Extract Templates" icon="sparkles" href="/documentation/web-tools/extract-templates/template-quickstart">
     Ready-to-use extraction templates for popular platforms
   </Card>
-  <Card title="Search" icon="magnifying-glass">
+  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search-quickstart">
     Perform web searches and retrieve parsed content from top results
   </Card>
   <Card title="Map" icon="sitemap">
-    Comming Soon..
+    Coming Soon...
   </Card>
   <Card title="Crawl" icon="spider">
-    Comming Soon..
+    Coming Soon...
   </Card>
   <Card title="Proxy" icon="globe">
     Access premium residential IPs with Nimble's Proxy Infrastructure
   </Card>
 </Columns>
 
-Check out the **API Reference**
+Check out additional resources:
 
 <Columns cols={2}>
   <Card title="API Reference" icon="sparkles" href="/api-reference/introduction">
-    Comming Soon..
+    Coming Soon...
   </Card>
-  <Card title="MCP Server" icon="robot" href="documentation/getting-started/mcp-server">
+  <Card title="MCP Server" icon="robot" href="/documentation/getting-started/mcp-server">
     Get started with Nimble MCP Server
   </Card>
 </Columns>
