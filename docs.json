@@ -25,16 +25,22 @@
             "group": "Getting Started",
             "icon": "play",
             "pages": [
-              "documentation/getting-started/quickstart",
-              "documentation/getting-started/authentication",
-              "documentation/getting-started/mcp-server",
               "documentation/getting-started/installation",
-              "documentation/getting-started/web-api",
-              "documentation/getting-started/agents",
-              "documentation/getting-started/account-management",
+              "documentation/getting-started/quickstart",
               "documentation/getting-started/sdk-limitations",
               "documentation/getting-started/response-codes",
-              "documentation/getting-started/billing"
+              {
+                "group": "WIP",
+                "hidden": true,
+                "pages": [
+                  "documentation/getting-started/authentication",
+                  "documentation/getting-started/mcp-server",
+                  "documentation/getting-started/web-api",
+                  "documentation/getting-started/agents",
+                  "documentation/getting-started/account-management",
+                  "documentation/getting-started/billing"
+                ]
+              }
             ]
           },
           {
@@ -85,8 +91,11 @@
                   "documentation/web-tools/search"
                 ]
               },
+              "documentation/web-tools/map-1",
+              "documentation/web-tools/crawl-1",
               {
                 "group": "Crawl",
+                "hidden": true,
                 "pages": [
                   "documentation/web-tools/crawl/crawl-quickstart",
                   "documentation/web-tools/crawl"
@@ -94,6 +103,7 @@
               },
               {
                 "group": "Map",
+                "hidden": true,
                 "pages": [
                   "documentation/web-tools/map/map-quickstart",
                   "documentation/web-tools/map"
