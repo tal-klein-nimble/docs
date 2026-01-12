@@ -27,6 +27,7 @@
             "pages": [
               "documentation/getting-started/installation",
               "documentation/getting-started/quickstart",
+              "documentation/getting-started/mcp-server",
               "documentation/getting-started/sdk-limitations",
               "documentation/getting-started/response-codes",
               {
@@ -34,7 +35,6 @@
                 "hidden": true,
                 "pages": [
                   "documentation/getting-started/authentication",
-                  "documentation/getting-started/mcp-server",
                   "documentation/getting-started/web-api",
                   "documentation/getting-started/agents",
                   "documentation/getting-started/account-management",

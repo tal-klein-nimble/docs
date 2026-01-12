@@ -31,19 +31,24 @@ description: "Retrieve a specific resource by ID"
 </ResponseField>
 
 <RequestExample>
+
 ```bash cURL
 curl --request GET \
   --url https://api.nimble.com/api/v2/resources/123 \
   --header 'Authorization: Bearer YOUR_API_KEY'
 ```
+
+
 ```javascript Node.js
 const response = await nimble.resources.get('123', {
   include: 'related'
 });
 ```
+
 </RequestExample>
 
 <ResponseExample>
+
 ```json 200
 {
   "data": {
@@ -56,4 +61,5 @@ const response = await nimble.resources.get('123', {
   }
 }
 ```
+
 </ResponseExample>
