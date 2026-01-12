@@ -43,7 +43,8 @@ from nimble import Nimble
 nimble = Nimble(api_key="YOUR-API-KEY")
 
 result = nimble.search({
-    "query": "Deni Avdija"
+    "query": "Deni Avdija",
+	"max_results": 3
 })
 
 print(result)
@@ -51,18 +52,6 @@ print(result)
 
 
 ```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-// Initialize client
-const nimble = new Nimble({
-  apiKey: "YOUR-API-KEY",
-});
-
-const result = await nimble.search({
-  query: "Deni Avdija"
-});
-
-console.log(result);
 ```
 
 
@@ -71,7 +60,8 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "query": "Deni Avdija"
+    "query": "Deni Avdija",
+	"max_results": 3
 }'
 ```
 
@@ -81,95 +71,48 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 ```json
 {
-  "results": [
-    {
-      "title": "Deni Avdija",
-      "description": "6 hours ago — In 2020, Avdija declared for the NBA draft and was drafted by the Washington Wizards with the 9th overall pick. He is also a member of the Israeli senior ...Read more",
-      "url": "https://en.wikipedia.org/wiki/Deni_Avdija",
-      "metadata": {
-        "position": 1,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni Avdija Stats, Height, Weight, Position, Draft ...",
-      "description": "Deni Avdija averages 26.1 points, 7.1 rebounds, and 6.9 assists per game. How many rings does Deni Avdija have? Deni Avdija has won 0 championships.Read more",
-      "url": "https://www.basketball-reference.com/players/a/avdijde01.html",
-      "metadata": {
-        "position": 2,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni (@deniavdia8) • Instagram photos and videos",
-      "description": "“He's a top 10 scorer in this league” One of the league's rising stars and a candidate for the NBA's Most Improved Player during his sixth NBA season, ...Read more",
-      "url": "https://www.instagram.com/deniavdia8/?hl=en",
-      "metadata": {
-        "position": 3,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni Avdija | Forward | Portland Trail Blazers",
-      "description": "Avdija finished with 33 points (10-19 FG, 4-10 3Pt, 9-10 FT), eight rebounds and nine assists in 29 minutes during Monday's 137-117 victory over the Jazz.Read more",
-      "url": "https://www.nba.com/player/1630166/deni-avdija",
-      "metadata": {
-        "position": 4,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni Avdija - Portland Trail Blazers Forward",
-      "description": "View the profile of Portland Trail Blazers Forward Deni Avdija on ESPN. Get the latest news, live stats and game highlights.",
-      "url": "https://www.espn.com/nba/player/_/id/4683021/deni-avdija",
-      "metadata": {
-        "position": 5,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni Avdija (@deniavdijaofficial)",
-      "description": "Deni Avdija. 41185 likes · 36382 talking about this. Facebook fanpage of Deni Avdija. Follow Deni on IG: @deniavdia8.",
-      "url": "https://www.facebook.com/deniavdijaofficial/",
-      "metadata": {
-        "position": 6,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Tiago Splitter shares troubling Deni Avdija back injury ...",
-      "description": "21 hours ago — Deni Avdija took an early exit in the Portland Trail Blazers' 123-114 loss against the New York Knicks on Sunday due to an apparent back ...",
-      "url": "https://basketnews.com/news-238601-tiago-splitter-shares-troubling-deni-advija-back-injury-news-after-late-exit-vs-knicks.html",
-      "metadata": {
-        "position": 7,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    },
-    {
-      "title": "Deni Avdija said his immediate status was uncertain, but ...",
-      "description": "Deni Avdija said his immediate status was uncertain, but he described the injury as \"nothing major.\" \"I'm not really concerned,\" Avdija said.Read more",
-      "url": "https://x.com/BlazerFreeman/status/2010540387635798180",
-      "metadata": {
-        "position": 8,
-        "entity_type": "OrganicResult",
-        "country": "US",
-        "locale": "en-US"
-      }
-    }
-  ]
+    "total_results": 3,
+    "results": [
+        {
+            "title": "Deni Avdija",
+            "description": "7 hours ago — In 2020, Avdija declared for the NBA draft and was drafted by the Washington Wizards with the 9th overall pick. He is also a member of the Israeli senior ...Read more",
+            "url": "https://en.wikipedia.org/wiki/Deni_Avdija",
+            "content": "[Jump to content]....",
+            "metadata": {
+                "position": 1,
+                "entity_type": "OrganicResult",
+                "country": "US",
+                "locale": "en",
+                "driver": "vx8"
+            }
+        },
+        {
+            "title": "Deni Avdija Stats, Height, Weight, Position, Draft ...",
+            "description": "Deni Avdija averages 26.1 points, 7.1 rebounds, and 6.9 assists per game. How many rings does Deni Avdija have? Deni Avdija has won 0 championships.Read more",
+            "url": "https://www.basketball-reference.com/players/a/avdijde01.html",
+            "content": "[Sports Reference ®]...",
+            "metadata": {
+                "position": 2,
+                "entity_type": "OrganicResult",
+                "country": "US",
+                "locale": "en",
+                "driver": "vx8"
+            }
+        },
+        {
+            "title": "Deni (@deniavdia8) • Instagram photos and videos",
+            "description": "“He's a top 10 scorer in this league” One of the league's rising stars and a candidate for the NBA's Most Improved Player during his sixth NBA season, ...Read more",
+            "url": "https://www.instagram.com/deniavdia8/?hl=en",
+            "content": "![](data:image/png;base64...)![](data:image/png;base64...)",
+            "metadata": {
+                "position": 3,
+                "entity_type": "OrganicResult",
+                "country": "US",
+                "locale": "en",
+                "driver": "vx8"
+            }
+        }
+    ],
+    "request_id": "84f08ac1-bb5f-4b6f-8447-2d21cb930416"
 }
 ```
