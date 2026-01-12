@@ -3,7 +3,7 @@ title: "Discover Templates"
 description: "Browse, search, and inspect available extraction templates"
 ---
 
-The Templates Discovery APIs help you find and understand available templates before using them. Browse templates by category, search by keyword, and inspect detailed schemas to understand inputs and outputs.
+The Templates Discovery APIs help you find and understand available templates before using them. Browse templates by category, search by keyword, and inspect detailed schemas to understand params and outputs.
 
 ## When to use
 
@@ -12,7 +12,7 @@ Use template discovery when you need to:
 - **Browse available templates**: See what platforms are supported
 - **Filter by category**: Find templates for specific industries
 - **Search by keyword**: Locate templates for specific platforms
-- **Inspect template details**: Understand input requirements and output structure
+- **Inspect template details**: Understand parameter requirements and output structure
 - **Validate before use**: Check supported countries and rate limits
 
 ## Two ways to explore templates
@@ -28,27 +28,43 @@ Browse templates visually with previews, examples, and interactive documentation
 
 - Visual interface with template previews
 - Interactive documentation with examples
-- Try templates with sample inputs
+- Try templates with sample params
 - Copy-paste ready code snippets
 
 <Card title="Explore Templates Gallery" icon="sparkles" href="https://online.nimbleway.com/pipeline-gallery">
   
 </Card>
 
-Browse 150+ pre-built templates with visual previews and documentation
+1. Browse 150+ pre-built templates with visual previews and documentation
 
 ![Image](/images/image.png)
+
+2. Explore template details including schemas, descriptions, and interactive demos
+
+![Image](/images/image-2.png)
+
+3. Run a live test with custom inputs to see real results 
+
+![Image](/images/image-1.png)
+
+4. Integrate instantly with one-click code export to your IDE
+
+![Image](/images/image-3.png)
 
 ### Via API
 
 Programmatically discover and inspect templates for automation and integration.
 
 - Build dynamic template selectors
-- Validate inputs before extraction
+- Validate params before extraction
 - Generate forms from schemas
 - Compare template capabilities
 
-## Discovery APIs
+<Note>
+  **Coming Soon**: Discovery APIs are currently under development and will be available soon. For now, please use the Platform UI to explore available templates.
+</Note>
+
+## Discovery APIs (Coming Soon)
 
 ### List Templates
 
@@ -66,18 +82,22 @@ Get comprehensive information about a specific template:
 GET https://api.webit.live/api/v1/extract-template/{template_name}
 ```
 
-## List Templates API
+## List Templates API (Coming Soon)
+
+<Note>
+  **Coming Soon**: The List Templates API is currently under development. Use the [Platform UI](https://online.nimbleway.com/pipeline-gallery) to browse available templates.
+</Note>
 
 ### Parameters
 
-| Parameter  | Type    | Description                                          | Required |
-| ---------- | ------- | ---------------------------------------------------- | -------- |
-| `category` | String  | Filter by category (ecommerce, social, search, etc.) | No       |
-| `search`   | String  | Search templates by name or description              | No       |
-| `page`     | Integer | Page number (default: 1)                             | No       |
-| `limit`    | Integer | Results per page (default: 20, max: 100)             | No       |
+| Parameter  | Type    | Description                                             | Required |
+| ---------- | ------- | ------------------------------------------------------- | -------- |
+| `vertical` | String  | Filter by vertical (Ecommerce, LLM, Social Media, etc.) | No       |
+| `search`   | String  | Search templates by name or description                 | No       |
+| `page`     | Integer | Page number (default: 1)                                | No       |
+| `limit`    | Integer | Results per page (default: 20, max: 100)                | No       |
 
-## Usage
+## Usage Examples (Coming Soon)
 
 ### List all templates
 
@@ -225,43 +245,65 @@ curl -X GET 'https://api.webit.live/api/v1/templates?search=amazon' \
   "data": {
     "items": [
       {
-        "name": "amazon_product",
-        "description": "Extract detailed product information from Amazon",
-        "category": "ecommerce",
-        "domain": "amazon.com",
-        "supported_countries": ["US", "UK", "DE", "FR", "IT", "ES", "CA"],
-        "features": ["pricing", "reviews", "availability", "images"],
-        "rate_limit": 100
+        "name": "amazon_pdp",
+        "display_name": "Amazon PDP",
+        "description": "The Amazon PDP (Product Detail Page) Pipeline extracts structured data from individual product pages on Amazon. This pipeline is ideal for tracking competitor pricing, monitoring catalog changes, and powering product intelligence use cases.",
+        "vertical": "Ecommerce",
+        "entity_type": "Product Detail Page (PDP)",
+        "domain": "www.amazon.com",
+        "tags": ["Amazon", "PDP"]
       },
       {
-        "name": "amazon_search",
-        "description": "Search Amazon and get product listings",
-        "category": "ecommerce",
-        "domain": "amazon.com",
-        "supported_countries": ["US", "UK", "DE", "FR", "IT", "ES", "CA"],
-        "features": ["search_results", "sponsored_ads", "filters"],
-        "rate_limit": 100
+        "name": "amazon_serp",
+        "display_name": "Amazon SERP",
+        "description": "The Amazon SERP (Search Results Page) Pipeline extracts structured data from Amazon's search results pages based on a given keyword. This pipeline is ideal for search visibility analysis, assortment tracking, and keyword-based product monitoring across Amazon's marketplace.",
+        "vertical": "Ecommerce",
+        "entity_type": "Search Engine Results Page (SERP)",
+        "domain": "www.amazon.com",
+        "tags": ["Amazon", "SERP"]
+      },
+      {
+        "name": "google_search",
+        "display_name": "Google SERP",
+        "description": "The Google SERP Pipeline Template is a pre-configured, ready-to-use scraping pipeline within the Nimble platform, purpose-built for extracting structured data from Google Search Results Pages (SERPs).",
+        "vertical": null,
+        "entity_type": "Search Engine Results Page (SERP)",
+        "domain": "www.google.com",
+        "tags": ["Google", "SERP"]
+      },
+      {
+        "name": "walmart_pdp",
+        "display_name": "Walmart PDP",
+        "description": "The Walmart PDP (Product Detail Page) Pipeline extracts structured data from individual product pages on Walmart. This pipeline is ideal for tracking competitor pricing, monitoring catalog changes, and powering product intelligence use cases.",
+        "vertical": "Ecommerce",
+        "entity_type": "Product Detail Page (PDP)",
+        "domain": "www.walmart.com",
+        "tags": ["walmart", "pdp"]
       }
     ],
     "pagination": {
       "page": 1,
       "limit": 20,
-      "total": 156,
+      "total": 150,
       "total_pages": 8
     }
   }
 }
 ```
 
-## Get Template Details API
+## Get Template Details API (Coming Soon)
+
+<Note>
+  **Coming Soon**: The Get Template Details API is currently under development. Use the [Platform UI](https://online.nimbleway.com/pipeline-gallery) to view template details.
+</Note>
 
 ### Parameters
 
-| Parameter       | Type   | Description                                       | Required |
-| --------------- | ------ | ------------------------------------------------- | -------- |
-| `template_name` | String | The name of the template (e.g., "amazon_product") | Yes      |
+| Parameter       | Type   | Description                                   | Required |
+| --------------- | ------ | --------------------------------------------- | -------- |
+| `template_name` | String | The name of the template (e.g., "amazon_pdp") | Yes      |
 
-## Usage
+## Usage Examples (Coming Soon)
 
 ### Get template details
 
@@ -274,8 +316,8 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-# Get details for amazon_product template
-template = nimble.get_template("amazon_product")
+# Get details for amazon_pdp template
+template = nimble.get_template("amazon_pdp")
 
 print(f"Template: {template['name']}")
 print(f"Description: {template['description']}")
@@ -290,8 +332,8 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-// Get details for amazon_product template
-const template = await nimble.getTemplate("amazon_product");
+// Get details for amazon_pdp template
+const template = await nimble.getTemplate("amazon_pdp");
 
 console.log(`Template: ${template.name}`);
 console.log(`Description: ${template.description}`);
@@ -302,15 +344,15 @@ console.log(`Rate limit: ${template.rate_limit} requests/minute`);
 
 
 ```bash cURL
-curl -X GET 'https://api.webit.live/api/v1/templates/amazon_product' \
+curl -X GET 'https://api.webit.live/api/v1/templates/amazon_pdp' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 
 </CodeGroup>
 
-### Inspect input schema
+### Inspect parameter schema
 
-Review required and optional inputs:
+Review required and optional parameters:
 
 <CodeGroup>
 
@@ -319,15 +361,15 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-template = nimble.get_template("amazon_product")
+template = nimble.get_template("amazon_pdp")
 
-# Review input schema
-print("Required inputs:")
+# Review parameter schema
+print("Required parameters:")
 for field_name, field_info in template["input_schema"].items():
     if field_info.get("required"):
         print(f"  - {field_name}: {field_info['type']} - {field_info['description']}")
 
-print("\nOptional inputs:")
+print("\nOptional parameters:")
 for field_name, field_info in template["input_schema"].items():
     if not field_info.get("required"):
         print(f"  - {field_name}: {field_info['type']} - {field_info['description']}")
@@ -339,17 +381,17 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-const template = await nimble.getTemplate("amazon_product");
+const template = await nimble.getTemplate("amazon_pdp");
 
-// Review input schema
-console.log("Required inputs:");
+// Review parameter schema
+console.log("Required parameters:");
 Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
   if (fieldInfo.required) {
     console.log(`  - ${fieldName}: ${fieldInfo.type} - ${fieldInfo.description}`);
   }
 });
 
-console.log("\nOptional inputs:");
+console.log("\nOptional parameters:");
 Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
   if (!fieldInfo.required) {
     console.log(`  - ${fieldName}: ${fieldInfo.type} - ${fieldInfo.description}`);
@@ -370,7 +412,7 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-template = nimble.get_template("amazon_product")
+template = nimble.get_template("amazon_pdp")
 
 # Review output schema
 print("Output fields:")
@@ -384,7 +426,7 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-const template = await nimble.getTemplate("amazon_product");
+const template = await nimble.getTemplate("amazon_pdp");
 
 // Review output schema
 console.log("Output fields:");
@@ -406,7 +448,7 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-template = nimble.get_template("amazon_product")
+template = nimble.get_template("amazon_pdp")
 
 # Check supported countries
 print(f"Supported countries: {', '.join(template['supported_countries'])}")
@@ -424,7 +466,7 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-const template = await nimble.getTemplate("amazon_product");
+const template = await nimble.getTemplate("amazon_pdp");
 
 // Check supported countries
 console.log(`Supported countries: ${template.supported_countries.join(", ")}`);
@@ -445,7 +487,7 @@ if (template.supported_countries.includes("US")) {
 {
   "status": "success",
   "data": {
-    "name": "amazon_product",
+    "name": "amazon_pdp",
     "description": "Extract detailed product information from Amazon",
     "category": "ecommerce",
     "domain": "amazon.com",
@@ -524,20 +566,48 @@ if (template.supported_countries.includes("US")) {
 }
 ```
 
-## Available categories
+## Available templates by vertical
 
-Filter templates by these categories:
+Browse templates by industry vertical:
 
-| Category       | Description                  | Example Templates                                 |
-| -------------- | ---------------------------- | ------------------------------------------------- |
-| `ecommerce`    | Online shopping platforms    | amazon_product, walmart_search, ebay_listing      |
-| `professional` | Career and business networks | linkedin_profile, glassdoor_reviews, indeed_jobs  |
-| `search`       | Search engines               | google_search, bing_search, google_maps           |
-| `social`       | Social media platforms       | twitter_profile, instagram_posts, facebook_page   |
-| `real-estate`  | Property listings            | zillow_listing, realtor_search, redfin_property   |
-| `news`         | News and media sites         | cnn_article, bbc_news, reuters_story              |
-| `travel`       | Travel and hospitality       | booking_hotel, airbnb_listing, expedia_search     |
-| `finance`      | Financial data               | yahoo_finance_stock, bloomberg_quote, marketwatch |
+| Vertical        | Description                 | Example Templates                                    |
+| --------------- | --------------------------- | ---------------------------------------------------- |
+| `Ecommerce`     | Online shopping platforms   | amazon_pdp, walmart_pdp, best_buy_pdp, target_pdp    |
+| `Search Engine` | Search engines and maps     | google_search, google_maps_search, google_search_aio |
+| `Social Media`  | Social media platforms      | tiktok_account, facebook_page, youtube_shorts        |
+| `Travel`        | Travel and local businesses | yelp_serp                                            |
+| `LLM`           | AI language models          | chatgpt, gemini, perplexity, grok                    |
+| `Healthcare`    | Pet products and health     | chewy_pdp, chewy_serp                                |
+
+## Popular templates
+
+### E-commerce
+
+| Template         | Description                | Domain                                        |
+| :--------------- | :------------------------- | :-------------------------------------------- |
+| `amazon_pdp`     | Amazon product details     | [www.amazon.com](http://www.amazon.com)       |
+| `amazon_serp`    | Amazon search results      | [www.amazon.com](http://www.amazon.com)       |
+| `walmart_pdp`    | Walmart product details    | [www.walmart.com](http://www.walmart.com)     |
+| `best_buy_pdp`   | Best Buy product details   | [www.bestbuy.com](http://www.bestbuy.com)     |
+| `target_pdp`     | Target product details     | [www.target.com](http://www.target.com)       |
+| `home_depot_pdp` | Home Depot product details | [www.homedepot.com](http://www.homedepot.com) |
+
+### Search engines
+
+| Template             | Description             | Domain                                  |
+| :------------------- | :---------------------- | :-------------------------------------- |
+| `google_search`      | Google search results   | [www.google.com](http://www.google.com) |
+| `google_maps_search` | Google Maps listings    | maps.google.com                         |
+| `google_search_aio`  | Google Search AIO (SGE) | [www.google.com](http://www.google.com) |
+
+### LLM platforms
+
+| Template     | Description          | Domain                                        |
+| :----------- | :------------------- | :-------------------------------------------- |
+| `chatgpt`    | ChatGPT responses    | chatgpt.com                                   |
+| `gemini`     | Gemini responses     | gemini.google.com                             |
+| `perplexity` | Perplexity responses | [www.perplexity.ai](http://www.perplexity.ai) |
+| `grok`       | Grok responses       | https://grok.com/                             |
 
 ## Use cases
 
@@ -571,7 +641,7 @@ def generate_form_fields(template_name):
     return form_fields
 
 # Use in UI
-fields = generate_form_fields("amazon_product")
+fields = generate_form_fields("amazon_pdp")
 for field in fields:
     print(f"{field['label']}: {field['name']} ({'required' if field['required'] else 'optional'})")
 ```
@@ -599,7 +669,7 @@ async function generateFormFields(templateName) {
 }
 
 // Use in UI
-const fields = await generateFormFields("amazon_product");
+const fields = await generateFormFields("amazon_pdp");
 fields.forEach(field => {
   console.log(`${field.label}: ${field.name} (${field.required ? "required" : "optional"})`);
 });
@@ -607,9 +677,9 @@ fields.forEach(field => {
 
 </CodeGroup>
 
-### Validate inputs
+### Validate parameters
 
-Check inputs against template schema before execution:
+Check parameters against template schema before execution:
 
 <CodeGroup>
 
@@ -619,18 +689,18 @@ import re
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-def validate_inputs(template_name, inputs):
-    """Validate inputs against template schema"""
+def validate_params(template_name, params):
+    """Validate params against template schema"""
     template = nimble.get_template(template_name)
     errors = []
 
     # Check required fields
     for field_name, field_info in template["input_schema"].items():
-        if field_info.get("required") and field_name not in inputs:
+        if field_info.get("required") and field_name not in params:
             errors.append(f"Missing required field: {field_name}")
 
     # Validate patterns
-    for field_name, value in inputs.items():
+    for field_name, value in params.items():
         field_info = template["input_schema"].get(field_name, {})
         pattern = field_info.get("pattern")
         if pattern and not re.match(pattern, value):
@@ -639,7 +709,7 @@ def validate_inputs(template_name, inputs):
     return errors
 
 # Validate before extraction
-errors = validate_inputs("amazon_product", {
+errors = validate_params("amazon_pdp", {
     "asin": "B08N5WRWNW",
     "country": "US"
 })
@@ -649,7 +719,7 @@ if errors:
     for error in errors:
         print(f"  - {error}")
 else:
-    print("✓ All inputs valid")
+    print("✓ All parameters valid")
 ```
 
 
@@ -658,19 +728,19 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-async function validateInputs(templateName, inputs) {
+async function validateParams(templateName, params) {
   const template = await nimble.getTemplate(templateName);
   const errors = [];
 
   // Check required fields
   Object.entries(template.input_schema).forEach(([fieldName, fieldInfo]) => {
-    if (fieldInfo.required && !(fieldName in inputs)) {
+    if (fieldInfo.required && !(fieldName in params)) {
       errors.push(`Missing required field: ${fieldName}`);
     }
   });
 
   // Validate patterns
-  Object.entries(inputs).forEach(([fieldName, value]) => {
+  Object.entries(params).forEach(([fieldName, value]) => {
     const fieldInfo = template.input_schema[fieldName] || {};
     const pattern = fieldInfo.pattern;
     if (pattern && !new RegExp(pattern).test(value)) {
@@ -682,7 +752,7 @@ async function validateInputs(templateName, inputs) {
 }
 
 // Validate before extraction
-const errors = await validateInputs("amazon_product", {
+const errors = await validateParams("amazon_pdp", {
   asin: "B08N5WRWNW",
   country: "US"
 });
@@ -691,7 +761,7 @@ if (errors.length > 0) {
   console.log("Validation errors:");
   errors.forEach(error => console.log(`  - ${error}`));
 } else {
-  console.log("✓ All inputs valid");
+  console.log("✓ All parameters valid");
 }
 ```
 
@@ -717,7 +787,7 @@ def compare_templates(template_names):
         comparison.append({
             "name": name,
             "description": template["description"],
-            "inputs": len(template["input_schema"]),
+            "params": len(template["input_schema"]),
             "outputs": len(template["output_schema"]),
             "countries": len(template["supported_countries"]),
             "rate_limit": template["rate_limit"]
@@ -727,13 +797,13 @@ def compare_templates(template_names):
 
 # Compare e-commerce templates
 templates = compare_templates([
-    "amazon_product",
-    "walmart_product",
-    "ebay_product"
+    "amazon_pdp",
+    "walmart_pdp",
+    "ebay_pdp"
 ])
 
 for t in templates:
-    print(f"{t['name']}: {t['inputs']} inputs, {t['outputs']} outputs, {t['countries']} countries")
+    print(f"{t['name']}: {t['params']} params, {t['outputs']} outputs, {t['countries']} countries")
 ```
 
 
@@ -749,7 +819,7 @@ async function compareTemplates(templateNames) {
       return {
         name,
         description: template.description,
-        inputs: Object.keys(template.input_schema).length,
+        params: Object.keys(template.input_schema).length,
         outputs: Object.keys(template.output_schema).length,
         countries: template.supported_countries.length,
         rate_limit: template.rate_limit
@@ -762,13 +832,13 @@ async function compareTemplates(templateNames) {
 
 // Compare e-commerce templates
 const templates = await compareTemplates([
-  "amazon_product",
-  "walmart_product",
-  "ebay_product"
+  "amazon_pdp",
+  "walmart_pdp",
+  "ebay_pdp"
 ]);
 
 templates.forEach(t => {
-  console.log(`${t.name}: ${t.inputs} inputs, ${t.outputs} outputs, ${t.countries} countries`);
+  console.log(`${t.name}: ${t.params} params, ${t.outputs} outputs, ${t.countries} countries`);
 });
 ```
 
@@ -810,7 +880,7 @@ Handle API errors gracefully:
 
 ```python
 try:
-    template = nimble.get_template("amazon_product")
+    template = nimble.get_template("amazon_pdp")
 except TemplateNotFoundError:
     print("Template doesn't exist")
 except APIError as e:

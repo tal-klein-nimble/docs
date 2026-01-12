@@ -3,7 +3,7 @@ title: "Templates Usage"
 description: "Ready-to-use extraction templates for popular platforms"
 ---
 
-The Extract Template API runs pre-built templates with simple inputs like product IDs or search terms. Skip complex configuration and get structured, normalized data instantly from popular platforms.
+The Extract Template API runs pre-built templates with simple params like product IDs or search terms. Skip complex configuration and get structured, normalized data instantly from popular platforms.
 
 ## When to use
 
@@ -11,7 +11,7 @@ Use the Extract Template API when you need to:
 
 - **Quick extraction**: Get data without configuring selectors
 - **Production-ready**: Use battle-tested extractors maintained by Nimble
-- **Simple inputs**: Provide IDs or terms instead of constructing URLs
+- **Simple params**: Provide IDs or terms instead of constructing URLs
 - **Normalized data**: Receive consistent schemas across requests
 - **Zero maintenance**: Let Nimble handle site changes
 
@@ -25,12 +25,12 @@ POST https://api.webit.live/api/v1/extract-template
 
 | Parameter  | Type   | Description                                     | Required |
 | ---------- | ------ | ----------------------------------------------- | -------- |
-| `template` | String | Template name (e.g., "amazon_product")          | Yes      |
-| `inputs`   | Object | Template-specific inputs (ASINs, queries, etc.) | Yes      |
+| `template` | String | Template name (e.g., "amazon_pdp")              | Yes      |
+| `params`   | Object | Template-specific params (ASINs, queries, etc.) | Yes      |
 | `country`  | String | Target country code (template-dependent)        | No       |
 
 <Note>
-  Each template has unique input requirements. Use the [Get Template Details](/documentation/web-tools/extract-templates/details) API to review input schemas.
+  Each template has unique parameter requirements. Use the [Get Template Details](/documentation/web-tools/extract-templates/details) API to review parameter schemas.
 </Note>
 
 ## Usage
@@ -48,8 +48,8 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 
 # Amazon product
 amazon_result = nimble.extract_template(
-    template="amazon_product",
-    inputs={
+    template="amazon_pdp",
+    params={
         "asin": "B08N5WRWNW",
         "country": "US",
         "zipcode": "90210"
@@ -61,8 +61,8 @@ print(f"Price: ${amazon_result['data']['price']['current']}")
 
 # Walmart product
 walmart_result = nimble.extract_template(
-    template="walmart_product",
-    inputs={
+    template="walmart_pdp",
+    params={
         "product_id": "123456789"
     }
 )
@@ -79,8 +79,8 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
 // Amazon product
 const amazonResult = await nimble.extractTemplate({
-  template: "amazon_product",
-  inputs: {
+  template: "amazon_pdp",
+  params: {
     asin: "B08N5WRWNW",
     country: "US",
     zipcode: "90210"
@@ -92,8 +92,8 @@ console.log(`Price: $${amazonResult.data.price.current}`);
 
 // Walmart product
 const walmartResult = await nimble.extractTemplate({
-  template: "walmart_product",
-  inputs: {
+  template: "walmart_pdp",
+  params: {
     product_id: "123456789"
   }
 });
@@ -109,8 +109,8 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template": "amazon_product",
-    "inputs": {
+    "template": "amazon_pdp",
+    "params": {
         "asin": "B08N5WRWNW",
         "country": "US",
         "zipcode": "90210"
@@ -122,8 +122,8 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template": "walmart_product",
-    "inputs": {
+    "template": "walmart_pdp",
+    "params": {
         "product_id": "123456789"
     }
 }'
@@ -144,8 +144,8 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 
 # Amazon search
 result = nimble.extract_template(
-    template="amazon_search",
-    inputs={
+    template="amazon_serp",
+    params={
         "query": "wireless headphones",
         "country": "US",
         "zipcode": "90210",
@@ -166,8 +166,8 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
 // Amazon search
 const result = await nimble.extractTemplate({
-  template: "amazon_search",
-  inputs: {
+  template: "amazon_serp",
+  params: {
     query: "wireless headphones",
     country: "US",
     zipcode: "90210",
@@ -187,8 +187,8 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template": "amazon_search",
-    "inputs": {
+    "template": "amazon_serp",
+    "params": {
         "query": "wireless headphones",
         "country": "US",
         "zipcode": "90210",
@@ -213,7 +213,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 # LinkedIn profile
 profile_result = nimble.extract_template(
     template="linkedin_profile",
-    inputs={
+    params={
         "profile_url": "https://www.linkedin.com/in/example-profile"
     }
 )
@@ -225,7 +225,7 @@ print(f"Company: {profile_result['data']['current_company']}")
 # LinkedIn jobs
 jobs_result = nimble.extract_template(
     template="linkedin_jobs",
-    inputs={
+    params={
         "query": "software engineer",
         "location": "San Francisco, CA"
     }
@@ -245,7 +245,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 // LinkedIn profile
 const profileResult = await nimble.extractTemplate({
   template: "linkedin_profile",
-  inputs: {
+  params: {
     profile_url: "https://www.linkedin.com/in/example-profile"
   }
 });
@@ -257,7 +257,7 @@ console.log(`Company: ${profileResult.data.current_company}`);
 // LinkedIn jobs
 const jobsResult = await nimble.extractTemplate({
   template: "linkedin_jobs",
-  inputs: {
+  params: {
     query: "software engineer",
     location: "San Francisco, CA"
   }
@@ -277,7 +277,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "template": "linkedin_profile",
-    "inputs": {
+    "params": {
         "profile_url": "https://www.linkedin.com/in/example-profile"
     }
 }'
@@ -288,7 +288,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "template": "linkedin_jobs",
-    "inputs": {
+    "params": {
         "query": "software engineer",
         "location": "San Francisco, CA"
     }
@@ -311,7 +311,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 # Google search
 google_result = nimble.extract_template(
     template="google_search",
-    inputs={
+    params={
         "query": "best laptop 2026",
         "country": "US",
         "page": 1
@@ -325,8 +325,8 @@ for result in google_result['data']['organic_results']:
 
 # Google Maps
 maps_result = nimble.extract_template(
-    template="google_maps",
-    inputs={
+    template="google_maps_search",
+    params={
         "query": "coffee shops",
         "location": "New York, NY"
     }
@@ -346,7 +346,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 // Google search
 const googleResult = await nimble.extractTemplate({
   template: "google_search",
-  inputs: {
+  params: {
     query: "best laptop 2026",
     country: "US",
     page: 1
@@ -361,8 +361,8 @@ googleResult.data.organic_results.forEach(result => {
 
 // Google Maps
 const mapsResult = await nimble.extractTemplate({
-  template: "google_maps",
-  inputs: {
+  template: "google_maps_search",
+  params: {
     query: "coffee shops",
     location: "New York, NY"
   }
@@ -382,7 +382,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "template": "google_search",
-    "inputs": {
+    "params": {
         "query": "best laptop 2026",
         "country": "US",
         "page": 1
@@ -394,8 +394,8 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template": "google_maps",
-    "inputs": {
+    "template": "google_maps_search",
+    "params": {
         "query": "coffee shops",
         "location": "New York, NY"
     }
@@ -418,7 +418,7 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 # Twitter profile
 twitter_result = nimble.extract_template(
     template="twitter_profile",
-    inputs={
+    params={
         "username": "example_user"
     }
 )
@@ -430,7 +430,7 @@ print(f"Bio: {twitter_result['data']['bio']}")
 # Instagram profile
 instagram_result = nimble.extract_template(
     template="instagram_profile",
-    inputs={
+    params={
         "username": "example_user"
     }
 )
@@ -449,7 +449,7 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 // Twitter profile
 const twitterResult = await nimble.extractTemplate({
   template: "twitter_profile",
-  inputs: {
+  params: {
     username: "example_user"
   }
 });
@@ -461,7 +461,7 @@ console.log(`Bio: ${twitterResult.data.bio}`);
 // Instagram profile
 const instagramResult = await nimble.extractTemplate({
   template: "instagram_profile",
-  inputs: {
+  params: {
     username: "example_user"
   }
 });
@@ -479,7 +479,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "template": "twitter_profile",
-    "inputs": {
+    "params": {
         "username": "example_user"
     }
 }'
@@ -490,7 +490,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "template": "instagram_profile",
-    "inputs": {
+    "params": {
         "username": "example_user"
     }
 }'
@@ -543,7 +543,7 @@ When a template executes successfully, you receive normalized data:
     "category": "Electronics > Headphones > Earbuds"
   },
   "metadata": {
-    "template": "amazon_product",
+    "template": "amazon_pdp",
     "template_version": "2.1.0",
     "execution_time_ms": 2150,
     "timestamp": "2026-01-10T00:45:23Z",
@@ -576,8 +576,8 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 def monitor_price(asin):
     """Monitor product price and alert on changes"""
     result = nimble.extract_template(
-        template="amazon_product",
-        inputs={"asin": asin}
+        template="amazon_pdp",
+        params={"asin": asin}
     )
 
     current_price = result['data']['price']['current']
@@ -603,8 +603,8 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 async function monitorPrice(asin) {
   // Monitor product price and alert on changes
   const result = await nimble.extractTemplate({
-    template: "amazon_product",
-    inputs: { asin }
+    template: "amazon_pdp",
+    params: { asin }
   });
 
   const currentPrice = result.data.price.current;
@@ -642,7 +642,7 @@ def generate_leads(job_title, location, limit=100):
     # Search for jobs
     result = nimble.extract_template(
         template="linkedin_jobs",
-        inputs={
+        params={
             "query": job_title,
             "location": location
         }
@@ -652,7 +652,7 @@ def generate_leads(job_title, location, limit=100):
     for job in result['data']['jobs'][:limit]:
         company_profile = nimble.extract_template(
             template="linkedin_company",
-            inputs={
+            params={
                 "company_url": job['company_url']
             }
         )
@@ -684,7 +684,7 @@ async function generateLeads(jobTitle, location, limit = 100) {
   // Search for jobs
   const result = await nimble.extractTemplate({
     template: "linkedin_jobs",
-    inputs: {
+    params: {
       query: jobTitle,
       location
     }
@@ -694,7 +694,7 @@ async function generateLeads(jobTitle, location, limit = 100) {
   for (const job of result.data.jobs.slice(0, limit)) {
     const companyProfile = await nimble.extractTemplate({
       template: "linkedin_company",
-      inputs: {
+      params: {
         company_url: job.company_url
       }
     });
@@ -732,8 +732,8 @@ def analyze_competitors(search_query):
     """Analyze competitor products"""
     # Get search results
     result = nimble.extract_template(
-        template="amazon_search",
-        inputs={"query": search_query}
+        template="amazon_serp",
+        params={"query": search_query}
     )
 
     # Analyze each product
@@ -741,8 +741,8 @@ def analyze_competitors(search_query):
     for product in result['data']['products'][:10]:
         # Get detailed product info
         details = nimble.extract_template(
-            template="amazon_product",
-            inputs={"asin": product['asin']}
+            template="amazon_pdp",
+            params={"asin": product['asin']}
         )
 
         analysis.append({
@@ -773,8 +773,8 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 async function analyzeCompetitors(searchQuery) {
   // Analyze competitor products
   const result = await nimble.extractTemplate({
-    template: "amazon_search",
-    inputs: { query: searchQuery }
+    template: "amazon_serp",
+    params: { query: searchQuery }
   });
 
   // Analyze each product
@@ -782,8 +782,8 @@ async function analyzeCompetitors(searchQuery) {
   for (const product of result.data.products.slice(0, 10)) {
     // Get detailed product info
     const details = await nimble.extractTemplate({
-      template: "amazon_product",
-      inputs: { asin: product.asin }
+      template: "amazon_pdp",
+      params: { asin: product.asin }
     });
 
     analysis.push({

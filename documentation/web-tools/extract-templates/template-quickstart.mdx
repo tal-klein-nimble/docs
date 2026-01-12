@@ -3,7 +3,7 @@ title: "Quick Start"
 description: "Ready-to-use extraction templates for popular platforms"
 ---
 
-Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Use simple inputs like product IDs or search terms instead of complex configurations.
+Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Use simple params like product IDs or search terms instead of complex configurations.
 
 <Note>
   For comprehensive details, template discovery, and advanced usage, see the **Extract Templates** pages.
@@ -25,7 +25,7 @@ Extract Templates are pre-built, production-ready extractors for popular platfor
     - Battle-tested on production workloads
   </Card>
   <Card title="Simple interface" icon="sparkles">
-    - Use inputs like ASINs or search terms
+    - Use params like ASINs or search terms
     - No need to construct URLs manually
     - Consistent response format across templates
     - Built-in validation and error handling
@@ -72,8 +72,8 @@ from nimble import Nimble
 nimble = Nimble(api_key="YOUR-API-KEY")
 
 result = nimble.extract_template({
-    "template": "amazon_product",
-    "inputs": {
+    "template": "amazon_pdp",
+    "params": {
         "asin": "B08N5WRWNW",
         "zipcode": "90210"
     }
@@ -92,8 +92,8 @@ const nimble = new Nimble({
 });
 
 const result = await nimble.extractTemplate({
-  template: "amazon_product",
-  inputs: {
+  template: "amazon_pdp",
+  params: {
     asin: "B08N5WRWNW",
     zipcode: "90210"
   }
@@ -108,8 +108,8 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "template": "amazon_product",
-    "inputs": {
+    "template": "amazon_pdp",
+    "params": {
         "asin": "B08N5WRWNW",
         "zipcode": "90210"
     }
@@ -126,18 +126,18 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
     "data": {
         "items": [
             {
-                "name": "amazon_product",
+                "name": "amazon_pdp",
                 "description": "Extract Amazon product details",
                 "category": "ecommerce",
                 "domain": "amazon.com",
-                "inputs": ["asin", "zipcode"]
+                "params": ["asin", "zipcode"]
             },
             {
-                "name": "amazon_search",
+                "name": "amazon_serp",
                 "description": "Extract Amazon search results",
                 "category": "ecommerce",
                 "domain": "amazon.com",
-                "inputs": ["query", "zipcode"]
+                "params": ["query", "zipcode"]
             }
         ],
         "total": 45,
@@ -150,6 +150,10 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 ## Discovering templates
 
 Browse available templates before using them.
+
+<Note>
+  **Coming Soon**: Template discovery APIs are currently under development. Use the [Platform UI](https://online.nimbleway.com/pipeline-gallery) to browse available templates.
+</Note>
 
 <CodeGroup>
 
@@ -218,7 +222,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20
     },
     "metadata": {
         "task_id": "abc-123-def",
-        "template": "amazon_product",
+        "template": "amazon_pdp",
         "execution_time_ms": 2340,
         "credits_used": 1
     }
@@ -231,10 +235,10 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20
 
 | Template          | Description            | Key Inputs         |
 | :---------------- | :--------------------- | :----------------- |
-| `amazon_product`  | Amazon product details | `asin`, `zipcode`  |
-| `amazon_search`   | Amazon search results  | `query`, `zipcode` |
-| `walmart_product` | Walmart product data   | `product_id`       |
-| `ebay_product`    | eBay listing details   | `item_id`          |
+| `amazon_pdp`  | Amazon product details | `asin`, `zipcode`  |
+| `amazon_serp`   | Amazon search results  | `query`, `zipcode` |
+| `walmart_pdp` | Walmart product data   | `product_id`       |
+| `ebay_pdp`    | eBay listing details   | `item_id`          |
 
 ### Professional networks
 
@@ -249,7 +253,7 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20
 | Template        | Description           | Key Inputs          |
 | :-------------- | :-------------------- | :------------------ |
 | `google_search` | Google search results | `query`, `country`  |
-| `google_maps`   | Google Maps listings  | `query`, `location` |
+| `google_maps_search`   | Google Maps listings  | `query`, `location` |
 | `bing_search`   | Bing search results   | `query`, `country`  |
 
 ### Social media
