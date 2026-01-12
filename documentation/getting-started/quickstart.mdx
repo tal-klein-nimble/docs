@@ -144,7 +144,6 @@ nimble = Nimble(api_key="YOUR-API-KEY")
 
 result = nimble.search({
     "query": "data scraping tools",
-    "search_engine": "google",
     "country": "US"
 })
 
@@ -159,7 +158,6 @@ const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
 const result = await nimble.search({
   query: "data scraping tools",
-  search_engine: "google",
   country: "US"
 });
 
@@ -173,7 +171,6 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "query": "data scraping tools",
-    "search_engine": "google",
     "country": "US"
 }'
 ```
