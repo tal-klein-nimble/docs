@@ -146,6 +146,9 @@
         ]
       },
       {
+        "tab": "Guides"
+      },
+      {
         "tab": "SDK",
         "hidden": true,
         "groups": [

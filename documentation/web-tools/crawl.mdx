@@ -1,3 +1,824 @@
 ---
 title: "Crawl Usage"
+description: "Comprehensive guide to crawling entire websites and discovering URLs automatically"
 ---
+
+The Crawl API enables you to crawl entire websites and discover URLs automatically. It intelligently follows sitemaps, internal links, and optionally external links based on your configuration, making it easy to map out entire domains.
+
+## When to use
+
+Use the Crawl API when you need to:
+
+- **Discover all pages**: Automatically find and list all URLs on a website
+- **Site mapping**: Create comprehensive site maps for large websites
+- **Content inventory**: Build a complete inventory of pages for migration or audit
+- **Competitor analysis**: Map out competitor site structures
+- **Monitor changes**: Track new pages and content additions over time
+- **SEO analysis**: Discover all indexable pages and their relationships
+
+<Note>
+  Crawl automatically handles URL discovery through sitemaps, internal links, and follows robots.txt guidelines.
+</Note>
+
+## API endpoint
+
+```bash
+POST https://api.nimbleway.io/crawl
+```
+
+## Core parameters
+
+### Basic parameters
+
+| Parameter | Type    | Description                   | Required |
+| --------- | ------- | ----------------------------- | -------- |
+| `url`     | String  | URL to start crawl            | Yes      |
+| `name`    | String  | Name of the crawl job         | No       |
+| `limit`   | Integer | Maximum number of URLs (5000) | No       |
+
+### Discovery options
+
+| Parameter              | Type    | Description                                         | Default   |
+| ---------------------- | ------- | --------------------------------------------------- | --------- |
+| `sitemap`              | String  | How to use sitemap: `'skip'`, `'include'`, `'only'` | `include` |
+| `crawl_entire_domain`  | Boolean | Follow internal links to sibling or parent URLs     | `false`   |
+| `allow_subdomains`     | Boolean | Allow crawler to follow links to subdomains         | `false`   |
+| `allow_external_links` | Boolean | Allow crawler to follow links to external websites  | `false`   |
+
+### Filtering options
+
+| Parameter                 | Type    | Description                                                | Default |
+| ------------------------- | ------- | ---------------------------------------------------------- | ------- |
+| `include_paths`           | Array   | URL pathname regex patterns that include matching URLs     | `[]`    |
+| `exclude_paths`           | Array   | URL pathname regex patterns that exclude matching URLs     | `[]`    |
+| `ignore_query_parameters` | Boolean | Do not re-scrape the same path with different query params | `false` |
+| `max_discovery_depth`     | Integer | Maximum depth to crawl based on discovery order            | -       |
+
+### Callback options
+
+| Parameter  | Type   | Description                    | Default |
+| ---------- | ------ | ------------------------------ | ------- |
+| `callback` | Object | Webhook callback configuration | -       |
+
+## Usage
+
+### Basic crawl
+
+Crawl a website using default settings:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com"
+})
+
+crawl_id = result["id"]
+print(f"Crawl started with ID: {crawl_id}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com"
+});
+
+const crawlId = result.id;
+console.log(`Crawl started with ID: ${crawlId}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com"
+}'
+```
+
+</CodeGroup>
+
+### Set crawl limits
+
+Control the maximum number of URLs to discover:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "name": "Example Blog Crawl",
+    "limit": 1000
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  name: "Example Blog Crawl",
+  limit: 1000
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "name": "Example Blog Crawl",
+    "limit": 1000
+}'
+```
+
+</CodeGroup>
+
+### Crawl entire domain
+
+Allow crawler to follow all internal links beyond the starting path:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com/blog",
+    "crawl_entire_domain": True,
+    "limit": 2000
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com/blog",
+  crawl_entire_domain: true,
+  limit: 2000
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/blog",
+    "crawl_entire_domain": true,
+    "limit": 2000
+}'
+```
+
+</CodeGroup>
+
+### Filter with URL patterns
+
+Use include and exclude patterns to control which URLs are crawled:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/.*", "/articles/.*"],
+    "exclude_paths": [".*/tag/.*", ".*/page/[0-9]+"],
+    "limit": 500
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  include_paths: ["/blog/.*", "/articles/.*"],
+  exclude_paths: [".*/tag/.*", ".*/page/[0-9]+"],
+  limit: 500
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/.*", "/articles/.*"],
+    "exclude_paths": [".*/tag/.*", ".*/page/[0-9]+"],
+    "limit": 500
+}'
+```
+
+</CodeGroup>
+
+### Sitemap-only crawl
+
+Crawl only URLs found in the sitemap:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "sitemap": "only",
+    "limit": 1000
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  sitemap: "only",
+  limit: 1000
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "sitemap": "only",
+    "limit": 1000
+}'
+```
+
+</CodeGroup>
+
+### Ignore query parameters
+
+Treat URLs with different query parameters as the same page:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "ignore_query_parameters": True,
+    "limit": 1000
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  ignore_query_parameters: true,
+  limit: 1000
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "ignore_query_parameters": true,
+    "limit": 1000
+}'
+```
+
+</CodeGroup>
+
+### Include subdomains
+
+Crawl subdomains of the main domain:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "allow_subdomains": True,
+    "limit": 2000
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  allow_subdomains: true,
+  limit: 2000
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "allow_subdomains": true,
+    "limit": 2000
+}'
+```
+
+</CodeGroup>
+
+### Webhook notification
+
+Get notified when crawl completes:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "limit": 1000,
+    "callback": {
+        "webhook": {
+            "url": "https://your-server.com/webhook",
+            "headers": {
+                "X-Custom-Header": "your-value"
+            },
+            "metadata": "crawl-001"
+        }
+    }
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  limit: 1000,
+  callback: {
+    webhook: {
+      url: "https://your-server.com/webhook",
+      headers: {
+        "X-Custom-Header": "your-value"
+      },
+      metadata: "crawl-001"
+    }
+  }
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "limit": 1000,
+    "callback": {
+        "webhook": {
+            "url": "https://your-server.com/webhook",
+            "headers": {
+                "X-Custom-Header": "your-value"
+            },
+            "metadata": "crawl-001"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+### Check crawl status
+
+Get current status and progress of a crawl:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+status = nimble.get_crawl_status(crawl_id="your-crawl-id")
+
+print(f"Status: {status['status']}")
+print(f"Total URLs: {status['total']}")
+print(f"Discovered: {len(status['tasks'])}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const status = await nimble.getCrawlStatus("your-crawl-id");
+
+console.log(`Status: ${status.status}`);
+console.log(`Total URLs: ${status.total}`);
+console.log(`Discovered: ${status.tasks.length}`);
+```
+
+
+```bash cURL
+curl -X GET 'https://api.nimbleway.io/crawl/{crawl_id}' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### Cancel a crawl
+
+Stop a running crawl:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.cancel_crawl(crawl_id="your-crawl-id")
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.cancelCrawl("your-crawl-id");
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X DELETE 'https://api.nimbleway.io/crawl/{crawl_id}' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+### List crawls by status
+
+Get all crawls with a specific status:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+crawls = nimble.get_crawls(status="running")
+
+for crawl in crawls:
+    print(f"Crawl {crawl['id']}: {crawl['name']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const crawls = await nimble.getCrawls({ status: "running" });
+
+crawls.forEach(crawl => {
+  console.log(`Crawl ${crawl.id}: ${crawl.name}`);
+});
+```
+
+
+```bash cURL
+curl -X GET 'https://api.nimbleway.io/crawl?status=running' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+## Sitemap options
+
+Control how the crawler uses sitemaps:
+
+**`include (default)`** - Use sitemap URLs plus discovered URLs:
+
+```python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "sitemap": "include"
+})
+```
+
+**`skip`** - Ignore sitemap, only follow discovered links:
+
+```python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "sitemap": "skip"
+})
+```
+
+**`only`** - Only crawl URLs found in sitemap:
+
+```python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "sitemap": "only"
+})
+```
+
+## Response format
+
+### Start crawl response
+
+```json
+{
+  "id": "crawl_abc123xyz",
+  "url": "https://www.example.com"
+}
+```
+
+### Get status response
+
+```json
+{
+  "status": "running",
+  "id": "crawl_abc123xyz",
+  "name": "Example Blog Crawl",
+  "account_name": "your-account",
+  "total": 150,
+  "completed": "2024-01-15T10:30:00Z",
+  "created": "2024-01-15T10:00:00Z",
+  "tasks": [
+    {
+      "url": "https://www.example.com",
+      "status": "completed",
+      "discovered": "2024-01-15T10:00:15Z"
+    },
+    {
+      "url": "https://www.example.com/about",
+      "status": "completed",
+      "discovered": "2024-01-15T10:00:22Z"
+    }
+  ]
+}
+```
+
+### Cancel crawl response
+
+```json
+{
+  "status": "canceled"
+}
+```
+
+## Best practices
+
+### Choose appropriate limits
+
+**Set limits based on site size:**
+
+```python
+# Small site (< 100 pages)
+result = nimble.crawl({
+    "url": "https://small-site.com",
+    "limit": 100
+})
+
+# Medium site (100-1000 pages)
+result = nimble.crawl({
+    "url": "https://medium-site.com",
+    "limit": 1000
+})
+
+# Large site (> 1000 pages)
+result = nimble.crawl({
+    "url": "https://large-site.com",
+    "limit": 5000
+})
+```
+
+### Use filters effectively
+
+**Combine include and exclude patterns:**
+
+```python
+# ✅ Good: Specific patterns for blog posts
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/[0-9]{4}/.*"],  # Year-based posts
+    "exclude_paths": [
+        ".*/page/[0-9]+",  # Pagination
+        ".*/tag/.*",       # Tag pages
+        ".*/author/.*"     # Author pages
+    ]
+})
+```
+
+### Handle large crawls
+
+**Use webhooks for completion notification:**
+
+```python
+result = nimble.crawl({
+    "url": "https://large-site.com",
+    "limit": 5000,
+    "callback": {
+        "webhook": {
+            "url": "https://your-server.com/crawl-complete",
+            "metadata": "crawl-2024-01-15"
+        }
+    }
+})
+```
+
+### Monitor progress
+
+**Poll status for long-running crawls:**
+
+```python
+import time
+
+# Start crawl
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "limit": 2000
+})
+
+crawl_id = result["id"]
+
+# Poll status
+while True:
+    status = nimble.get_crawl_status(crawl_id)
+
+    if status["status"] == "completed":
+        print(f"Crawl complete! Found {status['total']} URLs")
+        break
+    elif status["status"] == "failed":
+        print("Crawl failed")
+        break
+
+    print(f"Progress: {len(status['tasks'])} URLs discovered")
+    time.sleep(10)
+```
+
+## Limitations
+
+### Crawl limits
+
+- **Maximum limit per crawl**: 5,000 URLs
+- **Maximum concurrent crawls**: Varies by plan
+- **Crawl timeout**: 24 hours per crawl job
+
+### Pattern matching
+
+- **Regex patterns**: Full regex support for include/exclude paths
+- **Case sensitivity**: Patterns are case-sensitive
+- **Multiple patterns**: All patterns are evaluated (OR logic for includes, AND logic for excludes)
+
+## Common use cases
+
+### Blog content audit
+
+Map all blog posts excluding pagination and tags:
+
+```python
+result = nimble.crawl({
+    "url": "https://blog.example.com",
+    "include_paths": ["/[0-9]{4}/[0-9]{2}/.*"],
+    "exclude_paths": [".*/category/.*", ".*/tag/.*"],
+    "limit": 1000
+})
+```
+
+### E-commerce product discovery
+
+Find all product pages:
+
+```python
+result = nimble.crawl({
+    "url": "https://shop.example.com",
+    "include_paths": ["/products/.*", "/shop/.*"],
+    "exclude_paths": [".*/cart", ".*/checkout"],
+    "ignore_query_parameters": True,
+    "limit": 2000
+})
+```
+
+### Documentation site mapping
+
+Crawl documentation structure:
+
+```python
+result = nimble.crawl({
+    "url": "https://docs.example.com",
+    "crawl_entire_domain": False,
+    "sitemap": "include",
+    "limit": 500
+})
+```
+
+### Multi-language site crawl
+
+Crawl all language versions including subdomains:
+
+```python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "allow_subdomains": True,
+    "limit": 3000
+})
+```

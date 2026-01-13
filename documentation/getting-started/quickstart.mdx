@@ -177,6 +177,52 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
+### Crawl
+
+Discover and map entire websites automatically:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "limit": 100
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  limit: 100
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "limit": 100
+}'
+```
+
+</CodeGroup>
+
 ## 4. Next Steps
 
 Explore the **Web Tools** documentation:
@@ -194,8 +240,8 @@ Explore the **Web Tools** documentation:
   <Card title="Map" icon="sitemap">
     Coming Soon...
   </Card>
-  <Card title="Crawl" icon="spider">
-    Coming Soon...
+  <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
+    Discover and map entire websites automatically
   </Card>
   <Card title="Proxy" icon="globe">
     Access premium residential IPs with Nimble's Proxy Infrastructure

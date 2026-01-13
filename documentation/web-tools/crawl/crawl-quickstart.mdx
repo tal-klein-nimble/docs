@@ -1,3 +1,226 @@
 ---
-title: "Quick Start"
+title: "Crawl Quickstart"
+description: "Get started with website crawling in minutes"
 ---
+
+Discover and map entire websites automatically with the Crawl API. This guide will help you start your first crawl in minutes.
+
+## Start a crawl
+
+Begin crawling a website and discover all its URLs:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "limit": 100
+})
+
+crawl_id = result["id"]
+print(f"Crawl started: {crawl_id}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  limit: 100
+});
+
+const crawlId = result.id;
+console.log(`Crawl started: ${crawlId}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "limit": 100
+}'
+```
+
+</CodeGroup>
+
+## Check status
+
+Monitor your crawl progress:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+status = nimble.get_crawl_status("your-crawl-id")
+
+print(f"Status: {status['status']}")
+print(f"URLs found: {status['total']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const status = await nimble.getCrawlStatus("your-crawl-id");
+
+console.log(`Status: ${status.status}`);
+console.log(`URLs found: ${status.total}`);
+```
+
+
+```bash cURL
+curl -X GET 'https://api.nimbleway.io/crawl/{crawl_id}' \
+--header 'Authorization: Bearer <YOUR-API-KEY>'
+```
+
+</CodeGroup>
+
+## Common patterns
+
+### Filter specific sections
+
+Crawl only specific parts of a website:
+
+<CodeGroup>
+
+```python Python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/.*", "/docs/.*"],
+    "exclude_paths": [".*/tag/.*"],
+    "limit": 500
+})
+```
+
+
+```node Node.js
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  include_paths: ["/blog/.*", "/docs/.*"],
+  exclude_paths: [".*/tag/.*"],
+  limit: 500
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/.*", "/docs/.*"],
+    "exclude_paths": [".*/tag/.*"],
+    "limit": 500
+}'
+```
+
+</CodeGroup>
+
+### Crawl entire domain
+
+Allow crawler to explore beyond the starting path:
+
+<CodeGroup>
+
+```python Python
+result = nimble.crawl({
+    "url": "https://www.example.com/blog",
+    "crawl_entire_domain": True,
+    "limit": 1000
+})
+```
+
+
+```node Node.js
+const result = await nimble.crawl({
+  url: "https://www.example.com/blog",
+  crawl_entire_domain: true,
+  limit: 1000
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/blog",
+    "crawl_entire_domain": true,
+    "limit": 1000
+}'
+```
+
+</CodeGroup>
+
+### Use sitemap only
+
+Crawl only URLs from the sitemap for faster discovery:
+
+<CodeGroup>
+
+```python Python
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "sitemap": "only",
+    "limit": 1000
+})
+```
+
+
+```node Node.js
+const result = await nimble.crawl({
+  url: "https://www.example.com",
+  sitemap: "only",
+  limit: 1000
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/crawl' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "sitemap": "only",
+    "limit": 1000
+}'
+```
+
+</CodeGroup>
+
+## Next steps
+
+Explore more Crawl features and Web Tools:
+
+<CardGroup cols={2}>
+  <Card title="Crawl Usage" icon="book" href="/documentation/web-tools/crawl">
+    Complete guide to all crawl features and parameters
+  </Card>
+  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract">
+    Extract content from discovered URLs
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search">
+    Perform web searches across multiple engines
+  </Card>
+  <Card title="Extract Templates" icon="sparkles" href="/documentation/web-tools/extract-templates/template-usage">
+    Use pre-built templates for popular platforms
+  </Card>
+</CardGroup>
