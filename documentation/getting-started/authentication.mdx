@@ -1,3 +1,367 @@
 ---
-title: "Authentication"
+title: "Account Management"
+description: "Manage API keys and collaborate with your team"
 ---
+
+Manage your Nimble account settings, generate API keys, and collaborate with team members all from one centralized dashboard.
+
+## Accessing Account Settings
+
+Navigate to your account settings at [online.nimbleway.com](https://online.nimbleway.com):
+
+1. Log in with your username and password
+2. Click on your profile or settings icon
+3. Select **Account Settings** from the menu
+
+<Frame>
+  ![Account Settings Dashboard](/images/placeholder-account-settings.png)
+</Frame>
+
+---
+
+## API Keys
+
+API keys are used to authenticate your requests to the Nimble API. Each key is unique and should be kept secure.
+
+### Generate Your First API Key
+
+<Steps>
+  <Step title="Navigate to API Keys">
+    In Account Settings, click on the **API Keys** tab
+
+    <Frame>
+      ![API Keys Tab](/images/placeholder-api-keys-tab.png)
+    </Frame>
+  </Step>
+  <Step title="Create New Key">
+    Click the **Create New API Key** button
+
+    <Frame>
+      ![Create API Key Button](/images/placeholder-create-key-button.png)
+    </Frame>
+  </Step>
+  <Step title="Name Your Key">
+    Give your API key a descriptive name (e.g., "Production Server", "Development", "Testing")
+
+    <Frame>
+      ![Name API Key](/images/placeholder-name-key.png)
+    </Frame>
+  </Step>
+  <Step title="Copy Your Key">
+    <Warning>
+      **Important**: Your API key will only be displayed once. Make sure to copy it immediately and store it securely.
+    </Warning>
+    Click **Copy** to save your API key to clipboard
+
+    <Frame>
+      ![Copy API Key](/images/placeholder-copy-key.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### Managing API Keys
+
+Once created, you can view and manage all your API keys from the API Keys dashboard.
+
+<Frame>
+  ![API Keys List](/images/placeholder-api-keys-list.png)
+</Frame>
+
+#### API Key Information
+
+Each API key displays the following information:
+
+| Column         | Description                                         |
+| -------------- | --------------------------------------------------- |
+| **Name**       | The descriptive name you gave to the key            |
+| **Created**    | Date and time when the key was created              |
+| **Created By** | The team member who created the key                 |
+| **Last Used**  | Most recent date the key was used in an API request |
+| **Actions**    | Delete or manage the key                            |
+
+### Delete an API Key
+
+<Warning>
+  Deleting an API key is permanent and cannot be undone. Any applications using this key will immediately lose access.
+</Warning>
+
+To delete an API key:
+
+1. Locate the key you want to delete in the list
+2. Click the **Delete** button or trash icon
+3. Confirm the deletion in the popup dialog
+
+<Frame>
+  ![Delete API Key](/images/placeholder-delete-key.png)
+</Frame>
+
+### Generate API Keys via API
+
+<Note>
+  **Coming Soon**: Programmatic API key generation will be available in an upcoming release.
+</Note>
+
+Create and manage API keys programmatically using the Nimble API.
+
+<CodeGroup>
+
+```python Python
+# Coming soon
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-MASTER-KEY")
+
+# Create new API key
+result = nimble.create_api_key({
+    "name": "Production Server"
+})
+
+print(result["api_key"])
+```
+
+
+```node Node.js
+// Coming soon
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-MASTER-KEY" });
+
+// Create new API key
+const result = await nimble.createApiKey({
+  name: "Production Server"
+});
+
+console.log(result.apiKey);
+```
+
+
+```bash cURL
+# Coming soon
+curl -X POST 'https://api.nimbleway.io/v1/api-keys' \
+--header 'Authorization: Bearer <YOUR-MASTER-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Production Server"
+}'
+```
+
+</CodeGroup>
+
+### Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Descriptive Names" icon="tag">
+    Name keys based on their purpose or environment (e.g., "Production", "Development", "CI/CD Pipeline")
+  </Card>
+  <Card title="Rotate Keys Regularly" icon="rotate">
+    Create new keys periodically and delete old ones to maintain security
+  </Card>
+  <Card title="One Key Per Service" icon="server">
+    Use separate API keys for different services to track usage and limit exposure
+  </Card>
+  <Card title="Never Share Keys" icon="lock">
+    Keep API keys confidential and never commit them to version control
+  </Card>
+</CardGroup>
+
+<Tip>
+  Monitor the "Last Used" column to identify and remove unused API keys
+</Tip>
+
+---
+
+## Team Members
+
+Collaborate with your team by inviting members to your Nimble account. Control access levels and manage permissions all in one place.
+
+### Invite Team Members
+
+<Steps>
+  <Step title="Navigate to Team Tab">
+    In Account Settings, click on the **Team Members** tab
+
+    <Frame>
+      ![Team Members Tab](/images/placeholder-team-tab.png)
+    </Frame>
+  </Step>
+  <Step title="Invite New Member">
+    Click the **Invite Team Member** button
+
+    <Frame>
+      ![Invite Button](/images/placeholder-invite-button.png)
+    </Frame>
+  </Step>
+  <Step title="Enter Email Address">
+    Type the email address of the person you want to invite
+
+    <Frame>
+      ![Enter Email](/images/placeholder-enter-email.png)
+    </Frame>
+  </Step>
+  <Step title="Set Permission Level">
+    Choose their role:
+
+    - **Member**: Can use API keys and view account resources
+    - **Admin**: Can manage team members, API keys, and billing
+
+    <Frame>
+      ![Set Member Role](/images/placeholder-set-role.png)
+    </Frame>
+  </Step>
+  <Step title="Send Invitation">
+    Click **Send Invite** - they'll receive an email with instructions to join
+
+    <Frame>
+      ![Send Invitation](/images/placeholder-send-invite.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### Managing Team Members
+
+View and manage all team members from the Team Members dashboard.
+
+<Frame>
+  ![Team Members List](/images/placeholder-team-list.png)
+</Frame>
+
+#### Team Member Information
+
+| Column      | Description                            |
+| ----------- | -------------------------------------- |
+| **Name**    | Team member's full name                |
+| **Email**   | Associated email address               |
+| **Role**    | Permission level (Member or Admin)     |
+| **Status**  | Active, Pending, or Invited            |
+| **Joined**  | Date when they accepted the invitation |
+| **Actions** | Change role or remove member           |
+
+### Change Member Role
+
+Promote members to admins or revoke admin privileges:
+
+1. Locate the team member in the list
+2. Click the **Role** dropdown
+3. Select **Admin** or **Member**
+4. Changes take effect immediately
+
+<Frame>
+  ![Change Member Role](/images/placeholder-change-role.png)
+</Frame>
+
+<Info>
+  Admins have full access to account settings, billing, API keys, and team management
+</Info>
+
+### Remove Team Members
+
+To remove a team member from your account:
+
+1. Find the member in the team list
+2. Click the **Remove** button or trash icon
+3. Confirm the removal
+
+<Frame>
+  ![Remove Team Member](/images/placeholder-remove-member.png)
+</Frame>
+
+<Warning>
+  Removed members will immediately lose access to your account and all its resources
+</Warning>
+
+### Permission Levels
+
+<AccordionGroup>
+  <Accordion title="Member" icon="user">
+    **Members can:**
+
+    - Use existing API keys
+    - View usage statistics
+    - Access documentation
+    - Make API requests
+
+    **Members cannot:**
+
+    - Create or delete API keys
+    - Invite or remove team members
+    - Access billing information
+    - Change account settings
+  </Accordion>
+  <Accordion title="Admin" icon="user-shield">
+    **Admins can:**
+
+    - Everything Members can do
+    - Create and delete API keys
+    - Invite and remove team members
+    - Promote/demote member roles
+    - Access billing and payment information
+    - Modify account settings
+    - View audit logs
+
+    **Full account control with no restrictions**
+  </Accordion>
+</AccordionGroup>
+
+### Team Collaboration Tips
+
+<CardGroup cols={2}>
+  <Card title="Separate API Keys" icon="key">
+    Create unique API keys for each team member to track individual usage and maintain accountability
+  </Card>
+  <Card title="Limit Admin Access" icon="shield-halved">
+    Only promote trusted team members to admin roles to maintain account security
+  </Card>
+  <Card title="Use Descriptive Names" icon="id-card">
+    Encourage team members to use clear names when creating API keys
+  </Card>
+  <Card title="Regular Audits" icon="clipboard-check">
+    Periodically review team members and API keys to remove unused accounts
+  </Card>
+</CardGroup>
+
+---
+
+## Security Best Practices
+
+<AccordionGroup>
+  <Accordion title="Protect Your API Keys" icon="lock">
+    - Never commit API keys to version control
+    - Use environment variables to store keys
+    - Rotate keys regularly (every 90 days recommended)
+    - Delete keys immediately if compromised
+    - Use separate keys for development and production
+  </Accordion>
+  <Accordion title="Manage Team Access" icon="users-gear">
+    - Grant minimum necessary permissions
+    - Remove access for departing team members immediately
+    - Use admin roles sparingly
+    - Review team member list regularly
+    - Monitor API key usage patterns
+  </Accordion>
+  <Accordion title="Monitor Account Activity" icon="chart-line">
+    - Check "Last Used" dates on API keys
+    - Review team member activity
+    - Set up alerts for unusual usage
+    - Track API consumption by key
+    - Audit changes to account settings
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Need Help?
+
+<CardGroup cols={2}>
+  <Card title="Documentation" icon="book" href="/documentation/getting-started/quickstart">
+    Learn how to use your API keys with our quickstart guide
+  </Card>
+  <Card title="Support" icon="life-ring" href="https://nimbleway.com/contact">
+    Contact our support team for account assistance
+  </Card>
+  <Card title="Authentication" icon="key" href="/documentation/getting-started/authentication">
+    Learn more about authentication and security
+  </Card>
+  <Card title="Billing" icon="credit-card" href="/documentation/getting-started/billing">
+    Manage your subscription and usage limits
+  </Card>
+</CardGroup>
