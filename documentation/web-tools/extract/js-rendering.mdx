@@ -438,20 +438,16 @@ result = nimble.extract({
     },
     "browser_actions": [
         {
-            "wait_and_click": {
+            "click": {
                 "selector": "button.load-more",
                 "timeout": 5000
             }
         },
         {
-            "wait": {
-                "delay": 2000
-            }
+            "sleep": "2s"
         },
         {
-            "infinite_scroll": {
-                "duration": 5000
-            }
+            "auto_scroll": 5000
         }
     ]
 })
@@ -475,20 +471,16 @@ const result = await nimble.extract({
   },
   browser_actions: [
     {
-      wait_and_click: {
+      click: {
         selector: "button.load-more",
         timeout: 5000
       }
     },
     {
-      wait: {
-        delay: 2000
-      }
+      sleep: "2s"
     },
     {
-      infinite_scroll: {
-        duration: 5000
-      }
+      auto_scroll: 5000
     }
   ]
 });

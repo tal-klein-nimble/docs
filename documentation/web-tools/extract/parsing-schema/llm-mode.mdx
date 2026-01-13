@@ -351,9 +351,7 @@ result = nimble.extract({
     "render": True,
     "browser_actions": [
         {
-            "infinite_scroll": {
-                "duration": 10000
-            }
+            "auto_scroll": 10000
         }
     ],
     "schema": ProductList,
@@ -374,9 +372,7 @@ const result = await nimble.extract({
   render: true,
   browser_actions: [
     {
-      infinite_scroll: {
-        duration: 10000
-      }
+      auto_scroll: 10000
     }
   ],
   schema_prompt: "Extract all loaded products with names and prices. Return as array."
@@ -394,9 +390,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "infinite_scroll": {
-            "duration": 10000
-        }
+        "auto_scroll": 10000
     }],
     "schema_prompt": "Extract all loaded products with names and prices. Return as array."
 }'

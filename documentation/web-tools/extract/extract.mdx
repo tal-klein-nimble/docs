@@ -327,7 +327,7 @@ result = nimble.extract({
     "render": True,
     "browser_actions": [
         {
-            "wait_and_click": {
+            "click": {
                 "selector": "#load-more"
             }
         },
@@ -351,7 +351,7 @@ const result = await nimble.extract({
   render: true,
   browser_actions: [
     {
-      wait_and_click: {
+      click: {
         selector: "#load-more"
       }
     },
@@ -374,7 +374,7 @@ curl -X POST 'https://api.webit.live/api/v1/extract' \
     "render": true,
     "browser_actions": [
         {
-            "wait_and_click": {
+            "click": {
                 "selector": "#load-more"
             }
         },
