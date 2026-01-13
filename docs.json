@@ -137,10 +137,10 @@
             ]
           },
           {
-            "group": "Managed Web Search Agents",
+            "group": "WSA",
             "hidden": true,
             "pages": [
-              "documentation/managed-wsa/intro"
+              "documentation/managed-web-search-agents"
             ]
           }
         ]
