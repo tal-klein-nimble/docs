@@ -569,29 +569,35 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 
 ### Click
 
-Wait for an element to appear and click it.
+Click on an element by selector or at specific coordinates.
 
 **Parameters:**
 
-**Direct form** - Pass selectors array directly:
+**Direct form** - Pass CSS selector as string:
 
-- `click` (required) - Array of CSS selectors (clicks first matching element)
+- `click` (required) - CSS selector string
 
-**Extended form** - Use object with options:
+**Extended form (selector mode)** - Use object with selector options:
 
-- `selectors` (required) - Array of CSS selectors (clicks first matching element)
-- `offset_x` (optional) - X offset in pixels from top-left corner of element (number, default: center)
-- `offset_y` (optional) - Y offset in pixels from top-left corner of element (number, default: center)
-- `button` (optional) - Mouse button to use: `'left'`, `'right'`, or `'middle'` (default: `'left'`)
-- `duration` (optional) - Delay between mousedown and mouseup (Duration string, default: "50ms")
-- `visible` (optional) - Wait for element to be visible (boolean)
-- `scroll` (optional) - Scroll element into view before clicking (boolean, default: `true`)
-- `click_count` (optional) - Number of clicks: 1 for single, 2 for double (number, default: 1)
-- `delay` (optional) - Alternative delay between mousedown and mouseup (Duration string)
-- `steps` (optional) - Number of mouse movement steps (number)
-- `timeout` (optional) - Maximum wait time for element (Duration string)
-- `force` (optional) - Skip actionability checks (boolean, default: `false`)
-- `modifiers` (optional) - Modifier keys to hold: `['Alt']`, `['Control']`, `['Meta']`, `['Shift']` (array)
+- `selector` (required) - CSS selector of element to click (string)
+- `timeout` (optional) - Maximum time to wait for element (Duration string, default: "30s")
+- `visible` (optional) - Whether element must be visible (boolean, default: `true`)
+- `delay` (optional) - Delay before clicking (Duration string, default: "0ms")
+- `scroll` (optional) - Whether to scroll element into view (boolean, default: `true`)
+- `count` (optional) - Number of times to click (number, default: 1)
+- `steps` (optional) - Mouse movement steps for granular control (number, advanced)
+- `strategy` (optional) - Mouse movement strategy for behavioral simulation (advanced)
+- `required` (optional) - Set to `false` to make this step optional (boolean, default: `true`)
+
+**Extended form (coordinates mode)** - Click at specific coordinates:
+
+- `x` (required) - X coordinate (horizontal position, number)
+- `y` (required) - Y coordinate (vertical position, number)
+- `relative_to` (optional) - CSS selector to make coordinates relative to this element (string)
+- `timeout` (optional) - Maximum time for the click operation (Duration string, default: "15s")
+- `delay` (optional) - Delay before clicking (Duration string, default: "0ms")
+- `count` (optional) - Number of times to click (number, default: 1)
+- `steps` (optional) - Mouse movement steps for granular control (number, advanced)
 - `required` (optional) - Set to `false` to make this step optional (boolean, default: `true`)
 
 <CodeGroup>
@@ -601,30 +607,60 @@ from nimble import Nimble
 
 nimble = Nimble(api_key="YOUR-API-KEY")
 
-# Direct form - simple click
+# Direct form - simple click by selector
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
-            "click": ["button.load-more", "#show-more"]  # Click first matching element
+            "click": "button.submit"  # Click element matching selector
         }
     ]
 })
 
-# Extended form - with options
+# Extended form (selector mode) - with options
 result = nimble.extract({
     "url": "https://www.example.com",
     "render": True,
     "browser_actions": [
         {
             "click": {
-                "selectors": ["button.load-more"],
+                "selector": "button.load-more",
                 "timeout": "20s",
                 "delay": "500ms",
                 "scroll": True,
                 "visible": True,
-                "click_count": 2  # Double-click
+                "count": 2  # Double-click
+            }
+        }
+    ]
+})
+
+# Extended form (coordinates mode) - click at specific position
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "click": {
+                "x": 100,
+                "y": 200,
+                "delay": "300ms"
+            }
+        }
+    ]
+})
+
+# Coordinates relative to element
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {
+            "click": {
+                "x": 10,
+                "y": 10,
+                "relative_to": "#container"  # Click 10px from top-left of container
             }
         }
     ]
@@ -639,30 +675,60 @@ import { Nimble } from "@nimbleway/sdk";
 
 const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
-// Direct form - simple click
+// Direct form - simple click by selector
 const result = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
-      click: ["button.load-more", "#show-more"]  // Click first matching element
+      click: "button.submit"  // Click element matching selector
     }
   ]
 });
 
-// Extended form - with options
+// Extended form (selector mode) - with options
 const result2 = await nimble.extract({
   url: "https://www.example.com",
   render: true,
   browser_actions: [
     {
       click: {
-        selectors: ["button.load-more"],
+        selector: "button.load-more",
         timeout: "20s",
         delay: "500ms",
         scroll: true,
         visible: true,
-        click_count: 2  // Double-click
+        count: 2  // Double-click
+      }
+    }
+  ]
+});
+
+// Extended form (coordinates mode) - click at specific position
+const result3 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      click: {
+        x: 100,
+        y: 200,
+        delay: "300ms"
+      }
+    }
+  ]
+});
+
+// Coordinates relative to element
+const result4 = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    {
+      click: {
+        x: 10,
+        y: 10,
+        relative_to: "#container"  // Click 10px from top-left of container
       }
     }
   ]
@@ -673,7 +739,7 @@ console.log(result);
 
 
 ```bash cURL
-# Direct form
+# Direct form - simple click by selector
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -681,11 +747,11 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "url": "https://www.example.com",
     "render": true,
     "browser_actions": [{
-        "click": ["button.load-more", "#show-more"]
+        "click": "button.submit"
     }]
 }'
 
-# Extended form
+# Extended form (selector mode) - with options
 curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
@@ -694,12 +760,44 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
     "render": true,
     "browser_actions": [{
         "click": {
-            "selectors": ["button.load-more"],
+            "selector": "button.load-more",
             "timeout": "20s",
             "delay": "500ms",
             "scroll": true,
             "visible": true,
-            "click_count": 2
+            "count": 2
+        }
+    }]
+}'
+
+# Extended form (coordinates mode) - click at specific position
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "click": {
+            "x": 100,
+            "y": 200,
+            "delay": "300ms"
+        }
+    }]
+}'
+
+# Coordinates relative to element
+curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [{
+        "click": {
+            "x": 10,
+            "y": 10,
+            "relative_to": "#container"
         }
     }]
 }'
