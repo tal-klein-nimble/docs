@@ -135,6 +135,13 @@
               "documentation/residential-proxy/session-control",
               "documentation/residential-proxy/response-codes"
             ]
+          },
+          {
+            "group": "Managed Web Search Agents",
+            "hidden": true,
+            "pages": [
+              "documentation/managed-wsa/intro"
+            ]
           }
         ]
       },

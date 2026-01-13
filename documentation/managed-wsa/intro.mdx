@@ -1,0 +1,220 @@
+---
+title: "Managed Web Search Agents"
+---
+
+# Managed Web Search Agents
+
+Managed Web Search Agents (WSA) are production-ready, fully maintained data extraction solutions operated by Nimble's Data Ops team. This guide covers the integration requirements and service standards that apply across all Managed WSA products.
+
+## Overview
+
+With Managed WSA, Nimble handles agent maintenance, monitoring, and optimization—you simply provide input data and receive structured outputs via S3.
+
+**What's included:**
+- Fully managed infrastructure and execution
+- 24/7 monitoring and issue resolution
+- SLA-backed data delivery
+- Schema and logic updates handled by Nimble
+
+## Integration Guide
+
+### Input Configuration
+
+#### S3 Path Structure
+
+Input files should be delivered to your designated S3 bucket using the following path convention:
+
+```
+s3://<bucket-name>/input/<agent-name>/dt=YYYY-MM-DD/<filename>.<ext>
+```
+
+**Example:**
+```
+s3://nimble-customer-data/input/product-search/dt=2026-01-13/products.csv
+```
+
+#### AWS Role Provisioning
+
+To enable Nimble to read from your input bucket:
+
+1. Create an IAM role with read permissions for your input S3 path
+2. Add Nimble's AWS account as a trusted entity (provided during onboarding)
+3. Share the role ARN with your Nimble account team
+
+#### Supported Input Formats
+
+| Format | Extension | Notes |
+|--------|-----------|-------|
+| CSV | `.csv` | UTF-8 encoded, header row required |
+| Parquet | `.parquet` | Preferred for large datasets |
+| JSON Lines | `.jsonl` | One JSON object per line |
+
+#### Input File Requirements
+
+- Files must include all required fields as specified in your agent's input schema
+- Maximum file size: 1GB per file (split larger datasets)
+- Empty files are ignored; include at least one valid record
+
+### Output Configuration
+
+#### S3 Path Structure
+
+Output files are delivered to your designated bucket with hourly partitioning:
+
+```
+s3://<bucket-name>/output/<agent-name>/dt=YYYY-MM-DD/hr=HH/<filename>.<ext>
+```
+
+**Example:**
+```
+s3://nimble-customer-data/output/product-search/dt=2026-01-13/hr=14/results_001.parquet
+```
+
+#### Supported Output Formats
+
+| Format | Extension | Best For |
+|--------|-----------|----------|
+| Parquet | `.parquet` | Analytics, data warehouses |
+| CSV | `.csv` | Spreadsheet tools, simple integrations |
+| JSON Lines | `.jsonl` | Streaming, API integrations |
+
+Default format is Parquet. Contact your account team to configure an alternative.
+
+#### File Naming Convention
+
+Output files follow this naming pattern:
+```
+<agent-name>_<batch-id>_<sequence>.<ext>
+```
+
+## Scheduling & Cadence
+
+### Standard Cadence
+
+All Managed WSA products run on a **daily cadence** by default. Execution begins at your configured start time (UTC) and processes all input files from the previous partition.
+
+### Custom Cadence
+
+Custom scheduling options are available as an add-on:
+- Hourly
+- Multiple times per day
+- Weekly
+- Custom intervals
+
+Contact your account team to configure custom cadence.
+
+### Execution Time
+
+- Default execution time: **06:00 UTC**
+- Configure your preferred execution window during onboarding
+- All times are in UTC
+
+## Service Level Agreement
+
+### Data Retention & Recovery
+
+- **Output retention:** 7 days in delivery bucket
+- **Backup window:** 7-day rolling backup for recovery requests
+- **Re-delivery:** Available upon request within retention window
+
+### Coverage Commitments
+
+SLA commitments apply to:
+- ✅ Process initiation at scheduled time
+- ✅ Infrastructure availability
+- ✅ Issue response time
+
+SLA does not cover:
+- ❌ Target website availability or blocking
+- ❌ Input data quality issues
+- ❌ Customer-side S3 access problems
+
+## Authentication & Access
+
+### IAM Role Configuration
+
+Nimble requires cross-account IAM roles for S3 access:
+
+**Input bucket (your account → Nimble reads):**
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<your-input-bucket>",
+        "arn:aws:s3:::<your-input-bucket>/input/*"
+      ]
+    }
+  ]
+}
+```
+
+**Output bucket (Nimble writes → your account):**
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::<your-output-bucket>",
+        "arn:aws:s3:::<your-output-bucket>/output/*"
+      ]
+    }
+  ]
+}
+```
+
+### Access Provisioning Process
+
+1. **Onboarding:** Nimble provides AWS account ID and external ID
+2. **Role creation:** You create IAM roles with required permissions
+3. **Validation:** Nimble validates access and confirms setup
+4. **Production:** Agent begins processing on agreed schedule
+
+## Change Management & Support
+
+### Schema & Logic Changes
+
+To request changes to your agent:
+
+1. Submit a change request via your account team or support channel
+2. Nimble reviews feasibility and impact (1-2 business days)
+3. Changes are tested in staging environment
+4. Scheduled deployment with 48-hour advance notice
+
+**Change types:**
+- Input schema modifications
+- Output field additions
+- Extraction logic updates
+- Target URL changes
+
+### Support Channels
+
+| Channel | Response Time | Use For |
+|---------|---------------|---------|
+| Email | 24 hours | General inquiries, change requests |
+| Slack (if configured) | 4 hours | Urgent issues, delivery questions |
+| Emergency hotline | 1 hour | Production outages, SLA breaches |
+
+Contact your account team for channel configuration.
+
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **Managed WSA** | Web Search Agent fully operated and maintained by Nimble |
+| **Cadence** | Frequency at which the agent runs |
+| **Partition** | Date/hour-based folder structure for organizing files |
+| **Manifest** | Metadata file confirming execution status |
+| **Data Ops** | Nimble's team responsible for agent maintenance |
