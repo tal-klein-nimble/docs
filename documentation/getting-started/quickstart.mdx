@@ -7,300 +7,298 @@ description: "Get up and running with Nimble in minutes"
 
 This guide will help you make your first request with Nimble in just a few minutes.
 
-## 1. Get Your API Key
-
-First, obtain your API key from the [Nimble dashboard](https://online.nimbleway.com/account-settings/api-keys).
-
-## 2. Installation
-
-Install the Nimble SDK in your preferred language:
-
-<CodeGroup>
-
-```bash Python
-pip install nimble-py
-```
-
-
-```bash Node.js
-npm install @nimbleway/sdk
-```
-
-</CodeGroup>
-
-## 3. Quick Examples
-
-### Extract
-
-Get clean HTML and structured data from any URL:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract({
-    "url": "https://www.example.com",
-    "render": True
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extract({
-  url: "https://www.example.com",
-  render: true
-});
-
-console.log(result);
-```
-
-
-```bash cURL
-curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "url": "https://www.example.com",
-    "render": true
-}'
-```
-
-</CodeGroup>
-
-### Extract Templates
-
-Use pre-built templates for popular platforms:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.extract_template({
-    "template": "amazon_pdp",
-    "params": {
-        "asin": "B08N5WRWNW",
-        "zipcode": "90210"
-    }
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.extractTemplate({
-  template: "amazon_pdp",
-  params: {
-    asin: "B08N5WRWNW",
-    zipcode: "90210"
-  }
-});
-
-console.log(result);
-```
-
-
-```bash cURL
-curl -X POST 'https://gateway.nimbleway.com/api/v1/extract-template' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "template": "amazon_pdp",
-    "params": {
-        "asin": "B08N5WRWNW",
-        "zipcode": "90210"
-    }
-}'
-```
-
-</CodeGroup>
-
-### Search
-
-Perform web searches and get structured results:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.search({
-    "query": "data scraping tools",
-    "country": "US"
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.search({
-  query: "data scraping tools",
-  country: "US"
-});
-
-console.log(result);
-```
-
-
-```bash cURL
-curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "query": "data scraping tools",
-    "country": "US"
-}'
-```
-
-</CodeGroup>
-
-### Map
-
-Fast URL discovery and site structure mapping:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.map({
-    "URL": "https://www.example.com",
-    "Sitemap": "only"
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.map({
-  URL: "https://www.example.com",
-  Sitemap: "only"
-});
-
-console.log(result);
-```
-
-
-```bash cURL
-curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "URL": "https://www.example.com",
-    "Sitemap": "only"
-}'
-```
-
-</CodeGroup>
-
-### Crawl
-
-Discover and map entire websites automatically:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-result = nimble.crawl({
-    "url": "https://www.example.com",
-    "limit": 100
-})
-
-print(result)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-const result = await nimble.crawl({
-  url: "https://www.example.com",
-  limit: 100
-});
-
-console.log(result);
-```
-
-
-```bash cURL
-curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "url": "https://www.example.com",
-    "limit": 100
-}'
-```
-
-</CodeGroup>
-
-## 4. Next Steps
-
-Explore the **Web Tools** documentation:
-
-<Columns cols={3}>
-  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract-quickstart">
-    Get clean & structured data from any URL
-  </Card>
-  <Card title="Extract Templates" icon="bullseye-pointer" href="/documentation/web-tools/extract-templates/template-quickstart">
-    Ready-to-use extraction templates for popular platforms
-  </Card>
-  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search-quickstart">
-    Perform web searches and retrieve parsed content from top results
-  </Card>
-  <Card title="Map" icon="sitemap" href="/documentation/web-tools/map/map-quickstart">
-    Fast URL discovery and site structure mapping
-  </Card>
-  <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
-    Map and Extract content from entire websites at scale
-  </Card>
-  <Card title="Proxy" icon="globe">
-    Access premium residential IPs with Nimble's Proxy Infrastructure
-  </Card>
-</Columns>
-
-Check out additional resources:
-
-<Columns cols={2}>
-  <Card title="API Reference" icon="code" href="/api-reference/introduction">
-    Coming Soon...
-  </Card>
-  <Card title="MCP Server" icon="robot" href="/documentation/getting-started/mcp-server">
-    Get started with Nimble MCP Server
-  </Card>
-</Columns>
+<Steps>
+  <Step title="Get Your API Key">
+    First, obtain your API key from the [Nimble dashboard](https://online.nimbleway.com/account-settings/api-keys).
+  </Step>
+  <Step title="Installation">
+    Install the Nimble SDK in your preferred language:
+
+    <CodeGroup>
+
+    ```bash Python
+    pip install nimble-py
+    ```
+
+    
+    ```bash Node
+    npm install @nimbleway/sdk
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Quick Examples">
+    ### Extract
+
+    Get clean HTML and structured data from any URL:
+
+    <CodeGroup>
+
+    ```python Python
+    from nimble import Nimble
+    
+    nimble = Nimble(api_key="YOUR-API-KEY")
+    
+    result = nimble.extract({
+        "url": "https://www.example.com",
+        "render": True
+    })
+    
+    print(result)
+    ```
+
+    
+    ```node Node.js
+    import { Nimble } from "@nimbleway/sdk";
+    
+    const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+    
+    const result = await nimble.extract({
+      url: "https://www.example.com",
+      render: true
+    });
+    
+    console.log(result);
+    ```
+
+    
+    ```bash cURL
+    curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
+    --header 'Authorization: Bearer <YOUR-API-KEY>' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "url": "https://www.example.com",
+        "render": true
+    }'
+    ```
+
+    </CodeGroup>
+
+    ### Extract Templates
+
+    Use pre-built templates for popular platforms:
+
+    <CodeGroup>
+
+    ```python Python
+    from nimble import Nimble
+    
+    nimble = Nimble(api_key="YOUR-API-KEY")
+    
+    result = nimble.extract_template({
+        "template": "amazon_pdp",
+        "params": {
+            "asin": "B08N5WRWNW",
+            "zipcode": "90210"
+        }
+    })
+    
+    print(result)
+    ```
+
+    
+    ```node Node.js
+    import { Nimble } from "@nimbleway/sdk";
+    
+    const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+    
+    const result = await nimble.extractTemplate({
+      template: "amazon_pdp",
+      params: {
+        asin: "B08N5WRWNW",
+        zipcode: "90210"
+      }
+    });
+    
+    console.log(result);
+    ```
+
+    
+    ```bash cURL
+    curl -X POST 'https://gateway.nimbleway.com/api/v1/extract-template' \
+    --header 'Authorization: Bearer <YOUR-API-KEY>' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "template": "amazon_pdp",
+        "params": {
+            "asin": "B08N5WRWNW",
+            "zipcode": "90210"
+        }
+    }'
+    ```
+
+    </CodeGroup>
+
+    ### Search
+
+    Perform web searches and get structured results:
+
+    <CodeGroup>
+
+    ```python Python
+    from nimble import Nimble
+    
+    nimble = Nimble(api_key="YOUR-API-KEY")
+    
+    result = nimble.search({
+        "query": "data scraping tools",
+        "country": "US"
+    })
+    
+    print(result)
+    ```
+
+    
+    ```node Node.js
+    import { Nimble } from "@nimbleway/sdk";
+    
+    const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+    
+    const result = await nimble.search({
+      query: "data scraping tools",
+      country: "US"
+    });
+    
+    console.log(result);
+    ```
+
+    
+    ```bash cURL
+    curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
+    --header 'Authorization: Bearer <YOUR-API-KEY>' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "query": "data scraping tools",
+        "country": "US"
+    }'
+    ```
+
+    </CodeGroup>
+
+    ### Map
+
+    Fast URL discovery and site structure mapping:
+
+    <CodeGroup>
+
+    ```python Python
+    from nimble import Nimble
+    
+    nimble = Nimble(api_key="YOUR-API-KEY")
+    
+    result = nimble.map({
+        "URL": "https://www.example.com",
+        "Sitemap": "only"
+    })
+    
+    print(result)
+    ```
+
+    
+    ```node Node.js
+    import { Nimble } from "@nimbleway/sdk";
+    
+    const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+    
+    const result = await nimble.map({
+      URL: "https://www.example.com",
+      Sitemap: "only"
+    });
+    
+    console.log(result);
+    ```
+
+    
+    ```bash cURL
+    curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
+    --header 'Authorization: Bearer <YOUR-API-KEY>' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "URL": "https://www.example.com",
+        "Sitemap": "only"
+    }'
+    ```
+
+    </CodeGroup>
+
+    ### Crawl
+
+    Discover and map entire websites automatically:
+
+    <CodeGroup>
+
+    ```python Python
+    from nimble import Nimble
+    
+    nimble = Nimble(api_key="YOUR-API-KEY")
+    
+    result = nimble.crawl({
+        "url": "https://www.example.com",
+        "limit": 100
+    })
+    
+    print(result)
+    ```
+
+    
+    ```node Node.js
+    import { Nimble } from "@nimbleway/sdk";
+    
+    const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+    
+    const result = await nimble.crawl({
+      url: "https://www.example.com",
+      limit: 100
+    });
+    
+    console.log(result);
+    ```
+
+    
+    ```bash cURL
+    curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
+    --header 'Authorization: Bearer <YOUR-API-KEY>' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+        "url": "https://www.example.com",
+        "limit": 100
+    }'
+    ```
+
+    </CodeGroup>
+  </Step>
+  <Step title="Next Steps">
+    Explore the **Web Tools** documentation:
+
+    <Columns cols={3}>
+      <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract-quickstart">
+        Get clean & structured data from any URL
+      </Card>
+      <Card title="Extract Templates" icon="bullseye-pointer" href="/documentation/web-tools/extract-templates/template-quickstart">
+        Ready-to-use extraction templates for popular platforms
+      </Card>
+      <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search-quickstart">
+        Perform web searches and retrieve parsed content from top results
+      </Card>
+      <Card title="Map" icon="sitemap" href="/documentation/web-tools/map/map-quickstart">
+        Fast URL discovery and site structure mapping
+      </Card>
+      <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
+        Map and Extract content from entire websites at scale
+      </Card>
+      <Card title="Proxy" icon="globe">
+        Access premium residential IPs with Nimble's Proxy Infrastructure
+      </Card>
+    </Columns>
+    Check out additional resources:
+
+    <Columns cols={2}>
+      <Card title="API Reference" icon="code" href="/api-reference/introduction">
+        Coming Soon...
+      </Card>
+      <Card title="MCP Server" icon="robot" href="/documentation/getting-started/mcp-server">
+        Get started with Nimble MCP Server
+      </Card>
+    </Columns>
+  </Step>
+</Steps>
