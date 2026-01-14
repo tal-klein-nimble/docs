@@ -150,64 +150,7 @@
       },
       {
         "tab": "SDK",
-        "hidden": true,
-        "groups": [
-          {
-            "group": "Overview",
-            "icon": "package",
-            "pages": [
-              "nimble-sdk/sdk-overview"
-            ]
-          },
-          {
-            "group": "Web API",
-            "icon": "globe",
-            "pages": [
-              "nimble-sdk/web-api/overview",
-              "nimble-sdk/web-api/product-specs",
-              "nimble-sdk/web-api/quickstart",
-              "nimble-sdk/web-api/authentication",
-              "nimble-sdk/web-api/realtime-requests",
-              "nimble-sdk/web-api/delivery-methods",
-              "nimble-sdk/web-api/batch-processing",
-              "nimble-sdk/web-api/response-codes",
-              "nimble-sdk/web-api/faqs"
-            ]
-          },
-          {
-            "group": "Functions",
-            "icon": "function-square",
-            "pages": [
-              "nimble-sdk/web-api/functions",
-              {
-                "group": "Page Interaction",
-                "icon": "cursor-click",
-                "pages": [
-                  "nimble-sdk/web-api/page-interaction/wait",
-                  "nimble-sdk/web-api/page-interaction/wait-for-selector",
-                  "nimble-sdk/web-api/page-interaction/wait-and-click",
-                  "nimble-sdk/web-api/page-interaction/wait-and-type",
-                  "nimble-sdk/web-api/page-interaction/scroll"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Vertical Endpoints",
-            "icon": "search",
-            "pages": [
-              "nimble-sdk/web-api/serp-api",
-              "nimble-sdk/web-api/maps-api"
-            ]
-          },
-          {
-            "group": "Reference",
-            "icon": "book-open",
-            "pages": [
-              "nimble-sdk/web-api/reference"
-            ]
-          }
-        ]
+        "hidden": true
       },
       {
         "tab": "API Reference",
