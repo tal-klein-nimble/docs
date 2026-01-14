@@ -90,7 +90,6 @@
                   "documentation/web-tools/search"
                 ]
               },
-              "documentation/web-tools/map-1",
               "documentation/web-tools/proxy",
               {
                 "group": "Crawl",

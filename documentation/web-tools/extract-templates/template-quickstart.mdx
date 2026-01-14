@@ -3,7 +3,7 @@ title: "Quick Start"
 description: "Ready-to-use extraction templates for popular platforms"
 ---
 
-Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Use simple params like product IDs or search terms instead of complex configurations.
+Nimble Extract Templates are pre-built, production-ready extractors for popular platforms like Amazon, LinkedIn, Google, and more. Use simple params like product IDs or search terms instead of complex configurations.
 
 <Note>
   For comprehensive details, template discovery, and advanced usage, see the **Extract Templates** pages.
@@ -233,10 +233,10 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20
 
 ### E-commerce
 
-| Template          | Description            | Key Inputs         |
-| :---------------- | :--------------------- | :----------------- |
+| Template      | Description            | Key Inputs         |
+| :------------ | :--------------------- | :----------------- |
 | `amazon_pdp`  | Amazon product details | `asin`, `zipcode`  |
-| `amazon_serp`   | Amazon search results  | `query`, `zipcode` |
+| `amazon_serp` | Amazon search results  | `query`, `zipcode` |
 | `walmart_pdp` | Walmart product data   | `product_id`       |
 | `ebay_pdp`    | eBay listing details   | `item_id`          |
 
@@ -250,11 +250,11 @@ curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20
 
 ### Search engines
 
-| Template        | Description           | Key Inputs          |
-| :-------------- | :-------------------- | :------------------ |
-| `google_search` | Google search results | `query`, `country`  |
-| `google_maps_search`   | Google Maps listings  | `query`, `location` |
-| `bing_search`   | Bing search results   | `query`, `country`  |
+| Template             | Description           | Key Inputs          |
+| :------------------- | :-------------------- | :------------------ |
+| `google_search`      | Google search results | `query`, `country`  |
+| `google_maps_search` | Google Maps listings  | `query`, `location` |
+| `bing_search`        | Bing search results   | `query`, `country`  |
 
 ### Social media
 
