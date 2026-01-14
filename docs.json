@@ -36,7 +36,6 @@
                   "documentation/getting-started/authentication",
                   "documentation/getting-started/web-api",
                   "documentation/getting-started/agents",
-                  "documentation/getting-started/account-management",
                   "documentation/getting-started/billing",
                   "documentation/getting-started/sdk-limitations"
                 ]
@@ -92,11 +91,9 @@
                 ]
               },
               "documentation/web-tools/map-1",
-              "documentation/web-tools/crawl-1",
               "documentation/web-tools/proxy",
               {
                 "group": "Crawl",
-                "hidden": true,
                 "pages": [
                   "documentation/web-tools/crawl/crawl-quickstart",
                   "documentation/web-tools/crawl"
