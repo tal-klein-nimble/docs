@@ -1,4 +1,644 @@
 ---
-title: 'Proxy Usage'
+title: "Proxy Usage"
+description: "Access premium residential IPs with Nimble's BackConnect Gateway"
 ---
 
+Nimble **Residential Proxy** provides access to a global network of premium residential IPs through a single BackConnect gateway. Built for developers who need reliable, high-performance proxy infrastructure without managing IP lists.
+
+## When to use
+
+Use the Residential Proxy when you need to:
+
+- **Access geo-restricted content**: View content as it appears in different countries
+- **Avoid IP blocking**: Rotate through residential IPs for reliable access
+- **Monitor pricing**: Check prices and availability across different regions
+- **Collect SERP data**: Gather search results from various locations
+- **Test localization**: Verify how content appears to users in different regions
+- **Protect brand**: Monitor web presence and detect unauthorized use
+
+<Note>
+  Residential Proxy uses real residential IPs from ISPs worldwide, providing the most reliable and undetectable proxy solution.
+</Note>
+
+## Connection format
+
+```bash
+http://account-{accountName}-pipeline-{pipelineName}:{pipelinePassword}@gateway.nimbleway.com:7000
+```
+
+## Core parameters
+
+### Required parameters
+
+| Parameter          | Description                              | Example       |
+| ------------------ | ---------------------------------------- | ------------- |
+| `accountName`      | Your company gateway name                | mycompany     |
+| `pipelineName`     | Pipeline to use (default: "residential") | residential   |
+| `pipelinePassword` | Your pipeline authentication credential  | your-password |
+
+### Optional parameters
+
+Add these to your connection string using hyphens:
+
+| Parameter    | Description                       | Format                   |
+| ------------ | --------------------------------- | ------------------------ |
+| `country`    | Target specific country           | `country-{countryCode}`  |
+| `state`      | Target US state (US only)         | `state-{stateCode}`      |
+| `city`       | Target specific city              | `city-{cityName}`        |
+| `session`    | Maintain sticky session           | `session-{sessionId}`    |
+| `geosession` | Geo-consistent session (advanced) | `geosession-{sessionId}` |
+
+## Usage
+
+### Basic proxy request
+
+Send requests through residential proxy:
+
+<CodeGroup>
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+
+```python Python
+import requests
+
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(response.text)
+```
+
+
+```javascript Node.js
+const axios = require('axios');
+
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(response.data);
+```
+
+
+```go Go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+)
+
+func main() {
+	proxyURL, _ := url.Parse("http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000")
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		},
+	}
+
+	resp, _ := client.Get("https://ipinfo.io")
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+}
+```
+
+</CodeGroup>
+
+### Country targeting
+
+Route requests through specific countries:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Target United States
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(f"Country: {response.json()['country']}")
+```
+
+
+```javascript Node.js
+const axios = require('axios');
+
+// Target United Kingdom
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-GB:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(`Country: ${response.data.country}`);
+```
+
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+</CodeGroup>
+
+**Available country codes:**
+
+- `US` - United States
+- `GB` - United Kingdom
+- `DE` - Germany
+- `FR` - France
+- `JP` - Japan
+- `CA` - Canada
+- `AU` - Australia
+- `ALL` - Random country
+
+### State targeting (US only)
+
+Target specific US states:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Target California
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(f"State: {response.json()['region']}")
+```
+
+
+```javascript Node.js
+// Target New York
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-US-state-NY:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(`State: ${response.data.region}`);
+```
+
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName-country-US-state-TX:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+</CodeGroup>
+
+### City targeting
+
+Target specific cities for precise location control:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Target Los Angeles
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US-state-CA-city-losangeles:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US-state-CA-city-losangeles:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(f"City: {response.json()['city']}")
+```
+
+
+```javascript Node.js
+// Target Chicago
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-US-state-IL-city-chicago:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(`City: ${response.data.city}`);
+```
+
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName-country-US-state-NY-city-newyork:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+</CodeGroup>
+
+<Warning>
+  City targeting requires both country and state to be specified. Remove spaces from city names (e.g., "Los Angeles" becomes "losangeles").
+</Warning>
+
+### Sticky sessions
+
+Maintain the same IP across multiple requests:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Use session ID to maintain same IP
+session_id = "mysession123"
+proxies = {
+    'http': f'http://account-accountName-pipeline-pipelineName-session-{session_id}:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': f'http://account-accountName-pipeline-pipelineName-session-{session_id}:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+# First request
+response1 = requests.get('https://ipinfo.io', proxies=proxies)
+ip1 = response1.json()['ip']
+
+# Second request - uses same IP
+response2 = requests.get('https://example.com', proxies=proxies)
+
+print(f"Both requests used IP: {ip1}")
+```
+
+
+```javascript Node.js
+const sessionId = 'mysession123';
+
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: `account-accountName-pipeline-pipelineName-session-${sessionId}:pipelinePassword@gateway.nimbleway.com`,
+      port: 7000
+    }
+  }
+}
+
+// Both requests use same IP
+const response1 = await axios('https://ipinfo.io/json', await getProxy());
+const response2 = await axios('https://example.com', await getProxy());
+
+console.log(`IP maintained: ${response1.data.ip}`);
+```
+
+
+```bash cURL
+# First request
+curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+
+# Second request - same IP
+curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://example.com
+```
+
+</CodeGroup>
+
+**Session behavior:**
+
+- Sessions remain active for 10 minutes after last request
+- Session IDs can be up to 32 alphanumeric characters
+- If IP goes offline, a new IP is automatically assigned
+
+### Combined targeting and sessions
+
+Combine geotargeting with sticky sessions:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Sticky session with US targeting
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US-state-NY-session-mysession:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US-state-NY-session-mysession:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+# Multiple requests maintain same New York IP
+for i in range(3):
+    response = requests.get('https://ipinfo.io', proxies=proxies)
+    print(f"Request {i+1}: {response.json()['city']}, {response.json()['region']}")
+```
+
+
+```javascript Node.js
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-GB-session-uksession:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+// Multiple requests from UK with same IP
+for (let i = 0; i < 3; i++) {
+  const response = await axios('https://ipinfo.io/json', await getProxy());
+  console.log(`Request ${i+1}: ${response.data.city}, ${response.data.country}`);
+}
+```
+
+</CodeGroup>
+
+### Geo-sessions (advanced)
+
+Maintain geographic proximity and ISP consistency across rotations:
+
+<CodeGroup>
+
+```python Python
+import requests
+
+# Geo-session requires 16-32 character session ID
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US-geosession-mysession12345678:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US-geosession-mysession12345678:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(response.text)
+```
+
+
+```javascript Node.js
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-US-geosession-location789012345678:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(response.data);
+```
+
+</CodeGroup>
+
+**Geo-session features:**
+
+- IPs stay within 15km of original location
+- Same ISP/ASN across rotations
+- Session persists up to 10 days
+- Currently available in US only
+- Requires session ID of 16-32 characters
+
+## Authentication methods
+
+### Username & password
+
+Include credentials in every request (default method):
+
+```bash
+http://account-{accountName}-pipeline-{pipelineName}:{pipelinePassword}@gateway.nimbleway.com:7000
+```
+
+### IP allowlist
+
+Authenticate by trusted IP addresses without credentials:
+
+1. Add your IP to pipeline allowlist in Nimble dashboard
+2. Configure custom port (9000-10000)
+3. Send requests without username/password:
+
+```bash
+curl -x http://gateway.nimbleway.com:9000 https://ipinfo.io
+```
+
+<Card title="Learn More About Authentication" icon="key" href="/documentation/residential-proxy/authentication">
+  Detailed guide to authentication methods and configuration
+</Card>
+
+## Response format
+
+### Successful response
+
+When requesting `https://ipinfo.io`:
+
+```json
+{
+  "ip": "203.0.113.45",
+  "city": "Los Angeles",
+  "region": "California",
+  "country": "US",
+  "loc": "34.0522,-118.2437",
+  "org": "AS12345 Example ISP",
+  "timezone": "America/Los_Angeles"
+}
+```
+
+### Error responses
+
+| Code | Meaning                            | Solution                                    |
+| ---- | ---------------------------------- | ------------------------------------------- |
+| 407  | Authentication failed              | Verify account name, pipeline, and password |
+| 525  | No IP available for location       | Try different location or remove filtering  |
+| 401  | IP not in allowlist                | Add your IP to pipeline allowlist           |
+| 403  | Pipeline disabled or quota reached | Check dashboard for pipeline status         |
+
+<Card title="Complete Response Codes" icon="circle-info" href="/documentation/residential-proxy/response-codes">
+  View all response codes and troubleshooting steps
+</Card>
+
+## Best practices
+
+### Choose appropriate rotation
+
+**Use rotating IPs (default) for:**
+
+- Web scraping at scale
+- Rate limit distribution
+- Maximum IP diversity
+
+**Use sticky sessions for:**
+
+- Multi-step workflows
+- Login flows
+- Shopping cart sessions
+
+### Configure timeouts
+
+Set appropriate timeouts for proxy requests:
+
+```python
+# Recommended timeout settings
+response = requests.get(
+    'https://example.com',
+    proxies=proxies,
+    timeout=45  # 45 seconds recommended
+)
+```
+
+### Handle IP rotation
+
+Plan for IP changes in sticky sessions:
+
+```python
+import requests
+from requests.exceptions import ProxyError
+
+def make_request_with_retry(url, proxies, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, proxies=proxies, timeout=45)
+            return response
+        except ProxyError:
+            print(f"Attempt {attempt + 1} failed, retrying...")
+            continue
+    raise Exception("Max retries exceeded")
+```
+
+### Monitor quota usage
+
+Track your proxy usage to avoid hitting limits:
+
+- Check dashboard for real-time usage
+- Set up alerts for quota thresholds
+- Plan request volume within limits
+
+## Common use cases
+
+### E-commerce price monitoring
+
+Monitor prices across different regions:
+
+```python
+import requests
+
+countries = ['US', 'GB', 'DE', 'FR']
+
+for country in countries:
+    proxies = {
+        'http': f'http://account-accountName-pipeline-pipelineName-country-{country}:pipelinePassword@gateway.nimbleway.com:7000',
+        'https': f'http://account-accountName-pipeline-pipelineName-country-{country}:pipelinePassword@gateway.nimbleway.com:7000'
+    }
+
+    response = requests.get('https://shop.example.com/product/123', proxies=proxies)
+    print(f"{country} price: {extract_price(response.text)}")
+```
+
+### SERP data collection
+
+Collect search results from multiple locations:
+
+```python
+import requests
+
+locations = [
+    {'country': 'US', 'state': 'CA'},
+    {'country': 'US', 'state': 'NY'},
+    {'country': 'GB'}
+]
+
+for loc in locations:
+    if 'state' in loc:
+        proxy_url = f"http://account-accountName-pipeline-pipelineName-country-{loc['country']}-state-{loc['state']}:pipelinePassword@gateway.nimbleway.com:7000"
+    else:
+        proxy_url = f"http://account-accountName-pipeline-pipelineName-country-{loc['country']}:pipelinePassword@gateway.nimbleway.com:7000"
+
+    proxies = {'http': proxy_url, 'https': proxy_url}
+    response = requests.get('https://www.google.com/search?q=example', proxies=proxies)
+    # Process SERP data
+```
+
+### Multi-step automation
+
+Maintain session through login and workflow:
+
+```python
+import requests
+
+session_id = "workflow123"
+proxies = {
+    'http': f'http://account-accountName-pipeline-pipelineName-country-US-session-{session_id}:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': f'http://account-accountName-pipeline-pipelineName-country-US-session-{session_id}:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+# Step 1: Login
+login_response = requests.post('https://example.com/login',
+                               data={'user': 'test', 'pass': 'test'},
+                               proxies=proxies)
+
+# Step 2: Navigate (same IP)
+page_response = requests.get('https://example.com/dashboard', proxies=proxies)
+
+# Step 3: Action (same IP)
+action_response = requests.post('https://example.com/action',
+                                data={'action': 'submit'},
+                                proxies=proxies)
+```
+
+## Limitations
+
+### Geographic coverage
+
+- **Global**: Residential IPs available in 195+ countries
+- **State targeting**: US only
+- **City targeting**: Major cities worldwide
+- **Geo-sessions**: US only (as of current version)
+
+### Session limits
+
+- **Session duration**: 10 minutes of inactivity
+- **Geo-session duration**: Up to 10 days
+- **Session ID length**: Maximum 32 characters
+- **Geo-session ID length**: 16-32 characters (minimum 16)
+
+### Request limits
+
+- **Timeout**: Recommended 40-45 seconds
+- **Concurrent connections**: Varies by plan
+- **Quota**: Based on your subscription plan
+
+## Next steps
+
+Explore related Proxy features:
+
+<CardGroup cols={2}>
+  <Card title="Proxy Quickstart" icon="rocket" href="/documentation/web-tools/proxy/proxy-quickstart">
+    Get started in minutes
+  </Card>
+  <Card title="Geotargeting Guide" icon="location-dot" href="/documentation/residential-proxy/geotargeting">
+    Advanced location targeting
+  </Card>
+  <Card title="Session Control" icon="rotate" href="/documentation/residential-proxy/session-control">
+    Manage IP rotation
+  </Card>
+  <Card title="Authentication" icon="key" href="/documentation/residential-proxy/authentication">
+    Setup authentication methods
+  </Card>
+</CardGroup>

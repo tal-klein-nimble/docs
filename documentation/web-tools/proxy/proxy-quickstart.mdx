@@ -1,7 +1,276 @@
 ---
-title: "Proxy"
+title: "Quick Start"
+description: "Access premium residential IPs in seconds"
 ---
 
-<Card title="Proxy API - Legacy Docs Site" icon="globe" href="https://docs.nimbleway.com/nimble-sdk/proxy-api">
-  
-</Card>
+Nimble **Residential Proxy** provides access to a global network of premium residential IPs through a single BackConnect gateway. Simple proxy connection with advanced features like geotargeting and session control.
+
+<Note>
+  For comprehensive details, parameters, and advanced features, see the **Proxy Usage** page.
+</Note>
+
+## Proxy Quick Start
+
+### Proxy Connection Format
+
+```bash
+http://account-{accountName}-pipeline-{pipelineName}:{pipelinePassword}@gateway.nimbleway.com:7000
+```
+
+### Setup
+
+Get your credentials from the [Nimble dashboard](https://online.nimbleway.com):
+
+- **Account Name**: Your company gateway name
+- **Pipeline Name**: Pipeline to use (default: "residential")
+- **Pipeline Password**: Your pipeline authentication credential
+
+### Basic Usage
+
+Send requests through the residential proxy:
+
+<CodeGroup>
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+
+```python Python
+import requests
+
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+
+print(response.status_code)
+print(response.text)
+```
+
+
+```javascript Node.js
+const axios = require('axios');
+
+const targetAddress = "https://ipinfo.io/json";
+
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const run = async () => {
+  const res = await axios(targetAddress, await getProxy());
+  return res.data;
+}
+
+(async () => {
+  const response = await run()
+  console.log(response);
+})();
+```
+
+
+```go Go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+)
+
+func main() {
+	proxyURL, _ := url.Parse("http://account-accountName-pipeline-pipelineName:pipelinePassword@gateway.nimbleway.com:7000")
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		},
+	}
+
+	req, _ := http.NewRequest("GET", "https://ipinfo.io", nil)
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+}
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "ip": "203.0.113.45",
+  "city": "Los Angeles",
+  "region": "California",
+  "country": "US",
+  "loc": "34.0522,-118.2437",
+  "org": "AS12345 Example ISP",
+  "timezone": "America/Los_Angeles"
+}
+```
+
+## Common patterns
+
+### Target specific country
+
+Route requests through IPs from a specific country:
+
+<CodeGroup>
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+
+```python Python
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(f"Country: {response.json()['country']}")
+```
+
+
+```javascript Node.js
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-US:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(`Country: ${response.data.country}`);
+```
+
+</CodeGroup>
+
+### Maintain sticky session
+
+Keep the same IP across multiple requests:
+
+<CodeGroup>
+
+```bash cURL
+# First request
+curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+
+# Second request - same IP
+curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://example.com
+```
+
+
+```python Python
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-session-mysession123:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+# Both requests use the same IP
+response1 = requests.get('https://ipinfo.io', proxies=proxies)
+response2 = requests.get('https://example.com', proxies=proxies)
+
+print(f"IP1: {response1.json()['ip']}")
+print(f"IP2: Same as IP1")
+```
+
+
+```javascript Node.js
+const sessionId = 'mysession123';
+
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: `account-accountName-pipeline-pipelineName-session-${sessionId}:pipelinePassword@gateway.nimbleway.com`,
+      port: 7000
+    }
+  }
+}
+
+// Both requests use the same IP
+const response1 = await axios('https://ipinfo.io/json', await getProxy());
+const response2 = await axios('https://example.com', await getProxy());
+
+console.log(`Both requests use IP: ${response1.data.ip}`);
+```
+
+</CodeGroup>
+
+### Target state and city
+
+Precise location targeting for US states and cities:
+
+<CodeGroup>
+
+```bash cURL
+curl -x http://account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com:7000 \
+  https://ipinfo.io
+```
+
+
+```python Python
+# Target California
+proxies = {
+    'http': 'http://account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com:7000',
+    'https': 'https://account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com:7000'
+}
+
+response = requests.get('https://ipinfo.io', proxies=proxies)
+print(f"State: {response.json()['region']}")
+```
+
+
+```javascript Node.js
+const getProxy = async () => {
+  return {
+    proxy: {
+      host: "account-accountName-pipeline-pipelineName-country-US-state-CA:pipelinePassword@gateway.nimbleway.com",
+      port: 7000
+    }
+  }
+}
+
+const response = await axios('https://ipinfo.io/json', await getProxy());
+console.log(`State: ${response.data.region}`);
+```
+
+</CodeGroup>
+
+## Next steps
+
+Explore more Proxy features and Web Tools:
+
+<CardGroup cols={2}>
+  <Card title="Proxy Usage" icon="book" href="/documentation/web-tools/proxy">
+    Complete guide to all Proxy features and parameters
+  </Card>
+  <Card title="Geotargeting" icon="location-dot" href="/documentation/residential-proxy/geotargeting">
+    Advanced location targeting options
+  </Card>
+  <Card title="Session Control" icon="rotate" href="/documentation/residential-proxy/session-control">
+    Control IP rotation behavior
+  </Card>
+  <Card title="Authentication" icon="key" href="/documentation/residential-proxy/authentication">
+    Learn about authentication methods
+  </Card>
+</CardGroup>
