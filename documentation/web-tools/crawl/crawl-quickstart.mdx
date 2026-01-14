@@ -3,11 +3,36 @@ title: "Quick Start"
 description: "Map and Extract content from entire websites at scale"
 ---
 
-Nimble Crawl discovers and extracts content from every page on a website in a single operation. It maps URLs through sitemaps and internal links, then retrieves HTML, text, and structured data from each page automatically.
+Nimble **Crawl** discovers and extracts content from every page on a website in a single operation. It maps URLs through sitemaps and internal links, then retrieves HTML, text, and structured data from each page automatically.
 
-## Start a crawl
+<Note>
+  For comprehensive details, parameters, and advanced features, see the **Crawl Usage** page.
+</Note>
 
-Begin crawling a website and discover all its URLs:
+## API Endpoint
+
+```bash
+POST https://api.webit.live/api/v1/crawl
+```
+
+## Installation
+
+<CodeGroup>
+
+```bash Python
+pip install nimble-py
+```
+
+
+```bash Node.js
+npm install @nimbleway/sdk
+```
+
+</CodeGroup>
+
+## Basic Crawl
+
+Begin crawling a website and discover all its URLs using `nimble.crawl()`:
 
 <CodeGroup>
 
@@ -205,22 +230,3 @@ curl -X POST 'https://api.nimbleway.io/crawl' \
 ```
 
 </CodeGroup>
-
-## Next steps
-
-Explore more Crawl features and Web Tools:
-
-<CardGroup cols={2}>
-  <Card title="Crawl Usage" icon="book" href="/documentation/web-tools/crawl">
-    Complete guide to all crawl features and parameters
-  </Card>
-  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract">
-    Extract content from discovered URLs
-  </Card>
-  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search">
-    Perform web searches across multiple engines
-  </Card>
-  <Card title="Extract Templates" icon="sparkles" href="/documentation/web-tools/extract-templates/template-usage">
-    Use pre-built templates for popular platforms
-  </Card>
-</CardGroup>
