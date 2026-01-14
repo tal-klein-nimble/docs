@@ -94,6 +94,7 @@
               "documentation/web-tools/proxy",
               {
                 "group": "Crawl",
+                "hidden": true,
                 "pages": [
                   "documentation/web-tools/crawl/crawl-quickstart",
                   "documentation/web-tools/crawl"

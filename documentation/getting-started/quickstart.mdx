@@ -177,6 +177,52 @@ curl -X POST 'https://api.webit.live/api/v1/search' \
 
 </CodeGroup>
 
+### Map
+
+Fast URL discovery and site structure mapping:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  Sitemap: "only"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+}'
+```
+
+</CodeGroup>
+
 ### Crawl
 
 Discover and map entire websites automatically:
@@ -237,8 +283,8 @@ Explore the **Web Tools** documentation:
   <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search-quickstart">
     Perform web searches and retrieve parsed content from top results
   </Card>
-  <Card title="Map" icon="sitemap">
-    Coming Soon...
+  <Card title="Map" icon="sitemap" href="/documentation/web-tools/map/map-quickstart">
+    Fast URL discovery and site structure mapping
   </Card>
   <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
     Discover and map entire websites automatically

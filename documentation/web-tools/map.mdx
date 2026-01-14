@@ -1,3 +1,609 @@
 ---
 title: "Map Usage"
+description: "Fast URL discovery and site structure mapping"
 ---
+
+The Map API enables fast URL discovery and site structure mapping. It's a lightweight alternative to Crawl that focuses on quick URL discovery, primarily using sitemaps for efficient site mapping.
+
+## When to use
+
+Use the Map API when you need to:
+
+- **Quick URL discovery**: Fast retrieval of all URLs from a website
+- **Sitemap validation**: Verify and extract URLs from sitemaps
+- **Site structure analysis**: Understand website organization and hierarchy
+- **URL inventory**: Generate complete lists of URLs for auditing
+- **SEO analysis**: Discover all indexable pages quickly
+- **Pre-crawl planning**: Identify URLs before running a full crawl
+
+<Note>
+  Map is optimized for speed and uses sitemaps as the primary discovery method. For deep link following and comprehensive crawling, use the [Crawl API](/documentation/web-tools/crawl) instead.
+</Note>
+
+## API endpoint
+
+```bash
+POST https://api.nimbleway.io/map
+```
+
+## Core parameters
+
+### Basic parameters
+
+| Parameter      | Type   | Description                            | Required |
+| -------------- | ------ | -------------------------------------- | -------- |
+| `URL`          | String | URL to map                             | Yes      |
+| `Sitemap`      | String | How to use sitemap (see options below) | No       |
+| `country`      | String | Country code for geo-targeted mapping  | No       |
+| `locale`       | String | Locale settings for mapping operation  | No       |
+| `domainFilter` | String | Controls which domains to include      | No       |
+
+### Sitemap options
+
+| Value     | Description                                     | Use Case                   |
+| --------- | ----------------------------------------------- | -------------------------- |
+| `include` | Use sitemap URLs plus discovered URLs (default) | Comprehensive mapping      |
+| `only`    | Only URLs found in sitemap                      | Fast sitemap-based mapping |
+| `ignore`  | Skip sitemap, discover URLs through page crawl  | Non-sitemap sites          |
+
+### Domain filter options
+
+| Value          | Description                           | Use Case               |
+| -------------- | ------------------------------------- | ---------------------- |
+| `exact domain` | Only URLs from the exact domain       | Single domain mapping  |
+| `subdomain`    | Include subdomains                    | Multi-subdomain sites  |
+| `all`          | Include all domains (v2, coming soon) | Cross-domain discovery |
+
+## Usage
+
+### Basic map
+
+Map a website using default settings:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com"
+})
+
+print(f"Found {len(result['urls'])} URLs")
+for url in result['urls']:
+    print(url)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com"
+});
+
+console.log(`Found ${result.urls.length} URLs`);
+result.urls.forEach(url => console.log(url));
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com"
+}'
+```
+
+</CodeGroup>
+
+### Sitemap-only mapping
+
+Fast mapping using only the sitemap:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+print(f"Found {len(result['urls'])} URLs in sitemap")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  Sitemap: "only"
+});
+
+console.log(`Found ${result.urls.length} URLs in sitemap`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+}'
+```
+
+</CodeGroup>
+
+### Ignore sitemap
+
+Map without using sitemap, discovering URLs through page crawling:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "ignore"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  Sitemap: "ignore"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "Sitemap": "ignore"
+}'
+```
+
+</CodeGroup>
+
+### Include subdomains
+
+Map URLs across all subdomains:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  domainFilter: "subdomain"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+}'
+```
+
+</CodeGroup>
+
+### Exact domain only
+
+Restrict mapping to exact domain only:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://blog.example.com",
+  domainFilter: "exact domain"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+}'
+```
+
+</CodeGroup>
+
+### Geo-targeted mapping
+
+Map with specific country and locale settings:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "country": "UK",
+    "locale": "en-GB"
+})
+
+print(result)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  country: "UK",
+  locale: "en-GB"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "country": "UK",
+    "locale": "en-GB"
+}'
+```
+
+</CodeGroup>
+
+## Response format
+
+### Successful response
+
+```json
+{
+  "urls": [
+    "https://www.example.com",
+    "https://www.example.com/about",
+    "https://www.example.com/products",
+    "https://www.example.com/contact",
+    "https://www.example.com/blog"
+  ]
+}
+```
+
+## Map vs Crawl
+
+Choose the right tool for your needs:
+
+<CardGroup cols={2}>
+  <Card title="Map API" icon="map">
+    **Best for:**
+
+    - Fast URL discovery
+    - Sitemap-based mapping
+    - Quick site structure analysis
+    - Synchronous operations
+    - URL inventory generation
+
+    **Speed:** Very fast (seconds)
+  </Card>
+  <Card title="Crawl API" icon="spider">
+    **Best for:**
+
+    - Deep link following
+    - Comprehensive URL discovery
+    - Complex filtering rules
+    - Large-scale crawling
+    - Webhook notifications
+
+    **Speed:** Slower (minutes to hours)
+  </Card>
+</CardGroup>
+
+### When to use Map
+
+**Choose Map when you need:**
+
+```python
+# Quick sitemap validation
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+# Fast pre-crawl analysis
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+})
+```
+
+### When to use Crawl
+
+**Choose Crawl when you need:**
+
+```python
+# Complex filtering with patterns
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "include_paths": ["/blog/.*", "/articles/.*"],
+    "exclude_paths": [".*/tag/.*"],
+    "limit": 5000
+})
+
+# Webhook notifications for large jobs
+result = nimble.crawl({
+    "url": "https://www.example.com",
+    "limit": 2000,
+    "callback": {
+        "webhook": {
+            "url": "https://your-server.com/webhook"
+        }
+    }
+})
+```
+
+## Best practices
+
+### Choose appropriate sitemap mode
+
+**Fast mapping with sitemap:**
+
+```python
+# ✅ Good: Use sitemap for fast results
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"  # Fastest option
+})
+```
+
+**Without sitemap:**
+
+```python
+# Use when sitemap is unavailable or incomplete
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "ignore"
+})
+```
+
+### Use domain filters effectively
+
+**Single domain mapping:**
+
+```python
+# Map only the exact domain
+result = nimble.map({
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+})
+```
+
+**Multi-subdomain mapping:**
+
+```python
+# Include all subdomains
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+})
+```
+
+### Combine with Extract
+
+**Map then extract workflow:**
+
+```python
+# Step 1: Discover URLs
+map_result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+# Step 2: Extract content from discovered URLs
+for url in map_result['urls']:
+    content = nimble.extract({
+        "url": url,
+        "render": True
+    })
+    # Process content
+```
+
+## Common use cases
+
+### Sitemap validation
+
+Verify sitemap completeness and accuracy:
+
+```python
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+print(f"Sitemap contains {len(result['urls'])} URLs")
+```
+
+### Blog URL discovery
+
+Find all blog posts for content analysis:
+
+```python
+result = nimble.map({
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+})
+
+blog_posts = [url for url in result['urls'] if '/blog/' in url]
+print(f"Found {len(blog_posts)} blog posts")
+```
+
+### Multi-language site mapping
+
+Discover URLs across language-specific subdomains:
+
+```python
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+})
+
+# Filter by subdomain
+en_urls = [url for url in result['urls'] if 'en.' in url]
+fr_urls = [url for url in result['urls'] if 'fr.' in url]
+```
+
+### E-commerce product inventory
+
+Generate product URL inventory:
+
+```python
+result = nimble.map({
+    "URL": "https://shop.example.com",
+    "Sitemap": "only"
+})
+
+product_urls = [url for url in result['urls'] if '/products/' in url]
+print(f"Found {len(product_urls)} product pages")
+```
+
+### SEO audit preparation
+
+Quick URL discovery for SEO analysis:
+
+```python
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "include"
+})
+
+# Analyze URL structure
+print(f"Total URLs: {len(result['urls'])}")
+
+# Count by URL patterns
+for pattern in ['/blog/', '/products/', '/docs/']:
+    count = len([url for url in result['urls'] if pattern in url])
+    print(f"{pattern}: {count} URLs")
+```
+
+## Limitations
+
+### Discovery method
+
+- **Primary method**: Sitemap-based discovery
+- **Secondary method**: Basic page crawling when sitemap is ignored
+- **Not included**: Deep link following, complex filtering patterns
+
+### Performance
+
+- **Speed**: Optimized for fast results (typically completes in seconds)
+- **Scale**: Best for small to medium sites (\< 10,000 URLs)
+- **Complexity**: Limited filtering compared to Crawl API
+
+### Domain filtering
+
+- **Version 1**: `exact domain` and `subdomain` options available
+- **Version 2**: `all` option (cross-domain discovery) coming soon
+
+<Tip>
+  For large-scale URL discovery with complex filtering needs, use the [Crawl API](/documentation/web-tools/crawl) instead.
+</Tip>
+
+## Next steps
+
+Explore related Web Tools features:
+
+<CardGroup cols={2}>
+  <Card title="Map Quickstart" icon="rocket" href="/documentation/web-tools/map/map-quickstart">
+    Get started with Map in minutes
+  </Card>
+  <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl">
+    Deep crawling with advanced filtering
+  </Card>
+  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract">
+    Extract content from discovered URLs
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search">
+    Perform web searches across engines
+  </Card>
+</CardGroup>

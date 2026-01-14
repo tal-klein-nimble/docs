@@ -1,3 +1,278 @@
 ---
 title: "Quick Start"
+description: "Discover URLs and map site structure in seconds"
 ---
+
+Quickly discover and map all URLs from a website using sitemaps and page analysis. This guide will help you start mapping in minutes.
+
+## Basic mapping
+
+Discover URLs from a website:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.map({
+    "URL": "https://www.example.com"
+})
+
+print(f"Found {len(result['urls'])} URLs")
+for url in result['urls']:
+    print(url)
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.map({
+  URL: "https://www.example.com"
+});
+
+console.log(`Found ${result.urls.length} URLs`);
+result.urls.forEach(url => console.log(url));
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com"
+}'
+```
+
+</CodeGroup>
+
+## Common patterns
+
+### Fast sitemap mapping
+
+Use only the sitemap for fastest results:
+
+<CodeGroup>
+
+```python Python
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+print(f"Found {len(result['urls'])} URLs in sitemap")
+```
+
+
+```node Node.js
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  Sitemap: "only"
+});
+
+console.log(`Found ${result.urls.length} URLs in sitemap`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+}'
+```
+
+</CodeGroup>
+
+### Include subdomains
+
+Map across all subdomains:
+
+<CodeGroup>
+
+```python Python
+result = nimble.map({
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+})
+
+print(result)
+```
+
+
+```node Node.js
+const result = await nimble.map({
+  URL: "https://www.example.com",
+  domainFilter: "subdomain"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "domainFilter": "subdomain"
+}'
+```
+
+</CodeGroup>
+
+### Exact domain only
+
+Restrict to a specific domain:
+
+<CodeGroup>
+
+```python Python
+result = nimble.map({
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+})
+
+print(result)
+```
+
+
+```node Node.js
+const result = await nimble.map({
+  URL: "https://blog.example.com",
+  domainFilter: "exact domain"
+});
+
+console.log(result);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://blog.example.com",
+    "domainFilter": "exact domain"
+}'
+```
+
+</CodeGroup>
+
+## Map then extract workflow
+
+Discover URLs and extract content:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+# Step 1: Map the site
+map_result = nimble.map({
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+})
+
+# Step 2: Extract content from each URL
+for url in map_result['urls']:
+    content = nimble.extract({
+        "url": url,
+        "render": True
+    })
+    print(f"Extracted: {url}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+// Step 1: Map the site
+const mapResult = await nimble.map({
+  URL: "https://www.example.com",
+  Sitemap: "only"
+});
+
+// Step 2: Extract content from each URL
+for (const url of mapResult.urls) {
+  const content = await nimble.extract({
+    url: url,
+    render: true
+  });
+  console.log(`Extracted: ${url}`);
+}
+```
+
+
+```bash cURL
+# Step 1: Map the site
+curl -X POST 'https://api.nimbleway.io/map' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "URL": "https://www.example.com",
+    "Sitemap": "only"
+}'
+
+# Step 2: Extract each URL (loop in your script)
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/page",
+    "render": true
+}'
+```
+
+</CodeGroup>
+
+## Sitemap options
+
+Choose how to use the sitemap:
+
+| Option    | Description                         | Speed   | Use When              |
+| --------- | ----------------------------------- | ------- | --------------------- |
+| `only`    | Only URLs from sitemap              | Fastest | Sitemap is complete   |
+| `include` | Sitemap + discovered URLs (default) | Fast    | Comprehensive mapping |
+| `ignore`  | Skip sitemap, discover via crawl    | Slower  | No sitemap available  |
+
+## Domain filter options
+
+Control which domains to include:
+
+| Option         | Description                     | Use Case               |
+| -------------- | ------------------------------- | ---------------------- |
+| `exact domain` | Only the exact domain           | Single domain sites    |
+| `subdomain`    | Include all subdomains          | Multi-subdomain sites  |
+| `all`          | All domains (coming soon in v2) | Cross-domain discovery |
+
+## Next steps
+
+Explore more Map features and Web Tools:
+
+<CardGroup cols={2}>
+  <Card title="Map Usage" icon="book" href="/documentation/web-tools/map">
+    Complete guide to all Map features and parameters
+  </Card>
+  <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
+    Deep crawling with advanced filtering options
+  </Card>
+  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract">
+    Extract content from discovered URLs
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search">
+    Perform web searches across multiple engines
+  </Card>
+</CardGroup>
