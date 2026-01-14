@@ -47,7 +47,7 @@
             "pages": [
               {
                 "group": "Extract",
-                "icon": "minimize",
+                "icon": "arrows-to-circle",
                 "pages": [
                   "documentation/web-tools/extract/extract-quickstart",
                   "documentation/web-tools/extract/extract",
