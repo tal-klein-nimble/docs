@@ -55,6 +55,7 @@ curl -x http://account-accountName-pipeline-pipelineName-session-mysession123:pi
   https://example.com
 ```
 
+
 ```python Python
 import requests
 
@@ -72,6 +73,7 @@ print(response1.text)
 response2 = requests.get('https://example.com', proxies=proxies)
 print(response2.text)
 ```
+
 
 ```javascript Node.js
 const axios = require('axios');
@@ -131,28 +133,29 @@ For IP allowlist authentication, configure rotation behavior in pipeline setting
 
 ### Rotation Options
 
-| Option | Description |
-|--------|-------------|
+| Option        | Description                       |
+| ------------- | --------------------------------- |
 | Every request | New IP for each request (default) |
-| 1 minute | Rotate IP every 1 minute |
-| 3 minutes | Rotate IP every 3 minutes |
-| 5 minutes | Rotate IP every 5 minutes |
-| 10 minutes | Rotate IP every 10 minutes |
-| 30 minutes | Rotate IP every 30 minutes |
+| 1 minute      | Rotate IP every 1 minute          |
+| 3 minutes     | Rotate IP every 3 minutes         |
+| 5 minutes     | Rotate IP every 5 minutes         |
+| 10 minutes    | Rotate IP every 10 minutes        |
+| 30 minutes    | Rotate IP every 30 minutes        |
 
 ### IP Replacement Options
 
 Configure what happens when the current IP becomes unavailable:
 
-| Option | Behavior |
-|--------|----------|
-| Replace IP | Automatically assign any available IP |
-| Same ASN | Replace with IP from same ISP/ASN |
-| Fail request | Return error instead of replacing IP |
+| Option       | Behavior                              |
+| ------------ | ------------------------------------- |
+| Replace IP   | Automatically assign any available IP |
+| Same ASN     | Replace with IP from same ISP/ASN     |
+| Fail request | Return error instead of replacing IP  |
 
 ### Configuration Methods
 
 Configure through:
+
 - Nimble dashboard pipeline settings page
 - Admin API `/account/pipelines` endpoint
 
@@ -162,13 +165,13 @@ For enhanced location consistency, use geo-sessions instead of regular sessions.
 
 ### Key Differences
 
-| Feature | Regular Session | Geo-Session |
-|---------|----------------|-------------|
-| IP consistency | Same IP maintained | May rotate within constraints |
-| Location consistency | City-level | 15km radius |
-| ASN consistency | No guarantee | Guaranteed same ISP |
-| Rotation sensitivity | Medium | Low (more stable) |
-| Performance | High | Medium |
+| Feature              | Regular Session    | Geo-Session                   |
+| -------------------- | ------------------ | ----------------------------- |
+| IP consistency       | Same IP maintained | May rotate within constraints |
+| Location consistency | City-level         | 15km radius                   |
+| ASN consistency      | No guarantee       | Guaranteed same ISP           |
+| Rotation sensitivity | Medium             | Low (more stable)             |
+| Performance          | High               | Medium                        |
 
 ### Format
 
@@ -191,7 +194,7 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US-geosession-m
 ```
 
 <Info>
-**When to use Geo-sessions**: Use geo-sessions for long, multi-step processes that need location stability (within 15km) and ASN consistency, such as simulating real user behavior or multi-page workflows.
+  **When to use Geo-sessions**: Use geo-sessions for long, multi-step processes that need location stability (within 15km) and ASN consistency, such as simulating real user behavior or multi-page workflows.
 </Info>
 
 ## Use Cases
@@ -199,27 +202,28 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US-geosession-m
 <AccordionGroup>
   <Accordion title="Web Scraping with Login">
     Use sticky sessions to maintain authentication across multiple page requests:
+
     ```bash
     session-loginflow123
     ```
   </Accordion>
-
   <Accordion title="Multi-Page Workflows">
     Navigate through multiple pages while maintaining the same IP:
+
     ```bash
     session-workflow456
     ```
   </Accordion>
-
   <Accordion title="Rate Limit Management">
     Rotate IPs every N minutes to distribute requests:
+
     ```
     Configure pipeline with 5-minute rotation interval
     ```
   </Accordion>
-
   <Accordion title="Location-Consistent Browsing">
     Maintain geographic proximity across long sessions:
+
     ```bash
     geosession-location789012345678
     ```

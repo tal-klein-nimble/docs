@@ -34,6 +34,7 @@ account-{accountName}-pipeline-{pipelineName}-country-{countryCode}
 ### Country Codes
 
 Use ISO 3166 alpha-2 country codes:
+
 - `US` - United States
 - `GB` - United Kingdom
 - `DE` - Germany
@@ -50,6 +51,7 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US:pipelinePass
   https://ipinfo.io
 ```
 
+
 ```python Python
 import requests
 
@@ -61,6 +63,7 @@ proxies = {
 response = requests.get('https://ipinfo.io', proxies=proxies)
 print(response.text)
 ```
+
 
 ```javascript Node.js
 const axios = require('axios');
@@ -98,7 +101,7 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US-state-CA:pip
 ```
 
 <Note>
-State targeting is only available when the country is set to `US`. Use standard two-letter US state codes (e.g., CA, NY, TX).
+  State targeting is only available when the country is set to `US`. Use standard two-letter US state codes (e.g., CA, NY, TX).
 </Note>
 
 ## City Targeting
@@ -119,7 +122,7 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US-state-CA-cit
 ```
 
 <Warning>
-City targeting requires both country and state to be specified. If no IPs are available in the specified city, the request will return a 525 response code.
+  City targeting requires both country and state to be specified. If no IPs are available in the specified city, the request will return a 525 response code.
 </Warning>
 
 ## Combining with Other Parameters
@@ -175,21 +178,22 @@ curl -x http://account-accountName-pipeline-pipelineName-country-US-city-chicago
 ```
 
 <Info>
-**Geo-sessions vs Regular Sessions**: Geo-sessions provide stricter location consistency (15km radius) and ASN matching, while regular sessions simply maintain the same IP. Use geo-sessions when precise location consistency is critical.
+  **Geo-sessions vs Regular Sessions**: Geo-sessions provide stricter location consistency (15km radius) and ASN matching, while regular sessions simply maintain the same IP. Use geo-sessions when precise location consistency is critical.
 </Info>
 
 ## Configuration via Dashboard
 
 For IP allowlist authentication, configure default geotargeting through:
+
 - Nimble dashboard pipeline settings
 - Admin API `/account/pipelines` endpoint
 
 ## Response Codes
 
-| Code | Meaning |
-|------|---------|
-| 200 | Success - IP found for target location |
-| 525 | No IP available for specified location |
+| Code | Meaning                                |
+| ---- | -------------------------------------- |
+| 200  | Success - IP found for target location |
+| 525  | No IP available for specified location |
 
 <Card title="View All Response Codes" icon="list" href="/residential-proxy/response-codes">
   See complete response code reference

@@ -47,6 +47,7 @@
             "pages": [
               {
                 "group": "Extract",
+                "icon": "minimize",
                 "pages": [
                   "documentation/web-tools/extract/extract-quickstart",
                   "documentation/web-tools/extract/extract",
@@ -77,6 +78,7 @@
               },
               {
                 "group": "Extract Templates",
+                "icon": "bullseye-pointer",
                 "pages": [
                   "documentation/web-tools/extract-templates/template-quickstart",
                   "documentation/web-tools/extract-templates/extract-templates",
@@ -85,26 +87,34 @@
               },
               {
                 "group": "Search",
+                "icon": "magnifying-glass",
                 "pages": [
                   "documentation/web-tools/search/search-quickstart",
                   "documentation/web-tools/search"
                 ]
               },
-              "documentation/web-tools/proxy",
+              {
+                "group": "Map",
+                "icon": "sitemap",
+                "pages": [
+                  "documentation/web-tools/map/map-quickstart",
+                  "documentation/web-tools/map"
+                ]
+              },
               {
                 "group": "Crawl",
-                "hidden": true,
+                "icon": "spider",
                 "pages": [
                   "documentation/web-tools/crawl/crawl-quickstart",
                   "documentation/web-tools/crawl"
                 ]
               },
               {
-                "group": "Map",
-                "hidden": true,
+                "group": "Proxy",
+                "icon": "globe",
                 "pages": [
-                  "documentation/web-tools/map/map-quickstart",
-                  "documentation/web-tools/map"
+                  "documentation/web-tools/proxy/proxy-quickstart",
+                  "documentation/web-tools/proxy/proxy-usage"
                 ]
               }
             ]
