@@ -23,7 +23,7 @@ Use the Crawl API when you need to:
 ## API endpoint
 
 ```bash
-POST https://api.nimbleway.io/crawl
+POST https://gateway.nimbleway.com/api/v1/crawl
 ```
 
 ## Core parameters
@@ -97,7 +97,7 @@ console.log(`Crawl started with ID: ${crawlId}`);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -144,7 +144,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -193,7 +193,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -244,7 +244,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -294,7 +294,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -343,7 +343,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -392,7 +392,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -457,7 +457,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -510,7 +510,7 @@ console.log(`Discovered: ${status.tasks.length}`);
 
 
 ```bash cURL
-curl -X GET 'https://api.nimbleway.io/crawl/{crawl_id}' \
+curl -X GET 'https://gateway.nimbleway.com/api/v1/crawl/{crawl_id}' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 
@@ -545,7 +545,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X DELETE 'https://api.nimbleway.io/crawl/{crawl_id}' \
+curl -X DELETE 'https://gateway.nimbleway.com/api/v1/crawl/{crawl_id}' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 
@@ -583,7 +583,7 @@ crawls.forEach(crawl => {
 
 
 ```bash cURL
-curl -X GET 'https://api.nimbleway.io/crawl?status=running' \
+curl -X GET 'https://gateway.nimbleway.com/api/v1/crawl?status=running' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 

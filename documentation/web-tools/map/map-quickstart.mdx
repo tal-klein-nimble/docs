@@ -14,7 +14,7 @@ Nimble **Map** quickly discovers and maps all URLs from a website. It uses sitem
 ### Map API Endpoint
 
 ```bash
-POST https://api.nimbleway.io/map
+POST https://gateway.nimbleway.com/api/v1/map
 ```
 
 ### Installation
@@ -68,7 +68,7 @@ result.urls.forEach(url => console.log(url));
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/map' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -121,7 +121,7 @@ console.log(`Found ${result.urls.length} URLs in sitemap`);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/map' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -159,7 +159,7 @@ console.log(`Found ${result.urls.length} URLs`);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/map' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -197,7 +197,7 @@ console.log(`Mapped ${result.urls.length} URLs from blog subdomain`);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/map' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/map' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{

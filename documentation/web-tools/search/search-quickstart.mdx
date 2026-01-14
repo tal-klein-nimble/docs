@@ -14,7 +14,7 @@ Nimble **Search** enables you to perform web searches and automatically retrieve
 ### Search API Endpoint
 
 ```bash
-POST https://api.webit.live/api/v1/search
+POST https://gateway.nimbleway.com/api/v1/search
 ```
 
 ### Installation
@@ -74,7 +74,7 @@ result.data.results.forEach(item => {
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/search' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -141,7 +141,7 @@ console.log(`Found ${result.data.results.length} results`);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/search' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -190,7 +190,7 @@ result.data.results.forEach(item => {
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/search' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -242,7 +242,7 @@ console.log(`\nBased on ${result.data.results.length} sources`);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/search' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/search' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{

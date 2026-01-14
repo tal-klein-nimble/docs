@@ -18,7 +18,7 @@ Use the Extract Template API when you need to:
 ## API endpoint
 
 ```bash
-POST https://api.webit.live/api/v1/extract-template
+POST https://gateway.nimbleway.com/api/v1/extract-template
 ```
 
 ## Parameters
@@ -105,7 +105,7 @@ console.log(`Rating: ${walmartResult.data.rating}`);
 
 ```bash cURL
 # Amazon product
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -118,7 +118,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 }'
 
 # Walmart product
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -183,7 +183,7 @@ result.data.products.forEach(product => {
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -272,7 +272,7 @@ jobsResult.data.jobs.forEach(job => {
 
 ```bash cURL
 # LinkedIn profile
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -283,7 +283,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 }'
 
 # LinkedIn jobs
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -377,7 +377,7 @@ mapsResult.data.results.forEach(place => {
 
 ```bash cURL
 # Google search
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -390,7 +390,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 }'
 
 # Google Maps
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -474,7 +474,7 @@ console.log(`Followers: ${instagramResult.data.followers_count}`);
 
 ```bash cURL
 # Twitter profile
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -485,7 +485,7 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 }'
 
 # Instagram profile
-curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/templates/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{

@@ -24,7 +24,7 @@ Use the Extract API when you need to:
 ## API endpoint
 
 ```bash
-POST https://api.webit.live/api/v1/extract
+POST https://gateway.nimbleway.com/api/v1/extract
 ```
 
 ## Core parameters
@@ -97,7 +97,7 @@ console.log(html);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -146,7 +146,7 @@ const { html, markdown, text } = result.data;
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -200,7 +200,7 @@ console.log(result.data.html);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -248,7 +248,7 @@ const result = await nimble.extract({
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -299,7 +299,7 @@ console.log(result.data.html);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -366,7 +366,7 @@ const result = await nimble.extract({
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -454,7 +454,7 @@ console.log(`Price: ${parsed.price}`);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -539,7 +539,7 @@ captured[0].result.forEach(request => {
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -611,7 +611,7 @@ const result = await nimble.extract({
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{

@@ -149,7 +149,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -161,7 +161,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -263,7 +263,7 @@ const result2 = await nimble.extract({
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -275,7 +275,7 @@ curl -X POST 'https://api.webit.live/api/v1/extract' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/extract' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/extract' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -404,7 +404,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form - single selector
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -416,7 +416,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Direct form - multiple selectors
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -428,7 +428,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -619,7 +619,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form - simple click by selector
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -631,7 +631,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form (selector mode) - with options
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -650,7 +650,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form (coordinates mode) - click at specific position
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -666,7 +666,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Coordinates relative to element
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -771,7 +771,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -783,7 +783,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -947,7 +947,7 @@ console.log(result);
 
 ```bash cURL
 # Type mode (default)
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -966,7 +966,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Paste mode
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -983,7 +983,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Fill with options
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1193,7 +1193,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form - scroll down 500px
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1205,7 +1205,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Direct form - scroll up 200px
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1217,7 +1217,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Direct form - scroll to bottom
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1229,7 +1229,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Direct form - scroll to element
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1241,7 +1241,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form - scroll by pixels
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1256,7 +1256,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form - scroll to element in container
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1396,7 +1396,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form - boolean
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1408,7 +1408,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Direct form - number
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1420,7 +1420,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form - with options
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1534,7 +1534,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1546,7 +1546,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1648,7 +1648,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1660,7 +1660,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1776,7 +1776,7 @@ console.log(result);
 
 ```bash cURL
 # Direct form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1788,7 +1788,7 @@ curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
 }'
 
 # Extended form
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -1893,7 +1893,7 @@ console.log(result);
 
 
 ```bash cURL
-curl -X POST 'https://api.webit.live/api/v1/realtime/web' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/realtime/web' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{

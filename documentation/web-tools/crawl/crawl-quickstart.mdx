@@ -14,7 +14,7 @@ Nimble **Crawl** discovers and extracts content from every page on a website in 
 ### Crawl API Endpoint
 
 ```bash
-POST https://api.webit.live/api/v1/crawl
+POST https://gateway.nimbleway.com/api/v1/crawl
 ```
 
 ### Installation
@@ -69,7 +69,7 @@ console.log(`Crawl started: ${crawlId}`);
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -129,7 +129,7 @@ console.log(`URLs found: ${status.total}`);
 
 
 ```bash cURL
-curl -X GET 'https://api.nimbleway.io/crawl/{crawl_id}' \
+curl -X GET 'https://gateway.nimbleway.com/api/v1/crawl/{crawl_id}' \
 --header 'Authorization: Bearer <YOUR-API-KEY>'
 ```
 
@@ -164,7 +164,7 @@ const result = await nimble.crawl({
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -202,7 +202,7 @@ const result = await nimble.crawl({
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -239,7 +239,7 @@ const result = await nimble.crawl({
 
 
 ```bash cURL
-curl -X POST 'https://api.nimbleway.io/crawl' \
+curl -X POST 'https://gateway.nimbleway.com/api/v1/crawl' \
 --header 'Authorization: Bearer <YOUR-API-KEY>' \
 --header 'Content-Type: application/json' \
 --data-raw '{
