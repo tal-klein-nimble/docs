@@ -9,7 +9,7 @@ Nimble **Extract Templates** are pre-built, production-ready extractors for popu
   For comprehensive details, template discovery, and advanced usage, see the **Extract Templates** pages.
 </Note>
 
-# Why use templates?
+## Why use templates?
 
 <Columns cols={3}>
   <Card title="Zero configuration" icon="stopwatch">
@@ -38,13 +38,15 @@ Nimble **Extract Templates** are pre-built, production-ready extractors for popu
   
 </Card>
 
-## API endpoint
+## Extract Template Quick Start
+
+### API endpoint
 
 ```bash
 POST https://api.webit.live/api/v1/extract-templates
 ```
 
-## Installation
+### Installation
 
 <CodeGroup>
 
@@ -59,7 +61,7 @@ npm install @nimbleway/sdk
 
 </CodeGroup>
 
-## Using a template
+### Basic Usage
 
 Use `nimble.extract_template()` to extract data from popular platforms.
 
@@ -143,88 +145,6 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
         "total": 45,
         "page": 1,
         "limit": 20
-    }
-}
-```
-
-## Discovering templates
-
-Browse available templates before using them.
-
-<Note>
-  **Coming Soon**: Template discovery APIs are currently under development. Use the [Platform UI](https://online.nimbleway.com/pipeline-gallery) to browse available templates.
-</Note>
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-# Initialize client
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-# List templates by category
-templates = nimble.list_templates({
-    "category": "ecommerce",
-    "limit": 20
-})
-
-print(templates)
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-// Initialize client
-const nimble = new Nimble({
-  apiKey: "YOUR-API-KEY",
-});
-
-// List templates by category
-const templates = await nimble.listTemplates({
-  category: "ecommerce",
-  limit: 20
-});
-
-console.log(templates);
-```
-
-
-```bash cURL
-curl -X GET 'https://api.webit.live/api/v1/templates?category=ecommerce&limit=20' \
---header 'Authorization: Bearer <YOUR-API-KEY>'
-```
-
-</CodeGroup>
-
-**Response**
-
-```json
-{
-    "status": "success",
-    "data": {
-        "title": "Apple AirPods Pro",
-        "price": 249.99,
-        "rating": 4.7,
-        "reviews_count": 45892,
-        "availability": "In Stock",
-        "prime_eligible": true,
-        "description": "Active Noise Cancellation for immersive sound...",
-        "images": [
-            "https://m.media-amazon.com/images/I/71bhWgQK-cL._AC_SL1500_.jpg"
-        ],
-        "features": [
-            "Active Noise Cancellation",
-            "Transparency mode",
-            "Adaptive EQ"
-        ]
-    },
-    "metadata": {
-        "task_id": "abc-123-def",
-        "template": "amazon_pdp",
-        "execution_time_ms": 2340,
-        "credits_used": 1
     }
 }
 ```

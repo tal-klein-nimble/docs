@@ -9,13 +9,15 @@ Nimble **Crawl** discovers and extracts content from every page on a website in 
   For comprehensive details, parameters, and advanced features, see the **Crawl Usage** page.
 </Note>
 
-## API Endpoint
+## Crawling Quick Start
+
+### Crawl API Endpoint
 
 ```bash
 POST https://api.webit.live/api/v1/crawl
 ```
 
-## Installation
+### Installation
 
 <CodeGroup>
 
@@ -30,7 +32,7 @@ npm install @nimbleway/sdk
 
 </CodeGroup>
 
-## Basic Crawl
+### Basic Usage
 
 Begin crawling a website and discover all its URLs using `nimble.crawl()`:
 
@@ -77,6 +79,24 @@ curl -X POST 'https://api.nimbleway.io/crawl' \
 ```
 
 </CodeGroup>
+
+### Response
+
+```json
+{
+    "status": "success",
+    "data": {
+        "html": "<!DOCTYPE html><html>...</html>",
+        "url": "https://www.example.com"
+    },
+    "metadata": {
+        "task_id": "05420ecd-457c-1432-95d8-a99b4e83c307",
+        "driver": "vx6",
+        "execution_time_ms": 450,
+        "credits_used": 1
+    }
+}
+```
 
 ## Check status
 
