@@ -3,11 +3,38 @@ title: "Quick Start"
 description: "Discover URLs and map site structure in seconds"
 ---
 
-Quickly discover and map all URLs from a website using sitemaps and page analysis. This guide will help you start mapping in minutes.
+Nimble **Map** quickly discovers and maps all URLs from a website. It uses sitemaps and page analysis to provide fast URL discovery and site structure mapping, perfect for pre-crawl planning and quick site audits.
 
-## Basic mapping
+<Note>
+  For comprehensive details, parameters, and advanced features, see the **Map Usage** page.
+</Note>
 
-Discover URLs from a website:
+## Mapping Quick Start
+
+### Map API Endpoint
+
+```bash
+POST https://api.nimbleway.io/map
+```
+
+### Installation
+
+<CodeGroup>
+
+```bash Python
+pip install nimble-py
+```
+
+
+```bash Node.js
+npm install @nimbleway/sdk
+```
+
+</CodeGroup>
+
+### Basic Usage
+
+Discover and map all URLs from a website using `nimble.map()`:
 
 <CodeGroup>
 
@@ -51,6 +78,20 @@ curl -X POST 'https://api.nimbleway.io/map' \
 
 </CodeGroup>
 
+### Response
+
+```json
+{
+  "urls": [
+    "https://www.example.com",
+    "https://www.example.com/about",
+    "https://www.example.com/products",
+    "https://www.example.com/contact",
+    "https://www.example.com/blog"
+  ]
+}
+```
+
 ## Common patterns
 
 ### Fast sitemap mapping
@@ -93,7 +134,7 @@ curl -X POST 'https://api.nimbleway.io/map' \
 
 ### Include subdomains
 
-Map across all subdomains:
+Map URLs across all subdomains:
 
 <CodeGroup>
 
@@ -103,7 +144,7 @@ result = nimble.map({
     "domainFilter": "subdomain"
 })
 
-print(result)
+print(f"Found {len(result['urls'])} URLs")
 ```
 
 
@@ -113,7 +154,7 @@ const result = await nimble.map({
   domainFilter: "subdomain"
 });
 
-console.log(result);
+console.log(`Found ${result.urls.length} URLs`);
 ```
 
 
@@ -131,7 +172,7 @@ curl -X POST 'https://api.nimbleway.io/map' \
 
 ### Exact domain only
 
-Restrict to a specific domain:
+Restrict mapping to a specific domain:
 
 <CodeGroup>
 
@@ -141,7 +182,7 @@ result = nimble.map({
     "domainFilter": "exact domain"
 })
 
-print(result)
+print(f"Mapped {len(result['urls'])} URLs from blog subdomain")
 ```
 
 
@@ -151,7 +192,7 @@ const result = await nimble.map({
   domainFilter: "exact domain"
 });
 
-console.log(result);
+console.log(`Mapped ${result.urls.length} URLs from blog subdomain`);
 ```
 
 
@@ -166,113 +207,3 @@ curl -X POST 'https://api.nimbleway.io/map' \
 ```
 
 </CodeGroup>
-
-## Map then extract workflow
-
-Discover URLs and extract content:
-
-<CodeGroup>
-
-```python Python
-from nimble import Nimble
-
-nimble = Nimble(api_key="YOUR-API-KEY")
-
-# Step 1: Map the site
-map_result = nimble.map({
-    "URL": "https://www.example.com",
-    "Sitemap": "only"
-})
-
-# Step 2: Extract content from each URL
-for url in map_result['urls']:
-    content = nimble.extract({
-        "url": url,
-        "render": True
-    })
-    print(f"Extracted: {url}")
-```
-
-
-```node Node.js
-import { Nimble } from "@nimbleway/sdk";
-
-const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
-
-// Step 1: Map the site
-const mapResult = await nimble.map({
-  URL: "https://www.example.com",
-  Sitemap: "only"
-});
-
-// Step 2: Extract content from each URL
-for (const url of mapResult.urls) {
-  const content = await nimble.extract({
-    url: url,
-    render: true
-  });
-  console.log(`Extracted: ${url}`);
-}
-```
-
-
-```bash cURL
-# Step 1: Map the site
-curl -X POST 'https://api.nimbleway.io/map' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "URL": "https://www.example.com",
-    "Sitemap": "only"
-}'
-
-# Step 2: Extract each URL (loop in your script)
-curl -X POST 'https://api.webit.live/api/v1/extract' \
---header 'Authorization: Bearer <YOUR-API-KEY>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "url": "https://www.example.com/page",
-    "render": true
-}'
-```
-
-</CodeGroup>
-
-## Sitemap options
-
-Choose how to use the sitemap:
-
-| Option    | Description                         | Speed   | Use When              |
-| --------- | ----------------------------------- | ------- | --------------------- |
-| `only`    | Only URLs from sitemap              | Fastest | Sitemap is complete   |
-| `include` | Sitemap + discovered URLs (default) | Fast    | Comprehensive mapping |
-| `ignore`  | Skip sitemap, discover via crawl    | Slower  | No sitemap available  |
-
-## Domain filter options
-
-Control which domains to include:
-
-| Option         | Description                     | Use Case               |
-| -------------- | ------------------------------- | ---------------------- |
-| `exact domain` | Only the exact domain           | Single domain sites    |
-| `subdomain`    | Include all subdomains          | Multi-subdomain sites  |
-| `all`          | All domains (coming soon in v2) | Cross-domain discovery |
-
-## Next steps
-
-Explore more Map features and Web Tools:
-
-<CardGroup cols={2}>
-  <Card title="Map Usage" icon="book" href="/documentation/web-tools/map">
-    Complete guide to all Map features and parameters
-  </Card>
-  <Card title="Crawl" icon="spider" href="/documentation/web-tools/crawl/crawl-quickstart">
-    Deep crawling with advanced filtering options
-  </Card>
-  <Card title="Extract" icon="arrows-to-circle" href="/documentation/web-tools/extract/extract">
-    Extract content from discovered URLs
-  </Card>
-  <Card title="Search" icon="magnifying-glass" href="/documentation/web-tools/search/search">
-    Perform web searches across multiple engines
-  </Card>
-</CardGroup>

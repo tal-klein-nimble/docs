@@ -3,4 +3,253 @@ title: "Quick Start"
 description: "Perform web searches and retrieve parsed content from top results"
 ---
 
-Nimble **Search** enabls you to perform web searches and automatically retrieve clean, parsed content from results. Choose between fast URL discovery or deep content extraction with automatic parsing.
+Nimble **Search** enables you to perform web searches and automatically retrieve clean, parsed content from results. Choose between fast URL discovery or deep content extraction with automatic parsing.
+
+<Note>
+  For comprehensive details, parameters, and advanced features, see the **Search Usage** page.
+</Note>
+
+## Searching Quick Start
+
+### Search API Endpoint
+
+```bash
+POST https://api.webit.live/api/v1/search
+```
+
+### Installation
+
+<CodeGroup>
+
+```bash Python
+pip install nimble-py
+```
+
+
+```bash Node.js
+npm install @nimbleway/sdk
+```
+
+</CodeGroup>
+
+### Basic Usage
+
+Perform a web search and get structured results using `nimble.search()`:
+
+<CodeGroup>
+
+```python Python
+from nimble import Nimble
+
+nimble = Nimble(api_key="YOUR-API-KEY")
+
+result = nimble.search({
+    "query": "best web scraping tools 2026",
+    "max_results": 10,
+    "country": "US"
+})
+
+# Access results
+for item in result["data"]["results"]:
+    print(f"{item['title']}: {item['url']}")
+```
+
+
+```node Node.js
+import { Nimble } from "@nimbleway/sdk";
+
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
+
+const result = await nimble.search({
+  query: "best web scraping tools 2026",
+  max_results: 10,
+  country: "US"
+});
+
+// Access results
+result.data.results.forEach(item => {
+  console.log(`${item.title}: ${item.url}`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "best web scraping tools 2026",
+    "max_results": 10,
+    "country": "US"
+}'
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "status": "success",
+  "data": {
+    "query": "best web scraping tools 2026",
+    "results": [
+      {
+        "position": 1,
+        "title": "Top Web Scraping Tools for 2026",
+        "description": "Comprehensive guide to the best web scraping tools...",
+        "url": "https://example.com/scraping-tools",
+        "domain": "example.com"
+      }
+    ],
+    "total_results": 10
+  },
+  "metadata": {
+    "country": "US",
+    "locale": "en",
+    "credits_used": 1
+  }
+}
+```
+
+## Common patterns
+
+### Fast Mode (default)
+
+Get search results without extracting full content:
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "python web scraping tutorial",
+    "max_results": 10
+})
+
+print(f"Found {len(result['data']['results'])} results")
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "python web scraping tutorial",
+  max_results: 10
+});
+
+console.log(`Found ${result.data.results.length} results`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "python web scraping tutorial",
+    "max_results": 10
+}'
+```
+
+</CodeGroup>
+
+### Deep Search with content extraction
+
+Extract full content from search results:
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "machine learning algorithms",
+    "max_results": 5,
+    "deep_search": True,
+    "output_format": "markdown"
+})
+
+# Access extracted content
+for item in result["data"]["results"]:
+    print(f"Title: {item['title']}")
+    print(f"Content: {item['content'][:200]}...")
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "machine learning algorithms",
+  max_results: 5,
+  deep_search: true,
+  output_format: "markdown"
+});
+
+// Access extracted content
+result.data.results.forEach(item => {
+  console.log(`Title: ${item.title}`);
+  console.log(`Content: ${item.content.substring(0, 200)}...`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "machine learning algorithms",
+    "max_results": 5,
+    "deep_search": true,
+    "output_format": "markdown"
+}'
+```
+
+</CodeGroup>
+
+### Fast Mode with LLM answer
+
+Get AI-generated answer summary from search results:
+
+<CodeGroup>
+
+```python Python
+result = nimble.search({
+    "query": "what are the benefits of TypeScript",
+    "max_results": 10,
+    "include_answer": True
+})
+
+# Access LLM-generated answer
+print("AI Answer:")
+print(result["data"]["answer"])
+
+# Still get result URLs
+print(f"\nBased on {len(result['data']['results'])} sources")
+```
+
+
+```node Node.js
+const result = await nimble.search({
+  query: "what are the benefits of TypeScript",
+  max_results: 10,
+  include_answer: true
+});
+
+// Access LLM-generated answer
+console.log("AI Answer:");
+console.log(result.data.answer);
+
+// Still get result URLs
+console.log(`\nBased on ${result.data.results.length} sources`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/search' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "what are the benefits of TypeScript",
+    "max_results": 10,
+    "include_answer": true
+}'
+```
+
+</CodeGroup>

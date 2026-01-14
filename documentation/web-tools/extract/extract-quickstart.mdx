@@ -3,15 +3,15 @@ title: "Quick Start"
 description: "Get clean & structured data from any URL"
 ---
 
-Nimble **Extract** lets you retrieve clean HTML, text, and structured data from any webpage. Enable JavaScript rendering for dynamic sites, use stealth mode for anti-bot protection, and parse structured data with custom schemas.
+Nimble **Extract** retrieves clean HTML, text, and structured data from any webpage. Enable JavaScript rendering for dynamic sites, use stealth mode for anti-bot protection, and parse structured data with custom schemas.
 
 <Note>
   For comprehensive details, parameters, and advanced features, see the **Extract Usage** page.
 </Note>
 
-## Extract Quick Start
+## Extracting Quick Start
 
-### API endpoint
+### Extract API Endpoint
 
 ```bash
 POST https://api.webit.live/api/v1/extract
@@ -34,37 +34,33 @@ npm install @nimbleway/sdk
 
 ### Basic Usage
 
-Use `nimble.extract()` to retrieve page content from any URL.
+Retrieve page content from any URL using `nimble.extract()`:
 
 <CodeGroup>
 
 ```python Python
 from nimble import Nimble
 
-# Initialize client
 nimble = Nimble(api_key="YOUR-API-KEY")
 
 result = nimble.extract({
     "url": "https://www.example.com"
 })
 
-print(result)
+print(result["data"]["html"])
 ```
 
 
 ```node Node.js
 import { Nimble } from "@nimbleway/sdk";
 
-// Initialize client
-const nimble = new Nimble({
-  apiKey: "YOUR-API-KEY",
-});
+const nimble = new Nimble({ apiKey: "YOUR-API-KEY" });
 
 const result = await nimble.extract({
   url: "https://www.example.com"
 });
 
-console.log(result);
+console.log(result.data.html);
 ```
 
 
@@ -96,3 +92,334 @@ curl -X POST 'https://api.webit.live/api/v1/extract' \
     }
 }
 ```
+
+## Common patterns
+
+### Enable JavaScript rendering
+
+Extract content from dynamic websites that require JavaScript:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True
+})
+
+print(result["data"]["html"])
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true
+});
+
+console.log(result.data.html);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true
+}'
+```
+
+</CodeGroup>
+
+### Parse structured data with selectors
+
+Use CSS selectors to extract specific data from pages:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com/product",
+    "render": True,
+    "parsing": {
+        "title": {
+            "selector": "h1.product-title"
+        },
+        "price": {
+            "selector": ".price",
+            "type": "number"
+        },
+        "description": {
+            "selector": ".product-description"
+        }
+    }
+})
+
+parsed = result["data"]["parsing"]
+print(f"Product: {parsed['title']}")
+print(f"Price: ${parsed['price']}")
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com/product",
+  render: true,
+  parsing: {
+    title: {
+      selector: "h1.product-title"
+    },
+    price: {
+      selector: ".price",
+      type: "number"
+    },
+    description: {
+      selector: ".product-description"
+    }
+  }
+});
+
+const parsed = result.data.parsing;
+console.log(`Product: ${parsed.title}`);
+console.log(`Price: $${parsed.price}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/product",
+    "render": true,
+    "parsing": {
+        "title": {
+            "selector": "h1.product-title"
+        },
+        "price": {
+            "selector": ".price",
+            "type": "number"
+        },
+        "description": {
+            "selector": ".product-description"
+        }
+    }
+}'
+```
+
+</CodeGroup>
+
+### Get multiple output formats
+
+Extract content in multiple formats (HTML, markdown, text):
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com/article",
+    "formats": ["html", "markdown", "text"]
+})
+
+print(f"HTML length: {len(result['data']['html'])}")
+print(f"Markdown:\n{result['data']['markdown'][:200]}...")
+print(f"Plain text:\n{result['data']['text'][:200]}...")
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com/article",
+  formats: ["html", "markdown", "text"]
+});
+
+console.log(`HTML length: ${result.data.html.length}`);
+console.log(`Markdown:\n${result.data.markdown.substring(0, 200)}...`);
+console.log(`Plain text:\n${result.data.text.substring(0, 200)}...`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com/article",
+    "formats": ["html", "markdown", "text"]
+}'
+```
+
+</CodeGroup>
+
+### Extract with browser actions
+
+Interact with pages before extracting content:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "browser_actions": [
+        {"click": "#load-more-button"},
+        {"wait": "2s"},
+        {"scroll": "bottom"}
+    ]
+})
+
+print(result["data"]["html"])
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  browser_actions: [
+    { click: "#load-more-button" },
+    { wait: "2s" },
+    { scroll: "bottom" }
+  ]
+});
+
+console.log(result.data.html);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "browser_actions": [
+        {"click": "#load-more-button"},
+        {"wait": "2s"},
+        {"scroll": "bottom"}
+    ]
+}'
+```
+
+</CodeGroup>
+
+### Take screenshots
+
+Capture visual screenshots of pages:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "formats": ["screenshot"]
+})
+
+screenshot_base64 = result["data"]["screenshot"]
+print(f"Screenshot captured: {len(screenshot_base64)} bytes")
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  formats: ["screenshot"]
+});
+
+const screenshotBase64 = result.data.screenshot;
+console.log(`Screenshot captured: ${screenshotBase64.length} bytes`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "formats": ["screenshot"]
+}'
+```
+
+</CodeGroup>
+
+### Capture network requests
+
+Intercept API calls and network traffic:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract({
+    "url": "https://www.example.com",
+    "render": True,
+    "network_capture": [
+        {
+            "method": "GET",
+            "url": {
+                "type": "contains",
+                "value": "/api/"
+            },
+            "resource_type": ["xhr", "fetch"]
+        }
+    ]
+})
+
+captured = result["data"]["network_capture"]
+for request in captured[0]["result"]:
+    print(f"Captured: {request['url']}")
+    print(f"Response: {request['response']['body'][:100]}...")
+```
+
+
+```node Node.js
+const result = await nimble.extract({
+  url: "https://www.example.com",
+  render: true,
+  network_capture: [
+    {
+      method: "GET",
+      url: {
+        type: "contains",
+        value: "/api/"
+      },
+      resource_type: ["xhr", "fetch"]
+    }
+  ]
+});
+
+const captured = result.data.network_capture;
+captured[0].result.forEach(request => {
+  console.log(`Captured: ${request.url}`);
+  console.log(`Response: ${request.response.body.substring(0, 100)}...`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "url": "https://www.example.com",
+    "render": true,
+    "network_capture": [
+        {
+            "method": "GET",
+            "url": {
+                "type": "contains",
+                "value": "/api/"
+            },
+            "resource_type": ["xhr", "fetch"]
+        }
+    ]
+}'
+```
+
+</CodeGroup>

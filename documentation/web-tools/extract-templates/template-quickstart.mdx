@@ -38,6 +38,37 @@ Nimble **Extract Templates** are pre-built, production-ready extractors for popu
   
 </Card>
 
+## Popular Templates
+
+### E-commerce Templates
+
+| Template       | Description            | Key Inputs         |
+| :------------- | :--------------------- | :----------------- |
+| `amazon_pdp`   | Amazon product details | `asin`, `zipcode`  |
+| `amazon_serp`  | Amazon search results  | `query`, `zipcode` |
+| `walmart_pdp`  | Walmart product data   | `product_id`       |
+| `walmart_serp` | Walmart search results | `query`            |
+| `ebay_pdp`     | eBay listing details   | `item_id`          |
+
+### Social Templates
+
+| Template            | Description            | Key Inputs          |
+| :------------------ | :--------------------- | :------------------ |
+| `linkedin_profile`  | LinkedIn profile data  | `profile_url`       |
+| `linkedin_jobs`     | LinkedIn job listings  | `query`, `location` |
+| `linkedin_company`  | Company information    | `company_url`       |
+| `twitter_profile`   | Twitter profile data   | `username`          |
+| `twitter_search`    | Twitter search results | `query`             |
+| `instagram_profile` | Instagram profile data | `username`          |
+
+### Search Eengines Templates
+
+| Template             | Description           | Key Inputs          |
+| :------------------- | :-------------------- | :------------------ |
+| `google_search`      | Google search results | `query`, `country`  |
+| `google_maps_search` | Google Maps listings  | `query`, `location` |
+| `bing_search`        | Bing search results   | `query`, `country`  |
+
 ## Extract Template Quick Start
 
 ### API endpoint
@@ -149,40 +180,152 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 }
 ```
 
-## Popular templates
+## Common patterns
 
-### E-commerce
+### Amazon product extraction
 
-| Template      | Description            | Key Inputs         |
-| :------------ | :--------------------- | :----------------- |
-| `amazon_pdp`  | Amazon product details | `asin`, `zipcode`  |
-| `amazon_serp` | Amazon search results  | `query`, `zipcode` |
-| `walmart_pdp` | Walmart product data   | `product_id`       |
-| `ebay_pdp`    | eBay listing details   | `item_id`          |
+Extract detailed product information from Amazon:
 
-### Professional networks
+<CodeGroup>
 
-| Template           | Description           | Key Inputs          |
-| :----------------- | :-------------------- | :------------------ |
-| `linkedin_profile` | LinkedIn profile data | `profile_url`       |
-| `linkedin_jobs`    | LinkedIn job listings | `query`, `location` |
-| `linkedin_company` | Company information   | `company_url`       |
+```python Python
+result = nimble.extract_template({
+    "template": "amazon_pdp",
+    "params": {
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+})
 
-### Search engines
+print(f"Product: {result['data']['product_name']}")
+print(f"Price: ${result['data']['price']}")
+```
 
-| Template             | Description           | Key Inputs          |
-| :------------------- | :-------------------- | :------------------ |
-| `google_search`      | Google search results | `query`, `country`  |
-| `google_maps_search` | Google Maps listings  | `query`, `location` |
-| `bing_search`        | Bing search results   | `query`, `country`  |
 
-### Social media
+```node Node.js
+const result = await nimble.extractTemplate({
+  template: "amazon_pdp",
+  params: {
+    asin: "B08N5WRWNW",
+    zipcode: "90210"
+  }
+});
 
-| Template            | Description            | Key Inputs |
-| :------------------ | :--------------------- | :--------- |
-| `twitter_profile`   | Twitter profile data   | `username` |
-| `twitter_search`    | Twitter search results | `query`    |
-| `instagram_profile` | Instagram profile data | `username` |
+console.log(`Product: ${result.data.product_name}`);
+console.log(`Price: $${result.data.price}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract-template' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "amazon_pdp",
+    "params": {
+        "asin": "B08N5WRWNW",
+        "zipcode": "90210"
+    }
+}'
+```
+
+</CodeGroup>
+
+### LinkedIn profile data
+
+Extract professional profile information:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract_template({
+    "template": "linkedin_profile",
+    "params": {
+        "profile_url": "https://www.linkedin.com/in/example"
+    }
+})
+
+print(f"Name: {result['data']['name']}")
+print(f"Title: {result['data']['headline']}")
+```
+
+
+```node Node.js
+const result = await nimble.extractTemplate({
+  template: "linkedin_profile",
+  params: {
+    profile_url: "https://www.linkedin.com/in/example"
+  }
+});
+
+console.log(`Name: ${result.data.name}`);
+console.log(`Title: ${result.data.headline}`);
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract-template' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "linkedin_profile",
+    "params": {
+        "profile_url": "https://www.linkedin.com/in/example"
+    }
+}'
+```
+
+</CodeGroup>
+
+### Google search results
+
+Extract structured search results from Google:
+
+<CodeGroup>
+
+```python Python
+result = nimble.extract_template({
+    "template": "google_search",
+    "params": {
+        "query": "best web scraping tools",
+        "country": "US"
+    }
+})
+
+for item in result["data"]["results"]:
+    print(f"{item['title']}: {item['url']}")
+```
+
+
+```node Node.js
+const result = await nimble.extractTemplate({
+  template: "google_search",
+  params: {
+    query: "best web scraping tools",
+    country: "US"
+  }
+});
+
+result.data.results.forEach(item => {
+  console.log(`${item.title}: ${item.url}`);
+});
+```
+
+
+```bash cURL
+curl -X POST 'https://api.webit.live/api/v1/extract-template' \
+--header 'Authorization: Bearer <YOUR-API-KEY>' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "template": "google_search",
+    "params": {
+        "query": "best web scraping tools",
+        "country": "US"
+    }
+}'
+```
+
+</CodeGroup>
 
 ## Templates vs Custom Extract
 
@@ -190,33 +333,22 @@ curl -X POST 'https://api.webit.live/api/v1/templates/extract' \
 | :---------------- | :------------------- | :------------------------ |
 | **Setup**         | Zero configuration   | Manual configuration      |
 | **Maintenance**   | Maintained by Nimble | You maintain              |
-| **Cost**          | Optimized pricing    | Variable based on config  |
+| **Cost**          | Driver based pricing | Driver based pricing      |
 | **Customization** | Fixed schema         | Full control              |
 | **Time to value** | Immediate            | Minutes to hours          |
 | **Reliability**   | Battle-tested        | Depends on implementation |
 | **Best for**      | Common platforms     | Unique sites              |
 
-**Use templates when:**
+**Use <u>extract templates</u> when:**
 
 - Extracting from popular platforms
 - You want zero maintenance
 - Fast time to market is important
 - Standard data schemas work for you
 
-**Use custom extract when:**
+**Use custom <u>extract</u> when:**
 
 - Working with unique/niche sites
 - You need custom data structures
 - Site requires specific configurations
 - Template doesn't exist for your use case
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Discover Templates" icon="magnifying-glass" href="/documentation/web-tools/extract-templates/discover">
-    Browse, search, and inspect available templates
-  </Card>
-  <Card title="Using Templates" icon="play" href="/documentation/web-tools/extract-templates/extract">
-    Run templates to extract structured data
-  </Card>
-</CardGroup>
