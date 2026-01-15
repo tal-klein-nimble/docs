@@ -213,5 +213,11 @@
   },
   "styling": {
     "codeblocks": "system"
+  },
+  "footer": {
+    "socials": {
+      "website": "https://www.nimbleway.com/",
+      "linkedin": "https://www.linkedin.com/company/nimbledata"
+    }
   }
 }
