@@ -209,7 +209,7 @@
     }
   },
   "appearance": {
-    "default": "dark"
+    "default": "light"
   },
   "styling": {
     "codeblocks": "system"
