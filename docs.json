@@ -17,8 +17,7 @@
             "group": "Introduction",
             "icon": "book-open",
             "pages": [
-              "documentation/introduction/overview",
-              "documentation/introduction/release-notes"
+              "documentation/introduction/overview"
             ]
           },
           {
@@ -37,7 +36,8 @@
                   "documentation/getting-started/web-api",
                   "documentation/getting-started/agents",
                   "documentation/getting-started/billing",
-                  "documentation/getting-started/sdk-limitations"
+                  "documentation/getting-started/sdk-limitations",
+                  "documentation/introduction/release-notes"
                 ]
               }
             ]

@@ -1,6 +1,104 @@
 ---
 title: "Release Notes"
-description: "Latest updates and changes to Nimble SDK"
+description: "Stay up to date with the latest Nimble SDK updates and improvements"
 ---
 
-Comming Soon..
+Track new features, improvements, and updates to the Nimble SDK and Web Tools. We ship updates regularly to enhance performance, add capabilities, and improve your developer experience.
+
+<Note>
+  Have feedback or questions about a release? [Reach out to our team](https://nimbleway.com/contact-general)
+</Note>
+
+<Update label="January, 2026">
+  ### Release Notes for Week Ending January 15, 2026
+
+  ## 
+
+  ### ✨ New Features
+
+  #### Nimble SDK Python & Node.js
+
+  - **Unified Web Tools SDK**: Launched comprehensive Python and Node.js SDKs providing seamless access to all Nimble Web Tools through a single interface. Install with `pip install nimble-py` or `npm install @nimbleway/sdk` and access Extract, Search, Map, Crawl, and Template features with consistent, intuitive methods.
+  - **Extract API**: New `nimble.extract()` method retrieves clean HTML, text, and structured data from any webpage. Supports JavaScript rendering, stealth mode for anti-bot protection, custom parsing with CSS selectors, browser actions, screenshots, and network request capture. [Learn more](/documentation/web-tools/extract)
+  - **Extract Templates API**: Pre-built, production-ready extractors for 45+ popular platforms including Amazon, LinkedIn, Google, and more via `nimble.extract_template()`. Zero configuration required - just provide params like product IDs or search terms. Templates are maintained 24/7 by Nimble and automatically updated when sites change. [Learn more](/documentation/web-tools/extract-templates)
+  - **Search API**: Perform web searches and retrieve parsed content from top results with `nimble.search()`. Supports fast mode for URL discovery, deep search mode with full content extraction, and AI-powered answer summaries from search results. [Learn more](/documentation/web-tools/search)
+  - **Map API**: Fast URL discovery and site structure mapping through `nimble.map()`. Ideal for discovering all pages on a website, extracting sitemap URLs, and understanding site architecture without deep crawling overhead. Supports subdomain filtering and exact domain matching. [Learn more](/documentation/web-tools/map)
+  - **Crawl API**: Deep website crawling with `nimble.crawl()` for comprehensive data extraction across multiple pages. Features smart navigation, data normalization, and multi-page scraping with automatic pagination handling. [Learn more](/documentation/web-tools/crawl)
+  - **Residential Proxy Access**: Simple proxy connection format through `gateway.nimbleway.com:7000` with support for geotargeting (country, state, city), sticky sessions, and geo-sessions. Access premium residential IPs from 195+ countries with automatic rotation or session persistence. [Learn more](/documentation/web-tools/proxy)
+
+  ---
+
+  ### 🚀 Improvements
+
+  #### SDK Developer Experience
+
+  - **Type Hints & Autocomplete**: Full type annotations in Python SDK and TypeScript definitions in Node.js SDK provide IDE autocomplete and inline documentation for all methods and parameters.
+  - **Consistent Error Handling**: Standardized error responses across all SDK methods with detailed error codes, messages, and suggested resolutions for faster debugging.
+  - **Comprehensive Examples**: Added 100+ code examples across documentation covering common use cases for each Web Tool, available in both Python and Node.js with cURL alternatives.
+  - **Multi-Format Support**: All extraction methods now support multiple output formats (HTML, Markdown, Plain Text, JSON) with automatic content type detection and conversion.
+
+  ---
+
+  ### 🚀 Improvements
+
+  #### Extract & Templates
+
+  - **Faster JavaScript Rendering**: Optimized browser-based extraction reduces load times by 30% for JavaScript-heavy websites while maintaining full anti-bot protection.
+  - **Enhanced Parsing Engine**: CSS selector-based parsing now supports nested selectors, array extraction, and type coercion (string, number, boolean) for cleaner structured output.
+  - **Template Coverage Expansion**: Added 12 new extract templates including Wikipedia, Reddit, and additional e-commerce platforms. All templates monitored 24/7 with automatic fixes when sites update.
+
+  ---
+
+  ### 🚀 Improvements
+
+  #### Search & Discovery
+
+  - **AI Answer Quality**: Enhanced LLM-powered answer generation provides more accurate summaries with better source attribution and citation links.
+  - **Deep Search Performance**: Improved content extraction in deep search mode with better article detection, cleaner markdown conversion, and faster processing times.
+  - **Map Speed Optimization**: Sitemap parsing now 2x faster with parallel processing and intelligent caching for frequently accessed domains.
+
+  ---
+
+  ### 🚀 Improvements
+
+  #### Proxy Network
+
+  - **Expanded US State Coverage**: Added enhanced IP pool coverage for all 50 US states with improved city-level targeting accuracy.
+  - **Session Reliability**: Sticky sessions now maintain IP consistency more reliably with automatic failover to nearby IPs if primary peer goes offline.
+  - **Geo-Session Enhancement**: Geo-sessions now keep IPs within 15km of original location with same ISP/ASN consistency for up to 10 days.
+
+  ---
+
+  ### 📚 Documentation
+
+  #### Comprehensive Guides
+
+  - **Quickstart Pages**: New quickstart guides for all Web Tools with installation steps, basic usage examples, common patterns, and next steps. Get started in under 5 minutes.
+  - **Usage Documentation**: Detailed usage pages for each Web Tool covering all parameters, response formats, best practices, common use cases, and limitations.
+  - **API Reference**: Complete API reference with request/response schemas, error codes, rate limits, and authentication methods for all endpoints.
+  - **Account Management**: New guide covering API key generation, team member management, permissions, and security best practices. [View guide](/documentation/getting-started/account-management)
+</Update>
+
+<Update label="December, 2025">
+  ### Release notes for week ending December 31, 2025
+
+  ## 
+
+  ### ✨ New Features
+
+  #### Platform Launch
+
+  - **Nimble SDK Public Beta**: Official launch of Nimble's unified SDK for web data extraction and proxy services. Built for developers who need reliable, high-performance web scraping infrastructure.
+  - **Web Tools Suite**: Comprehensive suite of web data extraction tools including Extract, Search, Map, Crawl, and pre-built Templates for popular platforms.
+  - **Developer Dashboard**: New dashboard at [online.nimbleway.com](https://online.nimbleway.com) for API key management, usage monitoring, and team collaboration.
+
+  ---
+
+  ### 🚀 Improvements
+
+  #### Infrastructure
+
+  - **Global Proxy Network**: Launched with 195+ countries coverage, premium residential IPs, and advanced geotargeting capabilities.
+  - **Anti-Bot Protection**: Built-in stealth mode and CAPTCHA handling across all Web Tools for maximum success rates.
+  - **Rate Limit Optimization**: Intelligent request throttling and retry logic ensures optimal performance without hitting rate limits.
+</Update>
